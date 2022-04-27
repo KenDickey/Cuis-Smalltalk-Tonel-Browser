@@ -61,3 +61,6 @@ reader := TonelReader on: ('TrivialExample.class.st' asFileEntry) readStream.
 reader read.
 reader inspect.
 ````
+
+Note that this is a complete port of STON, but a "lite" port of Tonel from the Bee Smalltalk folks --
+NOT a port of the mountain of code from Pharo.  All code is MIT copyright.

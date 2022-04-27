@@ -65,6 +65,6 @@ reader inspect.
 Note that this is a complete port of STON, but a "lite" port of Tonel from the Bee Smalltalk folks --
 NOT a port of the mountain of code from Pharo.  
 
-Copyright not assigned is KenDickey, all other packages carry original copyrights.
+Copyright not assigned is copyright "Cuis", all other packages carry original copyrights.
 See LICENSES directory.
 All code is MIT copyright.

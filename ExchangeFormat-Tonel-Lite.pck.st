@@ -1,9 +1,10 @@
-'From Cuis 6.0 [latest update: #5107] on 27 April 2022 at 12:49:44 pm'!
+'From Cuis 6.0 [latest update: #5114] on 27 April 2022 at 2:05:05 pm'!
 'Description Just enough here to read/write basic Tonel file format.
+
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
-	See (MIT) license in LICENCES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 21!
+	See (MIT) license in LICENSES directory.'!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 23!
 !requires: 'BeeCompatibility' 1 4 nil!
 !requires: 'ExchangeFormat-STON' 1 31 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!

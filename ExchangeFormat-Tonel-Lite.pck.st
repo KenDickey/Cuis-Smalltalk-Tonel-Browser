@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5114] on 27 April 2022 at 2:05:05 pm'!
+'From Cuis 6.0 [latest update: #5114] on 28 April 2022 at 11:35:57 am'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 23!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 24!
 !requires: 'BeeCompatibility' 1 4 nil!
 !requires: 'ExchangeFormat-STON' 1 31 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
@@ -32,7 +32,7 @@ TrivialExample class
 
 !classDefinition: #TonelReader category: 'ExchangeFormat-Tonel-Lite'!
 Object subclass: #TonelReader
-	instanceVariableNames: 'comment class methods stream'
+	instanceVariableNames: 'classComment classInfo methodInfos stream'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-Tonel-Lite'!
@@ -66,14 +66,14 @@ reader inspect.
 !
 
 !TonelReader commentStamp: '<historical>' prior: 0!
-stream is a StandardFileStream, whose #name is a file path.
+stream  is a StandardFileStream, whose #name is a file path.
 
-comment is nil or a class comment String.
+classComment  is nil or a class comment String.
 
-class   is an OrderedDictionary of class information, typical keys are:
+classInfo  is an OrderedDictionary of class information, typical keys are:
    #category #name #superclass #classVars #instVars
 
-methods is an OrderedCollection of OrderedDictionaries -- one for each method
+methodInfos  is an OrderedCollection of OrderedDictionaries -- one for each method
   Typical method keys are 
 	#class ('CName' or 'CName class', a String)
 	#category (a Symbol)
@@ -314,36 +314,36 @@ initialize
 	Stooges := {}.
 	! !
 
-!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/26/2022 15:37:24'!
+!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/28/2022 10:51:47'!
 classComment
 
-	^ comment! !
+	^ classComment! !
 
-!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/26/2022 16:02:41'!
+!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/28/2022 10:52:03'!
 classInfo 
 
-	^ class! !
+	^ classInfo! !
 
 !TonelReader methodsFor: 'accessing' stamp: 'KenD 4/26/2022 16:04:17'!
 filePath
 
 	^ stream name! !
 
-!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/26/2022 16:03:25'!
+!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/28/2022 10:52:26'!
 methodInfos
 
-	^ methods! !
+	^ methodInfos! !
 
 !TonelReader methodsFor: 'accessing' stamp: 'KenD 4/19/2022 08:05:10'!
 stream: aReadStream 
 
 	stream := aReadStream! !
 
-!TonelReader methodsFor: 'initialization' stamp: 'KenD 4/19/2022 07:53:04'!
+!TonelReader methodsFor: 'initialization' stamp: 'KenD 4/28/2022 10:52:26'!
 initialize 
 
-	class      := OrderedDictionary new.
-	methods := OrderedCollection new! !
+	classInfo      := OrderedDictionary new.
+	methodInfos := OrderedCollection new! !
 
 !TonelReader methodsFor: 'private' stamp: 'KenD 4/20/2022 14:18:18'!
 skipComment 
@@ -402,13 +402,13 @@ read
 		readDefinition;
 		readMethods! !
 
-!TonelReader methodsFor: 'reading' stamp: 'KenD 4/27/2022 07:13:54'!
+!TonelReader methodsFor: 'reading' stamp: 'KenD 4/28/2022 10:51:47'!
 readClassComment 
 	"A Class Comment, if used, 
 	 is the first bit of syntax in a Tonel class codefile"
 	stream skipSeparators.
 	stream peek = $" ifTrue: [
-		comment := self readComment
+		classComment := self readComment
 	]
 ! !
 
@@ -434,14 +434,14 @@ readComment
 	
 ! !
 
-!TonelReader methodsFor: 'reading' stamp: 'KenD 4/19/2022 07:57:20'!
+!TonelReader methodsFor: 'reading' stamp: 'KenD 4/28/2022 10:52:03'!
 readDefinition 
 
 	STONReader new
 		on: stream skipSeparators;
-		parseMapDo: [:key :value | class at: key put: value]! !
+		parseMapDo: [:key :value | classInfo at: key put: value]! !
 
-!TonelReader methodsFor: 'reading' stamp: 'KenD 4/23/2022 14:04:52'!
+!TonelReader methodsFor: 'reading' stamp: 'KenD 4/28/2022 10:52:26'!
 readMethod 
 	| metadata classname signature selector method |
 	metadata := STON fromStream: stream.
@@ -459,7 +459,7 @@ readMethod
 			put: selector;
 		at: #body 
 			put: self nextBlock.
-	methods add: method! !
+	methodInfos add: method! !
 
 !TonelReader methodsFor: 'reading' stamp: 'KenD 4/19/2022 08:03:23'!
 readMethods 

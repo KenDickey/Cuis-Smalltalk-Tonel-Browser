@@ -70,6 +70,10 @@ reader fileOut.
 reader baseNameForFileOut. "Print this"
 ````
 
+As a matter of fact, this is how browsing Tonel works!  A Tonel file
+is read, then filed out as a chunk file, then the usual code
+browser reads it.
+
 Note that this is a fairly complete port of STON,
 but a "lite" port of Tonel from the Bee Smalltalk folks --
 NOT a port of the mountain of code from Pharo.  

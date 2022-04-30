@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5114] on 28 April 2022 at 11:35:57 am'!
+'From Cuis 6.0 [latest update: #5114] on 29 April 2022 at 5:20:56 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 24!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 28!
 !requires: 'BeeCompatibility' 1 4 nil!
 !requires: 'ExchangeFormat-STON' 1 31 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
@@ -32,7 +32,7 @@ TrivialExample class
 
 !classDefinition: #TonelReader category: 'ExchangeFormat-Tonel-Lite'!
 Object subclass: #TonelReader
-	instanceVariableNames: 'classComment classInfo methodInfos stream'
+	instanceVariableNames: 'classComment classInfo methodInfos stream codeType'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-Tonel-Lite'!
@@ -73,13 +73,18 @@ classComment  is nil or a class comment String.
 classInfo  is an OrderedDictionary of class information, typical keys are:
    #category #name #superclass #classVars #instVars
 
-methodInfos  is an OrderedCollection of OrderedDictionaries -- one for each method
+methodInfos  is an OrderedCollection of OrderedDictionaries -- one for each method.
   Typical method keys are 
 	#class ('CName' or 'CName class', a String)
 	#category (a Symbol)
 	#selector (e.g. #fooMeWith: , a Symbol)
 	#signiture (e.g. 'fooMeWith: anotherFooBar' , a String )
 	#body (a String which, composed with the #signiture, is the method's code)
+
+codeType  is either:
+	'Class' -- indicarting code for an entire class definition
+	    or
+	'Extension' -- indicating a set of methods extending an existing type
 !
 
 !TonelWriter commentStamp: '<historical>' prior: 0!
@@ -324,6 +329,19 @@ classInfo
 
 	^ classInfo! !
 
+!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/29/2022 12:53:49'!
+fileOut
+	"I represent a Class or a set of Extension methods to a Class.
+	 File me out in Cuis' Chunk Format."
+	codeType ifNil: [ self read ].
+	
+	(codeType = 'Class') 	ifTrue: [^self fileOutCompleteClass].
+	
+	(codeType = 'Extension') ifTrue: [^self fileOutAddedMethods].
+	
+	self inform: 'TonelReader: PROBLEM WITH FILEOUT DATA'.
+	! !
+
 !TonelReader methodsFor: 'accessing' stamp: 'KenD 4/26/2022 16:04:17'!
 filePath
 
@@ -344,33 +362,6 @@ initialize
 
 	classInfo      := OrderedDictionary new.
 	methodInfos := OrderedCollection new! !
-
-!TonelReader methodsFor: 'private' stamp: 'KenD 4/20/2022 14:18:18'!
-skipComment 
-
-	self skipToMatch: $"! !
-
-!TonelReader methodsFor: 'private' stamp: 'KenD 4/20/2022 14:29:43'!
-skipLine
-
-	[stream atEnd]
-		whileFalse:
-		[stream next isLineSeparator ifTrue: [^ self ]]! !
-
-!TonelReader methodsFor: 'private' stamp: 'KenD 4/20/2022 14:18:33'!
-skipString 
-
-	self skipToMatch: $'! !
-
-!TonelReader methodsFor: 'private' stamp: 'KenD 4/20/2022 14:18:51'!
-skipToMatch: aCharacter 
-	[| found |
-		found := stream skipTo: aCharacter.
-		found ifFalse: [self error: aCharacter storeString , ' end expected'].
-		stream peek = aCharacter ifTrue: [
-			stream next.
-			found := false].
-		found] whileFalse! !
 
 !TonelReader methodsFor: 'reading' stamp: 'KenD 4/22/2022 16:35:23'!
 nextBlock 
@@ -402,10 +393,11 @@ read
 		readDefinition;
 		readMethods! !
 
-!TonelReader methodsFor: 'reading' stamp: 'KenD 4/28/2022 10:51:47'!
+!TonelReader methodsFor: 'reading' stamp: 'KenD 4/29/2022 12:55:36'!
 readClassComment 
 	"A Class Comment, if used, 
 	 is the first bit of syntax in a Tonel class codefile"
+	stream position: 0. "Start at the beginning"
 	stream skipSeparators.
 	stream peek = $" ifTrue: [
 		classComment := self readComment
@@ -467,12 +459,184 @@ readMethods
 	[stream skipSeparators; atEnd] 
 		whileFalse: [self readMethod]! !
 
-!TonelReader methodsFor: 'reading' stamp: 'KenD 4/19/2022 08:03:37'!
+!TonelReader methodsFor: 'reading' stamp: 'KenD 4/29/2022 12:46:19'!
 readType 
-	| type |
-	type := stream skipSeparators; nextWordOrNumber.
-	(type = 'Class' or: [type = 'Extension'])
-		ifFalse: [self error: 'unsupported type']! !
+	"codeType is either
+		'Class' indicarting code for an entire class definition
+	or
+		'Extension' indicating a set of methods extending an existing type
+	"
+	codeType := stream skipSeparators; nextWordOrNumber.
+	(codeType = 'Class' or: [codeType = 'Extension'])
+		ifFalse: [self error: 'unsupported type ', codeType ]! !
+
+!TonelReader methodsFor: 'private' stamp: 'KenD 4/20/2022 14:18:18'!
+skipComment 
+
+	self skipToMatch: $"! !
+
+!TonelReader methodsFor: 'private' stamp: 'KenD 4/20/2022 14:29:43'!
+skipLine
+
+	[stream atEnd]
+		whileFalse:
+		[stream next isLineSeparator ifTrue: [^ self ]]! !
+
+!TonelReader methodsFor: 'private' stamp: 'KenD 4/20/2022 14:18:33'!
+skipString 
+
+	self skipToMatch: $'! !
+
+!TonelReader methodsFor: 'private' stamp: 'KenD 4/20/2022 14:18:51'!
+skipToMatch: aCharacter 
+	[| found |
+		found := stream skipTo: aCharacter.
+		found ifFalse: [self error: aCharacter storeString , ' end expected'].
+		stream peek = aCharacter ifTrue: [
+			stream next.
+			found := false].
+		found] whileFalse! !
+
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 15:13:39'!
+fileOutClassCommentTo: aFileStream
+	"Tonel does not keep author & timestamp metaData"
+
+	classComment ifNil: [ ^nil ]. "Skip if unused"
+	aFileStream 
+		nextPut: $!! ;
+		nextPutAll: (classInfo at: #name) asString;
+		nextPutAll: ' commentStamp: ''<historical>'' prior: 0!!';
+		newLine.
+		
+	aFileStream 
+		nextChunkPut: classComment;
+		newLine; 
+		newLine.
+			
+	! !
+
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 15:48:52'!
+fileOutClassInfoTo: aFileStream
+
+	aFileStream 
+		timeStamp;
+		nextPutAll: '!!classDefinition: ' ;
+		nextPutAll: (classInfo at: #name) printString;
+		nextPutAll: ' category: ', (classInfo at: #category) printString, '!!';
+		newLine.
+		
+	aFileStream 
+		nextPutAll: (classInfo at: #superclass) asString;
+		nextPutAll: ' subclass: ', (classInfo at: #name) printString;
+		newLine.
+		
+	aFileStream tab;
+		nextPutAll: 'instanceVariableNames: '.
+	self fileOutNamesAsString: (classInfo at: #instVars ifAbsent: ['']) 
+		on: aFileStream.
+	aFileStream newLine.
+	
+	aFileStream tab;
+		nextPutAll: 'classVariableNames: '.
+	self fileOutNamesAsString: (classInfo at: #classVars ifAbsent: ['']) 
+		on: aFileStream.
+	aFileStream newLine.
+	
+	self flag: #PoolDictionaries.
+	aFileStream tab;
+		nextPutAll: 'poolDictionaries: '''' '; "Unused?"
+		newLine.
+
+	aFileStream tab;
+		nextPutAll: 'category: ';
+		nextPutAll: (classInfo at: #category) asString printString.
+		
+	aFileStream nextPut: $!!; newLine.
+	
+	self fileOutClassCommentTo: aFileStream
+	! !
+
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 15:23:22'!
+fileOutClassMethodPrefixTo: aFileStream
+
+	"NYI"
+	! !
+
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 15:23:32'!
+fileOutClassMethodSuffixTo: aFileStream
+
+	"NYI"
+	! !
+
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 15:00:48'!
+fileOutCompleteClass
+	"I read in a complete Class definition; write out in Cuis's Chunk Format."
+	| writeStream |
+	writeStream := self writeStreamForFileOut.
+	writeStream ifNil: [ self inform: 'Nothing written'. ^nil ].
+	[ 	self fileOutClassInfoTo: writeStream.
+		self fileOutMethodInfosTo: writeStream.
+	] ensure: [ writeStream close ].
+	! !
+
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 17:18:39'!
+fileOutMethodInfoTo: aFileStream forMethod: methodInfo
+	"File out code chunk for a single method."
+	aFileStream 
+		nextPut: $!! ;
+		nextPutAll: (methodInfo at: #class) asString;
+		nextPutAll: ' methodsFor:  ', (methodInfo at: #category) asString printString;
+		nextPutAll: ' stamp: ', Utilities changeStamp printString;
+		nextPut: $!! ;
+		newLine.
+	
+	aFileStream 
+		nextPutAll: (methodInfo at: #signature);
+		nextPutAll: (methodInfo at: #body);
+		nextPut: $!! ;
+		newLine.
+	! !
+
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 15:22:50'!
+fileOutMethodInfosTo: aFileStream
+
+	| instMInfos classMInfos |
+	instMInfos := methodInfos select: [ :mi | ((mi at: #class) endsWith: 'class') not ].
+	classMInfos := methodInfos select: [ :mi | (mi at: #class) endsWith: 'class' ].
+	instMInfos do: [ :mi | self fileOutMethodInfoTo: aFileStream forMethod: mi ].
+	self fileOutClassMethodPrefixTo: aFileStream.
+	classMInfos do: [ :mi | self fileOutMethodInfoTo: aFileStream forMethod: mi ].
+	self fileOutClassMethodSuffixTo: aFileStream.
+	aFileStream newLine.
+	! !
+
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 15:08:43'!
+fileOutNamesAsString: anArrayOfSymbols on: aWriteStream
+
+	| first |
+	first := true.
+	aWriteStream nextPut: $' .
+	anArrayOfSymbols do: [ :sym |
+		first ifTrue: [first := false] ifFalse: [aWriteStream space].
+		aWriteStream nextPutAll: sym asString
+	].
+	aWriteStream nextPut: $' .! !
+
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 13:23:47'!
+writeStreamForFileOut
+	"Answer an appropriate stream or nil.
+	 Stream will be opened on a fresh (empty) file."
+	| fileName fileEntry className |
+	className := classInfo at: #name.
+	fileName := stream name asFileEntry parent 
+				pathName, '/', className, '.', codeType, '.st'.
+	fileEntry := fileName asFileEntry.
+	(fileEntry exists) ifTrue: [
+		(PopUpMenu confirm: className, '.', codeType, '.st Exists. Overwrite?')
+			ifFalse: [^nil]
+	].
+	^ fileEntry forceWriteStream.
+! !
 
 !TonelReader class methodsFor: 'instance creation' stamp: 'KenD 4/19/2022 07:51:29'!
 new 

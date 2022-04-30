@@ -1,6 +1,6 @@
-'From Cuis 6.0 [latest update: #5107] on 26 April 2022 at 4:07:32 pm'!
+'From Cuis 6.0 [latest update: #5114] on 29 April 2022 at 1:20:41 pm'!
 'Description '!
-!provides: 'ExchangeFormat-TonelBrowser' 1 0!
+!provides: 'ExchangeFormat-TonelBrowser' 1 3!
 !requires: 'ExchangeFormat-Tonel-Lite' 1 18 nil!
 SystemOrganization addCategory: 'ExchangeFormat-TonelBrowser'!
 
@@ -16,7 +16,7 @@ TonelCodeBrowser class
 	instanceVariableNames: ''!
 
 !classDefinition: #TonelCodeBrowserWindow category: 'ExchangeFormat-TonelBrowser'!
-BrowserWindow subclass: #TonelCodeBrowserWindow
+CodeFileBrowserWindow subclass: #TonelCodeBrowserWindow
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -34,11 +34,22 @@ Note docs in TonelReader class!
 !TonelCodeBrowserWindow commentStamp: '<historical>' prior: 0!
 I present a Smalltalk Code Browser for the Tonel source code exchange format.!
 
-!TonelCodeBrowser methodsFor: 'initialization' stamp: 'KenD 4/26/2022 14:33:41'!
+!TonelCodeBrowser methodsFor: 'accessing' stamp: 'KenD 4/28/2022 10:55:24'!
+selectedClass
+	"Answer a symbol"
+	
+	^ tonelReader classInfo at: #name! !
+
+!TonelCodeBrowser methodsFor: 'initialization' stamp: 'KenD 4/29/2022 07:38:55'!
 browseCodeFileEntry: aFileEntry
 
 	tonelReader := TonelReader on: aFileEntry readStream.
-	tonelReader read.! !
+	tonelReader read. "Note: TonelReader class comment"
+	! !
+
+!TonelCodeBrowser methodsFor: 'initialization' stamp: 'KenD 4/27/2022 16:04:03'!
+defaultBrowserTitle
+	^ 'Tonel File Browser'! !
 
 !TonelCodeBrowser class methodsFor: 'instance creation' stamp: 'KenD 4/26/2022 14:31:26'!
 browseCodeFile: aFileNameString

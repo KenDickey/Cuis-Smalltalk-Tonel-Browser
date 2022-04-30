@@ -1,6 +1,6 @@
-'From Cuis 6.0 [latest update: #5107] on 27 April 2022 at 7:24:22 am'!
+'From Cuis 6.0 [latest update: #5114] on 29 April 2022 at 5:21:00 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 18!
+!provides: 'BeeCompatibility' 1 19!
 !requires: 'SqueakCompatibility' 1 30 nil!
 SystemOrganization addCategory: 'BeeCompatibility'!
 
@@ -435,10 +435,21 @@ source
 	"Answer source for method, including the signature"
 	^ self getSource ! !
 
-!PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 4/21/2022 07:59:56'!
-copyFrom: start to: finish
-
-	^ collection copyFrom: start to: (finish min: readLimit)! !
+!PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 4/29/2022 17:12:08'!
+copyFrom: start to: stop
+	"Answer a string"
+	| savedPos collected |
+	self assert: (start <= stop).
+	self assert: (stop <= self size).
+	savedPos := self position.
+	self position: start - 1.
+	collected := WriteStream on: '' .
+	1 to: (stop - start + 1) do: [ :ignored |
+		 collected nextPut: (self next)
+	].
+	self position: savedPos.
+	^ collected contents
+	! !
 
 !PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 4/20/2022 14:23:38'!
 nextWordOrNumber

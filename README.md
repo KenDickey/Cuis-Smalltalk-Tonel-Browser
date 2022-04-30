@@ -1,5 +1,11 @@
 # Cuis-Smalltalk-Tonel-Browser
-Browser for simple Tonel format Smalltalk source files
+Browser for simple Tonel format Smalltalk source files.
+
+This is very much a work in progress, but
+````Smalltalk
+Feature require: 'ExchangeFormat-Tonel-Lite'.
+````
+will allor a File List to browse, via the #code button, a Tonel Class source file.  
 
 Tonel format is fairly simple.
 ````
@@ -47,24 +53,23 @@ TrivialExample >> explain: rationale to: entity [
 	self flag: #RationaleIsBogus.
 	entity add: rationale.
 ]
+
 ````
 
+Note that Tonel loses information (e.g. time & author stamp).
 
-THE BROWSER IS NOT YET WRITTEN, but read/write for Tonel is working.
+You can fileOut what the TonelReader reads as a Chunk File.
 
 ````Smalltalk
-Feature require: 'ExchangeFormat-Tonel-Lite'.
-
-writer := TonelWriter on: 'TrivialExample.class.st' asFileEntry forceWriteStream.
-writer writeClass: TrivialExample category: #'ExchangeFormat-Tonel-Lite'.
-reader := TonelReader on: ('TrivialExample.class.st' asFileEntry) readStream.
-reader read.
-reader inspect.
+reader fileOut.
+reader baseNameForFileOut. "Print this"
 ````
 
-Note that this is a complete port of STON, but a "lite" port of Tonel from the Bee Smalltalk folks --
+Note that this is a complete port of STON,
+but a "lite" port of Tonel from the Bee Smalltalk folks --
 NOT a port of the mountain of code from Pharo.  
 
-Copyright not assigned is copyright "Cuis", all other packages carry original copyrights.
+Copyright not assigned is copyright "Cuis",
+all other packages carry original copyrights.
 See LICENSES directory.
-All code is MIT copyright.
+All code here is MIT copyright.

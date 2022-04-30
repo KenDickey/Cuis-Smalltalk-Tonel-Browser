@@ -5,7 +5,8 @@ This is very much a work in progress, but
 ````Smalltalk
 Feature require: 'ExchangeFormat-Tonel-Lite'.
 ````
-will allor a File List to browse, via the #code button, a Tonel Class source file.  
+will allow a File List to browse, via the #code button, 
+a Tonel Class source file.  Just answer the prompts.
 
 Tonel format is fairly simple.
 ````

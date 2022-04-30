@@ -32,7 +32,7 @@ Class {
 		'curley'
 	],
 	#classVars : [
-		#Stooges
+		'Stooges'
 	],
 	#category : #ExchangeFormat-Tonel-Lite
 }

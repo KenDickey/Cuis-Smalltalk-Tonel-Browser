@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5114] on 30 April 2022 at 9:55:05 am'!
+'From Cuis 6.0 [latest update: #5116] on 30 April 2022 at 1:12:10 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 30!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 31!
 !requires: 'BeeCompatibility' 1 4 nil!
 !requires: 'ExchangeFormat-STON' 1 31 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
@@ -115,7 +115,7 @@ methods
 	class isNil ifTrue: [ ^#() ].
 	^ class class methodDictionary asArray & class methodDictionary asArray! !
 
-!TonelWriter methodsFor: 'private' stamp: 'KenD 4/19/2022 10:34:29'!
+!TonelWriter methodsFor: 'private' stamp: 'KenD 4/30/2022 13:08:41'!
 definition 
 	| map supername |
 	map := OrderedDictionary new.
@@ -134,7 +134,7 @@ definition
 		ifFalse: [map at: #type put: #bytes].
 	map
 		at: #instVars put: class instVarNames;
-		at: #classVars put: class classVarNames asSortedCollection asArray.
+		at: #classVars put: (class classVarNames collect: [ :n | n asString ]) asSortedCollection asArray.
 	category notNil ifTrue: [map at: #category put: category asSymbol].
 	
 	^ map! !

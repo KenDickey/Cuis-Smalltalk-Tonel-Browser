@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5114] on 29 April 2022 at 5:20:56 pm'!
+'From Cuis 6.0 [latest update: #5114] on 30 April 2022 at 8:27:07 am'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 28!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 29!
 !requires: 'BeeCompatibility' 1 4 nil!
 !requires: 'ExchangeFormat-STON' 1 31 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
@@ -319,6 +319,12 @@ initialize
 	Stooges := {}.
 	! !
 
+!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/30/2022 07:55:51'!
+baseNameForFileOut
+	
+	^ (classInfo at: #name), '.', codeType, '.st'
+! !
+
 !TonelReader methodsFor: 'accessing' stamp: 'KenD 4/28/2022 10:51:47'!
 classComment
 
@@ -556,16 +562,46 @@ fileOutClassInfoTo: aFileStream
 	self fileOutClassCommentTo: aFileStream
 	! !
 
-!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 15:23:22'!
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 08:25:08'!
 fileOutClassMethodPrefixTo: aFileStream
 
-	"NYI"
+	| classString |
+	classString := (classInfo at: #name) asString, ' class'.
+	aFileStream 
+		newLine; 
+		nextPutAll: '"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!!'; 
+		newLine; 
+		newLine.
+	aFileStream 
+		nextPut: $!! ;
+		nextPutAll: 'classDefinition: ', classString printString;
+		nextPutAll:  ' category: ', (classInfo at: #category) printString;
+		nextPut: $!! ;
+		newLine.
+	aFileStream
+		nextPutAll: classString;
+		newLine; tab;
+		nextPutAll: 'instanceVariableNames: '.
+	self fileOutNamesAsString: (classInfo at: #instVars ifAbsent: ['']) 
+		on: aFileStream.
+	aFileStream 
+		nextPut: $!! ;
+		newLine;
+		newLine.
+
+		
 	! !
 
-!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 15:23:32'!
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 08:16:41'!
 fileOutClassMethodSuffixTo: aFileStream
-
-	"NYI"
+	"Add initilize DoIt if required"
+	(methodInfos detect: [ :mi | (mi at: #selector) = #initialize ] ifNone: [ nil ])
+	ifNotNil: [ :ignored |
+		aFileStream 
+			newLine;
+			nextChunkPut: (classInfo at: #name) asString , ' initialize';
+			newLine
+	]
 	! !
 
 !TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 15:00:48'!
@@ -579,7 +615,7 @@ fileOutCompleteClass
 	] ensure: [ writeStream close ].
 	! !
 
-!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 17:18:39'!
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 08:20:31'!
 fileOutMethodInfoTo: aFileStream forMethod: methodInfo
 	"File out code chunk for a single method."
 	aFileStream 
@@ -593,7 +629,8 @@ fileOutMethodInfoTo: aFileStream forMethod: methodInfo
 	aFileStream 
 		nextPutAll: (methodInfo at: #signature);
 		nextPutAll: (methodInfo at: #body);
-		nextPut: $!! ;
+		nextPutAll: '!! !!' ;
+		newLine;
 		newLine.
 	! !
 
@@ -622,14 +659,14 @@ fileOutNamesAsString: anArrayOfSymbols on: aWriteStream
 	].
 	aWriteStream nextPut: $' .! !
 
-!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 13:23:47'!
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 07:56:29'!
 writeStreamForFileOut
 	"Answer an appropriate stream or nil.
 	 Stream will be opened on a fresh (empty) file."
 	| fileName fileEntry className |
 	className := classInfo at: #name.
 	fileName := stream name asFileEntry parent 
-				pathName, '/', className, '.', codeType, '.st'.
+				pathName, '/', self baseNameForFileOut.
 	fileEntry := fileName asFileEntry.
 	(fileEntry exists) ifTrue: [
 		(PopUpMenu confirm: className, '.', codeType, '.st Exists. Overwrite?')

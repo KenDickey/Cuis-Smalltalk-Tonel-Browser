@@ -1,4 +1,4 @@
-# Cuis-Smalltalk-Tonel-Browser
+># Cuis-Smalltalk-Tonel-Browser
 Browser for simple Tonel format Smalltalk source files.
 
 This is very much a work in progress, but
@@ -8,7 +8,7 @@ Feature require: 'ExchangeFormat-Tonel-Lite'.
 will allow a File List to browse, via the #code button, 
 a Tonel Class source file.  Just answer the prompts.
 
-Tonel format is fairly simple.
+Tonel format is fairly simple.  It starts with an optional class comment.
 ````
 "I am a trivial Class which should never be instantiated.
 
@@ -54,19 +54,23 @@ TrivialExample >> explain: rationale to: entity [
 	self flag: #RationaleIsBogus.
 	entity add: rationale.
 ]
-
 ````
 
 Note that Tonel loses information (e.g. time & author stamp).
 
-You can fileOut what the TonelReader reads as a Chunk File.
+Also, Tonel files use the same suffix, ".st", as chunk files.  Very bad!
 
+You can fileOut what the TonelReader reads as a Chunk File.
 ````Smalltalk
+writer :=  TonelWriter on: 'TrivialExample.class.st' asFileEntry forceWriteStream.
+writer writeClass: TrivialExample category: #'ExchangeFormat-Tonel-Lite'.
+reader := TonelReader on: ('TrivialExample.class.st' asFileEntry) readStream.
+reader read.
 reader fileOut.
 reader baseNameForFileOut. "Print this"
 ````
 
-Note that this is a complete port of STON,
+Note that this is a fairly complete port of STON,
 but a "lite" port of Tonel from the Bee Smalltalk folks --
 NOT a port of the mountain of code from Pharo.  
 

@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5116] on 30 April 2022 at 1:12:10 pm'!
+'From Cuis 6.0 [latest update: #5116] on 30 April 2022 at 2:06:10 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 31!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 32!
 !requires: 'BeeCompatibility' 1 4 nil!
 !requires: 'ExchangeFormat-STON' 1 31 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
@@ -335,7 +335,7 @@ classInfo
 
 	^ classInfo! !
 
-!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/29/2022 12:53:49'!
+!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/30/2022 13:37:53'!
 fileOut
 	"I represent a Class or a set of Extension methods to a Class.
 	 File me out in Cuis' Chunk Format."
@@ -343,12 +343,12 @@ fileOut
 	
 	(codeType = 'Class') 	ifTrue: [^self fileOutCompleteClass].
 	
-	(codeType = 'Extension') ifTrue: [^self fileOutAddedMethods].
+	(codeType = 'Extension') ifTrue: [^self fileOutExtensionMethods].
 	
 	self inform: 'TonelReader: PROBLEM WITH FILEOUT DATA'.
 	! !
 
-!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/30/2022 09:35:16'!
+!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/30/2022 13:31:29'!
 fileOutToStream: aFileStream
 	"I represent a Class or a set of Extension methods to a Class.
 	 File me out in Cuis' Chunk Format."
@@ -356,7 +356,7 @@ fileOutToStream: aFileStream
 	
 	(codeType = 'Class') 	ifTrue: [^self fileOutCompleteClassTo: aFileStream].
 	
-	(codeType = 'Extension') ifTrue: [^self fileOutAddedMethodsTo: aFileStream].
+	(codeType = 'Extension') ifTrue: [^self fileOutMethodInfosTo: aFileStream].
 	
 	self inform: 'TonelReader: PROBLEM WITH FILEOUT DATA'.
 	! !
@@ -534,7 +534,7 @@ fileOutClassCommentTo: aFileStream
 			
 	! !
 
-!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 15:48:52'!
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 14:03:02'!
 fileOutClassInfoTo: aFileStream
 
 	aFileStream 
@@ -563,7 +563,7 @@ fileOutClassInfoTo: aFileStream
 	
 	self flag: #PoolDictionaries.
 	aFileStream tab;
-		nextPutAll: 'poolDictionaries: '''' '; "Unused?"
+		nextPutAll: 'poolDictionaries: '''''; "Unused?"
 		newLine.
 
 	aFileStream tab;
@@ -636,6 +636,38 @@ fileOutCompleteClassTo: aFileStream
 	[ 	self fileOutClassInfoTo: aFileStream.
 		self fileOutMethodInfosTo: aFileStream.
 	] ensure: [ aFileStream close ].
+	! !
+
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 13:55:18'!
+fileOutExtensionHeadertTo: aFileStream
+
+	aFileStream 
+		timeStamp;
+		newLine; 
+		newLine.
+		! !
+
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 13:36:01'!
+fileOutExtensionMethodInfosTo: aFileStream
+
+	| instMInfos classMInfos |
+	instMInfos := methodInfos select: [ :mi | ((mi at: #class) endsWith: 'class') not ].
+	classMInfos := methodInfos select: [ :mi | (mi at: #class) endsWith: 'class' ].
+	instMInfos do: [ :mi | self fileOutMethodInfoTo: aFileStream forMethod: mi ].
+	classMInfos do: [ :mi | self fileOutMethodInfoTo: aFileStream forMethod: mi ].
+	aFileStream newLine.
+	! !
+
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 13:37:53'!
+fileOutExtensionMethods
+	"I read in a Class extension (new methods for an existing class); 
+	 write out in Cuis's Chunk Format."
+	| writeStream |
+	writeStream := self writeStreamForFileOut.
+	writeStream ifNil: [ self inform: 'Nothing written'. ^nil ].
+	[ 	self fileOutExtensionHeadertTo: writeStream.
+		self fileOutExtensionMethodInfosTo: writeStream.
+	] ensure: [ writeStream close ].
 	! !
 
 !TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 08:20:31'!

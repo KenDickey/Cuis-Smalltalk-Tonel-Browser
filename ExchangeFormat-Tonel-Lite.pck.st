@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5114] on 30 April 2022 at 8:27:07 am'!
+'From Cuis 6.0 [latest update: #5114] on 30 April 2022 at 9:55:05 am'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 29!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 30!
 !requires: 'BeeCompatibility' 1 4 nil!
 !requires: 'ExchangeFormat-STON' 1 31 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
@@ -348,6 +348,19 @@ fileOut
 	self inform: 'TonelReader: PROBLEM WITH FILEOUT DATA'.
 	! !
 
+!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/30/2022 09:35:16'!
+fileOutToStream: aFileStream
+	"I represent a Class or a set of Extension methods to a Class.
+	 File me out in Cuis' Chunk Format."
+	codeType ifNil: [ self read ].
+	
+	(codeType = 'Class') 	ifTrue: [^self fileOutCompleteClassTo: aFileStream].
+	
+	(codeType = 'Extension') ifTrue: [^self fileOutAddedMethodsTo: aFileStream].
+	
+	self inform: 'TonelReader: PROBLEM WITH FILEOUT DATA'.
+	! !
+
 !TonelReader methodsFor: 'accessing' stamp: 'KenD 4/26/2022 16:04:17'!
 filePath
 
@@ -615,6 +628,16 @@ fileOutCompleteClass
 	] ensure: [ writeStream close ].
 	! !
 
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 09:36:28'!
+fileOutCompleteClassTo: aFileStream
+	"I read in a complete Class definition; write out in Cuis's Chunk Format."
+
+	aFileStream ifNil: [ self inform: 'Nothing written'. ^nil ].
+	[ 	self fileOutClassInfoTo: aFileStream.
+		self fileOutMethodInfosTo: aFileStream.
+	] ensure: [ aFileStream close ].
+	! !
+
 !TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 08:20:31'!
 fileOutMethodInfoTo: aFileStream forMethod: methodInfo
 	"File out code chunk for a single method."
@@ -675,6 +698,21 @@ writeStreamForFileOut
 	^ fileEntry forceWriteStream.
 ! !
 
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 09:31:53'!
+writeStreamForFileOut: dirPathString
+	"Answer an appropriate stream or nil.
+	 Stream will be opened on a fresh (empty) file."
+	| fileName fileEntry className |
+	className := classInfo at: #name.
+	fileName := dirPathString, '/', self baseNameForFileOut.
+	fileEntry := fileName asFileEntry.
+	(fileEntry exists) ifTrue: [
+		(PopUpMenu confirm: className, '.', codeType, '.st Exists. Overwrite?')
+			ifFalse: [^nil]
+	].
+	^ fileEntry forceWriteStream.
+! !
+
 !TonelReader class methodsFor: 'instance creation' stamp: 'KenD 4/19/2022 07:51:29'!
 new 
 
@@ -684,6 +722,27 @@ new
 on: aStream 
 
 	^ self new stream: aStream! !
+
+!TonelReader class methodsFor: 'translteration' stamp: 'KenD 4/30/2022 09:43:57'!
+chunkFromTonel: aFileEntry
+	"FileEntry is assumed to be a Tonel file.
+	 Read it in an write a Chunk file to correspond.
+	Answer nil or a fileEntry on the chunk file"
+	| reader parentDirName answer outFile newName |
+	answer := nil.
+	parentDirName := aFileEntry parent pathName.
+	reader := self on: aFileEntry readStream.
+	[ reader read.
+	  outFile := reader writeStreamForFileOut: parentDirName.
+	  outFile ifNotNil: [
+		newName := outFile name.
+		reader fileOutToStream: outFile.
+		outFile close.
+		answer := newName asFileEntry.
+		].
+	] ensure: [ "empty" ].
+
+	^ answer! !
 
 !TonelWriter methodsFor: 'accessing' stamp: 'KenD 4/19/2022 10:31:50'!
 class: aClass 
@@ -873,4 +932,21 @@ writeMethods: aCollection
 	(self on: tonel) writeMethods: aCollection.
 	
 	^ tonel contents! !
+
+!CodeFileBrowser class methodsFor: '*ExchangeFormat-Tonel-Lite' stamp: 'KenD 4/30/2022 09:41:04'!
+browseCodeFileEntry: aFileEntry
+	"Check for Tonel Format vs Chunk Format based on 1st character"
+	| char entryToUse |
+	entryToUse := aFileEntry.
+	char := aFileEntry readStream peek.
+	"Chunk files typically begin with $!! or $' ( 'From Cuis..) "
+	('!!''' includes: char) ifFalse: [
+		(PopUpMenu confirm: 'Looks like a Tonel File. OK to write a Chunk File?' )
+		ifTrue: [ | altFileEntry |
+			altFileEntry := TonelReader chunkFromTonel: aFileEntry.
+			altFileEntry ifNotNil: [ :ignored | entryToUse := altFileEntry ].
+		]
+	].
+	
+	^ self browseCodeSource: (CodeFile newFromFile: entryToUse )! !
 TrivialExample initialize!

@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5116] on 30 April 2022 at 2:06:10 pm'!
+'From Cuis 6.0 [latest update: #5117] on 1 May 2022 at 12:49:03 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 32!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 35!
 !requires: 'BeeCompatibility' 1 4 nil!
 !requires: 'ExchangeFormat-STON' 1 31 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
@@ -348,7 +348,7 @@ fileOut
 	self inform: 'TonelReader: PROBLEM WITH FILEOUT DATA'.
 	! !
 
-!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/30/2022 13:31:29'!
+!TonelReader methodsFor: 'accessing' stamp: 'KenD 5/1/2022 12:45:29'!
 fileOutToStream: aFileStream
 	"I represent a Class or a set of Extension methods to a Class.
 	 File me out in Cuis' Chunk Format."
@@ -356,7 +356,7 @@ fileOutToStream: aFileStream
 	
 	(codeType = 'Class') 	ifTrue: [^self fileOutCompleteClassTo: aFileStream].
 	
-	(codeType = 'Extension') ifTrue: [^self fileOutMethodInfosTo: aFileStream].
+	(codeType = 'Extension') ifTrue: [^self fileOutExtensionMethodsTo: aFileStream].
 	
 	self inform: 'TonelReader: PROBLEM WITH FILEOUT DATA'.
 	! !
@@ -575,7 +575,7 @@ fileOutClassInfoTo: aFileStream
 	self fileOutClassCommentTo: aFileStream
 	! !
 
-!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 08:25:08'!
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 5/1/2022 12:12:40'!
 fileOutClassMethodPrefixTo: aFileStream
 
 	| classString |
@@ -595,7 +595,7 @@ fileOutClassMethodPrefixTo: aFileStream
 		nextPutAll: classString;
 		newLine; tab;
 		nextPutAll: 'instanceVariableNames: '.
-	self fileOutNamesAsString: (classInfo at: #instVars ifAbsent: ['']) 
+	self fileOutNamesAsString: (classInfo at: #classVars ifAbsent: ['']) 
 		on: aFileStream.
 	aFileStream 
 		nextPut: $!! ;
@@ -647,27 +647,38 @@ fileOutExtensionHeadertTo: aFileStream
 		newLine.
 		! !
 
-!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 13:36:01'!
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 5/1/2022 12:46:32'!
 fileOutExtensionMethodInfosTo: aFileStream
 
 	| instMInfos classMInfos |
 	instMInfos := methodInfos select: [ :mi | ((mi at: #class) endsWith: 'class') not ].
-	classMInfos := methodInfos select: [ :mi | (mi at: #class) endsWith: 'class' ].
+	classMInfos := methodInfos select: [ :cmi | (cmi at: #class) endsWith: 'class' ].
 	instMInfos do: [ :mi | self fileOutMethodInfoTo: aFileStream forMethod: mi ].
 	classMInfos do: [ :mi | self fileOutMethodInfoTo: aFileStream forMethod: mi ].
 	aFileStream newLine.
 	! !
 
-!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 13:37:53'!
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 5/1/2022 12:43:47'!
 fileOutExtensionMethods
 	"I read in a Class extension (new methods for an existing class); 
 	 write out in Cuis's Chunk Format."
 	| writeStream |
 	writeStream := self writeStreamForFileOut.
 	writeStream ifNil: [ self inform: 'Nothing written'. ^nil ].
+self halt.
 	[ 	self fileOutExtensionHeadertTo: writeStream.
 		self fileOutExtensionMethodInfosTo: writeStream.
-	] ensure: [ writeStream close ].
+	] ensure: [ writeStream flush; close ].
+	! !
+
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 5/1/2022 12:47:27'!
+fileOutExtensionMethodsTo: aFileStream
+	"I read in a Class extension (new methods for an existing class); 
+	 write out in Cuis's Chunk Format."
+	aFileStream ifNil: [ self inform: 'Nothing written'. ^nil ].
+	[ 	self fileOutExtensionHeadertTo: aFileStream.
+		self fileOutExtensionMethodInfosTo: aFileStream.
+	] ensure: [ aFileStream close ].
 	! !
 
 !TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 08:20:31'!
@@ -755,7 +766,7 @@ on: aStream
 
 	^ self new stream: aStream! !
 
-!TonelReader class methodsFor: 'translteration' stamp: 'KenD 4/30/2022 09:43:57'!
+!TonelReader class methodsFor: 'translteration' stamp: 'KenD 5/1/2022 12:47:06'!
 chunkFromTonel: aFileEntry
 	"FileEntry is assumed to be a Tonel file.
 	 Read it in an write a Chunk file to correspond.

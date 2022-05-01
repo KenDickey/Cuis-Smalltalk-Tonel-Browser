@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5117] on 1 May 2022 at 12:49:03 pm'!
+'From Cuis 6.0 [latest update: #5117] on 1 May 2022 at 1:15:39 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 35!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 36!
 !requires: 'BeeCompatibility' 1 4 nil!
 !requires: 'ExchangeFormat-STON' 1 31 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
@@ -681,7 +681,7 @@ fileOutExtensionMethodsTo: aFileStream
 	] ensure: [ aFileStream close ].
 	! !
 
-!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 08:20:31'!
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 5/1/2022 13:12:09'!
 fileOutMethodInfoTo: aFileStream forMethod: methodInfo
 	"File out code chunk for a single method."
 	aFileStream 
@@ -693,9 +693,8 @@ fileOutMethodInfoTo: aFileStream forMethod: methodInfo
 		newLine.
 	
 	aFileStream 
-		nextPutAll: (methodInfo at: #signature);
-		nextPutAll: (methodInfo at: #body);
-		nextPutAll: '!! !!' ;
+		nextChunkPut: (methodInfo at: #signature) , (methodInfo at: #body);
+		nextPutAll: ' !!' ;
 		newLine;
 		newLine.
 	! !

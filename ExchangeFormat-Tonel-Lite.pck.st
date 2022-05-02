@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5117] on 1 May 2022 at 1:15:39 pm'!
+'From Cuis 6.0 [latest update: #5130] on 2 May 2022 at 3:53:24 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 36!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 37!
 !requires: 'BeeCompatibility' 1 4 nil!
 !requires: 'ExchangeFormat-STON' 1 31 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
@@ -92,52 +92,6 @@ I take a Cuis Class and write it out to a file in the Tonel exchange format.
 
 I am not very bright, but perhaps you could fix that!!
 !
-
-!TonelReader methodsFor: 'test access' stamp: 'KenD 4/26/2022 16:19:53'!
-definition
-
-	^ self classInfo ! !
-
-!TonelReader methodsFor: 'test access' stamp: 'KenD 4/26/2022 16:20:19'!
-methods
-
-	^ self methodInfos ! !
-
-!TonelWriter methodsFor: 'accessing' stamp: 'KenD 4/19/2022 08:11:43'!
-category: aString 
-
-	category := aString! !
-
-!TonelWriter methodsFor: 'accessing' stamp: 'KenD 4/19/2022 10:36:31'!
-methods 
-
-	methods notNil ifTrue: [ ^methods ].
-	class isNil ifTrue: [ ^#() ].
-	^ class class methodDictionary asArray & class methodDictionary asArray! !
-
-!TonelWriter methodsFor: 'private' stamp: 'KenD 4/30/2022 13:08:41'!
-definition 
-	| map supername |
-	map := OrderedDictionary new.
-	self isExtension
-		ifTrue: [^ map
-			at: #name put: methods anyOne classBinding name asSymbol;
-			yourself].
-	supername := (class respondsTo: #supername)
-		ifTrue: [class supername]
-		ifFalse: [class superclass ifNotNil: [:c | c name]].
-	map
-		at: #name put: class name asSymbol;
-		at: #superclass put: supername asSymbol.
-	class _instancesHavePointers
-		ifTrue: [class _instancesAreArrayed ifTrue: [map at: #type put: #variable]]
-		ifFalse: [map at: #type put: #bytes].
-	map
-		at: #instVars put: class instVarNames;
-		at: #classVars put: (class classVarNames collect: [ :n | n asString ]) asSortedCollection asArray.
-	category notNil ifTrue: [map at: #category put: category asSymbol].
-	
-	^ map! !
 
 !TonelTest methodsFor: 'private' stamp: 'KenD 4/19/2022 12:39:07'!
 fileEntryFor: aClassSpec 
@@ -382,7 +336,7 @@ initialize
 	classInfo      := OrderedDictionary new.
 	methodInfos := OrderedCollection new! !
 
-!TonelReader methodsFor: 'reading' stamp: 'KenD 4/22/2022 16:35:23'!
+!TonelReader methodsFor: 'reading' stamp: 'KenD 5/2/2022 15:49:20'!
 nextBlock 
 	"(stream at: position) is $[, find matching unnested $]
 	 and answer the body "
@@ -394,9 +348,9 @@ nextBlock
 	start := stream position.
 	[	(char == $[ andNot: [prev == $$]) ifTrue: [nested := nested + 1].
 		(char = $]   andNot: [prev == $$]) ifTrue: [nested := nested - 1].
-		prev := char.
-		char = $' ifTrue: [self skipString].
-		char = $" ifTrue: [self skipComment].
+		(char = $' andNot: [prev == $$]) ifTrue: [prev := char. self skipString].
+		(char = $" andNot: [prev == $$]) ifTrue: [prev := char. self skipComment].
+		prev := char. 
 		nested = 0]
 		whileFalse: [char := stream next].
 	
@@ -489,6 +443,16 @@ readType
 	(codeType = 'Class' or: [codeType = 'Extension'])
 		ifFalse: [self error: 'unsupported type ', codeType ]! !
 
+!TonelReader methodsFor: 'test access' stamp: 'KenD 4/26/2022 16:19:53'!
+definition
+
+	^ self classInfo ! !
+
+!TonelReader methodsFor: 'test access' stamp: 'KenD 4/26/2022 16:20:19'!
+methods
+
+	^ self methodInfos ! !
+
 !TonelReader methodsFor: 'private' stamp: 'KenD 4/20/2022 14:18:18'!
 skipComment 
 
@@ -534,7 +498,7 @@ fileOutClassCommentTo: aFileStream
 			
 	! !
 
-!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 14:03:02'!
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 5/2/2022 15:39:24'!
 fileOutClassInfoTo: aFileStream
 
 	aFileStream 
@@ -561,10 +525,11 @@ fileOutClassInfoTo: aFileStream
 		on: aFileStream.
 	aFileStream newLine.
 	
-	self flag: #PoolDictionaries.
 	aFileStream tab;
-		nextPutAll: 'poolDictionaries: '''''; "Unused?"
-		newLine.
+		nextPutAll: 'poolDictionaries: '.
+	self fileOutNamesAsString: (classInfo at: #pools ifAbsent: ['']) 
+		on: aFileStream.
+	aFileStream newLine.
 
 	aFileStream tab;
 		nextPutAll: 'category: ';
@@ -786,10 +751,22 @@ chunkFromTonel: aFileEntry
 
 	^ answer! !
 
+!TonelWriter methodsFor: 'accessing' stamp: 'KenD 4/19/2022 08:11:43'!
+category: aString 
+
+	category := aString! !
+
 !TonelWriter methodsFor: 'accessing' stamp: 'KenD 4/19/2022 10:31:50'!
 class: aClass 
 
 	class := aClass! !
+
+!TonelWriter methodsFor: 'accessing' stamp: 'KenD 4/19/2022 10:36:31'!
+methods 
+
+	methods notNil ifTrue: [ ^methods ].
+	class isNil ifTrue: [ ^#() ].
+	^ class class methodDictionary asArray & class methodDictionary asArray! !
 
 !TonelWriter methodsFor: 'accessing' stamp: 'KenD 4/22/2022 16:17:36'!
 methods: aCollection 
@@ -811,6 +788,30 @@ stream: aWriteStream
 crtab 
 
 	stream crtab! !
+
+!TonelWriter methodsFor: 'private' stamp: 'KenD 4/30/2022 13:08:41'!
+definition 
+	| map supername |
+	map := OrderedDictionary new.
+	self isExtension
+		ifTrue: [^ map
+			at: #name put: methods anyOne classBinding name asSymbol;
+			yourself].
+	supername := (class respondsTo: #supername)
+		ifTrue: [class supername]
+		ifFalse: [class superclass ifNotNil: [:c | c name]].
+	map
+		at: #name put: class name asSymbol;
+		at: #superclass put: supername asSymbol.
+	class _instancesHavePointers
+		ifTrue: [class _instancesAreArrayed ifTrue: [map at: #type put: #variable]]
+		ifFalse: [map at: #type put: #bytes].
+	map
+		at: #instVars put: class instVarNames;
+		at: #classVars put: (class classVarNames collect: [ :n | n asString ]) asSortedCollection asArray.
+	category notNil ifTrue: [map at: #category put: category asSymbol].
+	
+	^ map! !
 
 !TonelWriter methodsFor: 'private' stamp: 'KenD 4/20/2022 14:03:20'!
 flush

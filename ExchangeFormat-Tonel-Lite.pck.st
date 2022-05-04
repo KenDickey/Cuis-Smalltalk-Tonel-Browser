@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5130] on 2 May 2022 at 3:53:24 pm'!
+'From Cuis 6.0 [latest update: #5135] on 3 May 2022 at 5:01:15 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 37!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 38!
 !requires: 'BeeCompatibility' 1 4 nil!
 !requires: 'ExchangeFormat-STON' 1 31 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
@@ -58,7 +58,7 @@ I am a trivial Class which should never be instantiated.
 	
 Time donated to Cuis pays for itself!!
 
-writer :=  TonelWriter on: 'TrivialExample.class.st' asFileEntry forceWriteStream.
+writer :=  TonelWriter on: 'TrivialExample.class.tonel.st' asFileEntry forceWriteStream.
 writer writeClass: TrivialExample category: #'ExchangeFormat-Tonel-Lite'.
 reader := TonelReader on: ('TrivialExample.class.st' asFileEntry) readStream.
 reader read.
@@ -91,6 +91,10 @@ codeType  is either:
 I take a Cuis Class and write it out to a file in the Tonel exchange format.
 
 I am not very bright, but perhaps you could fix that!!
+
+writer :=  TonelWriter on: 'TrivialExample.class.tonel.st' asFileEntry forceWriteStream.
+writer writeClass: TrivialExample category: #'ExchangeFormat-Tonel-Lite'.
+
 !
 
 !TonelTest methodsFor: 'private' stamp: 'KenD 4/19/2022 12:39:07'!
@@ -789,7 +793,7 @@ crtab
 
 	stream crtab! !
 
-!TonelWriter methodsFor: 'private' stamp: 'KenD 4/30/2022 13:08:41'!
+!TonelWriter methodsFor: 'private' stamp: 'KenD 5/3/2022 16:58:04'!
 definition 
 	| map supername |
 	map := OrderedDictionary new.
@@ -810,6 +814,8 @@ definition
 		at: #instVars put: class instVarNames;
 		at: #classVars put: (class classVarNames collect: [ :n | n asString ]) asSortedCollection asArray.
 	category notNil ifTrue: [map at: #category put: category asSymbol].
+	(class sharedPoolsString size isZero) 
+		ifFalse:  [map at: #pools put: (class sharedPoolsString findTokens: ' ') asArray].
 	
 	^ map! !
 

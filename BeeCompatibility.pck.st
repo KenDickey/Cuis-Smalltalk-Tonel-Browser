@@ -1,6 +1,6 @@
-'From Cuis 6.0 [latest update: #5114] on 29 April 2022 at 5:21:00 pm'!
+'From Cuis 6.0 [latest update: #5135] on 5 May 2022 at 11:53:42 am'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 19!
+!provides: 'BeeCompatibility' 1 20!
 !requires: 'SqueakCompatibility' 1 30 nil!
 SystemOrganization addCategory: 'BeeCompatibility'!
 
@@ -48,14 +48,6 @@ For current system, note:
 	Smalltalk osVersion ." 'linux-gnu' "
 	!
 
-!Stretch methodsFor: 'printing' stamp: 'KenD 2/21/2021 13:41:14'!
-printOn: aStream 
-
-	aStream
-		nextPutAll: start asString;
-		nextPutAll: ' thru: ';
-		nextPutAll: end asString! !
-
 !PSharedPool class methodsFor: 'accessing' stamp: 'Install-PowerLang 4/25/2021 10:33:58'!
 asArray 
 
@@ -91,6 +83,14 @@ detect: aBlock ifNone: anotherBlock
 do: aBlock 
 
 	^self classPool do: aBlock! !
+
+!Stretch methodsFor: 'printing' stamp: 'KenD 2/21/2021 13:41:14'!
+printOn: aStream 
+
+	aStream
+		nextPutAll: start asString;
+		nextPutAll: ' thru: ';
+		nextPutAll: end asString! !
 
 !Stretch methodsFor: 'comparing' stamp: 'KenD 2/21/2021 13:37:03'!
 = aStretch 
@@ -319,6 +319,21 @@ split: aString
 			ifFalse: [parts add: ''].
 		keyStart := keyStop + 1].
 	^parts! !
+
+!SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 5/5/2022 11:51:37'!
+sortBy: blockOrCriteria
+	"My elements to be ordered 
+	 by criteria (a Selector Symbol) 
+	 or by using a sortblock."
+	| sortBlock sorted |
+	(blockOrCriteria is: #Symbol)
+		ifTrue:  [ sortBlock := [ :a :b | 
+					(a perform: blockOrCriteria) 
+					<= (b  perform: blockOrCriteria) ] 
+		]
+		ifFalse: [ sortBlock := blockOrCriteria ].
+	sorted := self asSortedCollection: sortBlock.
+	^ self species withAll: sorted! !
 
 !String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 16:53:01'!
 arity 

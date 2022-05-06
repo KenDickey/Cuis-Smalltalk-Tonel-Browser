@@ -1,6 +1,6 @@
-'From Cuis 6.0 [latest update: #5135] on 5 May 2022 at 11:53:42 am'!
+'From Cuis 6.0 [latest update: #5135] on 6 May 2022 at 8:06:07 am'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 20!
+!provides: 'BeeCompatibility' 1 21!
 !requires: 'SqueakCompatibility' 1 30 nil!
 SystemOrganization addCategory: 'BeeCompatibility'!
 
@@ -340,6 +340,11 @@ arity
 
 	^self numArgs! !
 
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 08:05:47'!
+asFile
+
+	^ self asFileEntry ! !
+
 !String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 16:53:12'!
 existingSymbol 
 
@@ -414,6 +419,21 @@ trimBlanks
 
 	^self withBlanksTrimmed! !
 
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 07:41:44'!
+trimTail: suffixString
+
+	^ self withoutSuffix: suffixString ! !
+
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 08:03:40'!
+withExtension: newSuffix
+
+	^ self append: '.' , newSuffix! !
+
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 08:03:50'!
+withFullExtension: newSuffix
+
+	^ self append: '.' ,  newSuffix! !
+
 !String methodsFor: '*BeeCompatibility' stamp: 'KenD 4/22/2022 15:27:34'!
 withoutLineSeparators
 	
@@ -480,4 +500,9 @@ nextWordOrNumber
 			ifTrue: [ self position: self position-1. ^ word ]
 		].
 	^ word! !
+
+!DirectoryEntry methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 07:59:19'!
+\ pathString
+	
+	^ self // pathString! !
 TargetOSPlatform initialize!

@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5135] on 3 May 2022 at 5:01:15 pm'!
+'From Cuis 6.0 [latest update: #5135] on 6 May 2022 at 4:07:29 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 38!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 40!
 !requires: 'BeeCompatibility' 1 4 nil!
 !requires: 'ExchangeFormat-STON' 1 31 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
@@ -30,6 +30,16 @@ TonelTest subclass: #TrivialExample
 TrivialExample class
 	instanceVariableNames: ''!
 
+!classDefinition: #TonelPackage category: 'ExchangeFormat-Tonel-Lite'!
+Object subclass: #TonelPackage
+	instanceVariableNames: 'category classList'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ExchangeFormat-Tonel-Lite'!
+!classDefinition: 'TonelPackage class' category: 'ExchangeFormat-Tonel-Lite'!
+TonelPackage class
+	instanceVariableNames: ''!
+
 !classDefinition: #TonelReader category: 'ExchangeFormat-Tonel-Lite'!
 Object subclass: #TonelReader
 	instanceVariableNames: 'classComment classInfo methodInfos stream codeType'
@@ -38,6 +48,16 @@ Object subclass: #TonelReader
 	category: 'ExchangeFormat-Tonel-Lite'!
 !classDefinition: 'TonelReader class' category: 'ExchangeFormat-Tonel-Lite'!
 TonelReader class
+	instanceVariableNames: ''!
+
+!classDefinition: #TonelRepository category: 'ExchangeFormat-Tonel-Lite'!
+Object subclass: #TonelRepository
+	instanceVariableNames: 'dirEntry categories'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ExchangeFormat-Tonel-Lite'!
+!classDefinition: 'TonelRepository class' category: 'ExchangeFormat-Tonel-Lite'!
+TonelRepository class
 	instanceVariableNames: ''!
 
 !classDefinition: #TonelWriter category: 'ExchangeFormat-Tonel-Lite'!
@@ -65,6 +85,9 @@ reader read.
 reader inspect.
 !
 
+!TonelPackage commentStamp: '<historical>' prior: 0!
+I keep a list of class name strings for a given category.!
+
 !TonelReader commentStamp: '<historical>' prior: 0!
 stream  is a StandardFileStream, whose #name is a file path.
 
@@ -85,6 +108,10 @@ codeType  is either:
 	'Class' -- indicarting code for an entire class definition
 	    or
 	'Extension' -- indicating a set of methods extending an existing type
+!
+
+!TonelRepository commentStamp: '<historical>' prior: 0!
+Directory of Tonel formatted source files.
 !
 
 !TonelWriter commentStamp: '<historical>' prior: 0!
@@ -277,6 +304,36 @@ initialize
 	Stooges := {}.
 	! !
 
+!TonelPackage methodsFor: 'accessing' stamp: 'KenD 5/6/2022 15:04:51'!
+category
+
+	^ category ! !
+
+!TonelPackage methodsFor: 'accessing' stamp: 'KenD 5/6/2022 15:05:02'!
+classList
+
+	^ classList ! !
+
+!TonelPackage methodsFor: 'initialization' stamp: 'KenD 5/6/2022 15:02:05'!
+category: aCategory classList: aClassList
+
+	category := aCategory.
+	classList := aClassList ! !
+
+!TonelPackage class methodsFor: 'instance creation' stamp: 'KenD 5/6/2022 15:02:40'!
+category: aCategory classList: aClassList
+
+	^ self new 
+		category: aCategory classList: aClassList! !
+
+!TonelPackage class methodsFor: 'instance creation' stamp: 'KenD 5/6/2022 15:12:32'!
+fromReader: aTonelReader
+
+	aTonelReader read. "Should have been done, but harmless"
+	^ self new 
+		category: (aTonelReader classInfo at: #name)
+		classList: (aTonelReader classInfo at: #classes)! !
+
 !TonelReader methodsFor: 'accessing' stamp: 'KenD 4/30/2022 07:55:51'!
 baseNameForFileOut
 	
@@ -293,7 +350,7 @@ classInfo
 
 	^ classInfo! !
 
-!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/30/2022 13:37:53'!
+!TonelReader methodsFor: 'accessing' stamp: 'KenD 5/6/2022 15:15:57'!
 fileOut
 	"I represent a Class or a set of Extension methods to a Class.
 	 File me out in Cuis' Chunk Format."
@@ -303,18 +360,25 @@ fileOut
 	
 	(codeType = 'Extension') ifTrue: [^self fileOutExtensionMethods].
 	
+	(codeType = 'Package') ifTrue: [^self fileOutPackageDoIt].
+	
 	self inform: 'TonelReader: PROBLEM WITH FILEOUT DATA'.
 	! !
 
-!TonelReader methodsFor: 'accessing' stamp: 'KenD 5/1/2022 12:45:29'!
+!TonelReader methodsFor: 'accessing' stamp: 'KenD 5/6/2022 15:17:12'!
 fileOutToStream: aFileStream
 	"I represent a Class or a set of Extension methods to a Class.
 	 File me out in Cuis' Chunk Format."
 	codeType ifNil: [ self read ].
 	
-	(codeType = 'Class') 	ifTrue: [^self fileOutCompleteClassTo: aFileStream].
+	(codeType = 'Class') 	
+		ifTrue: [^self fileOutCompleteClassTo: aFileStream].
 	
-	(codeType = 'Extension') ifTrue: [^self fileOutExtensionMethodsTo: aFileStream].
+	(codeType = 'Extension') 
+		ifTrue: [^self fileOutExtensionMethodsTo: aFileStream].
+	
+	(codeType = 'Package') 
+		ifTrue: [^self fileOutPackageDoItTo: aFileStream].
 	
 	self inform: 'TonelReader: PROBLEM WITH FILEOUT DATA'.
 	! !
@@ -436,15 +500,18 @@ readMethods
 	[stream skipSeparators; atEnd] 
 		whileFalse: [self readMethod]! !
 
-!TonelReader methodsFor: 'reading' stamp: 'KenD 4/29/2022 12:46:19'!
+!TonelReader methodsFor: 'reading' stamp: 'KenD 5/6/2022 14:31:55'!
 readType 
 	"codeType is either
 		'Class' indicarting code for an entire class definition
 	or
 		'Extension' indicating a set of methods extending an existing type
+	or 
+		'Package' indicating a category (#name) 
+		  and collection of class names (#classes)
 	"
 	codeType := stream skipSeparators; nextWordOrNumber.
-	(codeType = 'Class' or: [codeType = 'Extension'])
+	( #( 'Class' 'Extension' 'Package' ) includes: codeType )
 		ifFalse: [self error: 'unsupported type ', codeType ]! !
 
 !TonelReader methodsFor: 'test access' stamp: 'KenD 4/26/2022 16:19:53'!
@@ -586,15 +653,14 @@ fileOutClassMethodSuffixTo: aFileStream
 	]
 	! !
 
-!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 15:00:48'!
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 5/6/2022 15:49:38'!
 fileOutCompleteClass
 	"I read in a complete Class definition; write out in Cuis's Chunk Format."
 	| writeStream |
 	writeStream := self writeStreamForFileOut.
-	writeStream ifNil: [ self inform: 'Nothing written'. ^nil ].
-	[ 	self fileOutClassInfoTo: writeStream.
-		self fileOutMethodInfosTo: writeStream.
-	] ensure: [ writeStream close ].
+	writeStream 
+		ifNil: [ self inform: 'Nothing written'. ^nil ]
+		ifNotNil: [ self fileOutCompleteClassTo: writeStream ]
 	! !
 
 !TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 09:36:28'!
@@ -627,17 +693,16 @@ fileOutExtensionMethodInfosTo: aFileStream
 	aFileStream newLine.
 	! !
 
-!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 5/1/2022 12:43:47'!
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 5/6/2022 15:47:01'!
 fileOutExtensionMethods
 	"I read in a Class extension (new methods for an existing class); 
 	 write out in Cuis's Chunk Format."
 	| writeStream |
 	writeStream := self writeStreamForFileOut.
-	writeStream ifNil: [ self inform: 'Nothing written'. ^nil ].
-self halt.
-	[ 	self fileOutExtensionHeadertTo: writeStream.
-		self fileOutExtensionMethodInfosTo: writeStream.
-	] ensure: [ writeStream flush; close ].
+	writeStream 
+		ifNil: [ self inform: 'Nothing written'. ^nil ]
+		ifNotNil: [ self fileOutExtensionMethodsTo: writeStream ]
+
 	! !
 
 !TonelReader methodsFor: 'private fileOut' stamp: 'KenD 5/1/2022 12:47:27'!
@@ -692,6 +757,30 @@ fileOutNamesAsString: anArrayOfSymbols on: aWriteStream
 		aWriteStream nextPutAll: sym asString
 	].
 	aWriteStream nextPut: $' .! !
+
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 5/6/2022 15:48:02'!
+fileOutPackageDoIt
+
+	| writeStream |
+	writeStream := self writeStreamForFileOut.
+	writeStream 
+		ifNil: [ self inform: 'Nothing written'. ^nil ]
+		ifNotNil: [ self fileOutPackageDoItTo: writeStream ]
+! !
+
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 5/6/2022 16:05:50'!
+fileOutPackageDoItTo: aFileStream
+
+	aFileStream 
+		timeStamp;
+		newLine;
+		nextPutAll: 'Smalltalk at: #CurrentTonelPackage put: (TonelPackage category: ';
+		nextPutAll: (classInfo at: #name) printString;
+		newLine;
+		nextPutAll: ' classList: ';
+		nextPutAll: (classInfo at: #classes) printString;
+		nextPutAll: ' ).';
+		newLine! !
 
 !TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 07:56:29'!
 writeStreamForFileOut
@@ -754,6 +843,27 @@ chunkFromTonel: aFileEntry
 	] ensure: [ "empty" ].
 
 	^ answer! !
+
+!TonelRepository methodsFor: 'processing' stamp: 'KenD 5/6/2022 07:55:23'!
+clean
+
+	self flag: #WTF.
+	self inform: 'RingEnv ''clean'' semantics ?!!?'! !
+
+!TonelRepository methodsFor: 'initialization' stamp: 'KenD 5/6/2022 11:57:30'!
+asRingEnvironmentWith: arrayofCategorySymbols
+
+	categories := arrayofCategorySymbols.
+	self flag: #RingEnvironment.
+	^ self	! !
+
+!TonelRepository methodsFor: 'initialization' stamp: 'KenD 5/6/2022 07:49:26'!
+directory: pathOrDirEntry
+
+	(pathOrDirEntry is: #String)
+		ifTrue:  [ dirEntry := pathOrDirEntry asDirectoryEntry ]
+		ifFalse:  [ dirEntry := pathOrDirEntry ]
+	! !
 
 !TonelWriter methodsFor: 'accessing' stamp: 'KenD 4/19/2022 08:11:43'!
 category: aString 

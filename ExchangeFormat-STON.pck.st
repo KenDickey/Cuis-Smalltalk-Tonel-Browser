@@ -1,4 +1,4 @@
-'From Cuis 6.0 [latest update: #5141] on 7 May 2022 at 4:07:22 pm'!
+'From Cuis 6.0 [latest update: #5141] on 10 May 2022 at 7:35:56 am'!
 'Description STON implements serialization and materialization using the Smalltalk Object Notation format.
 
 Ported from:
@@ -7,7 +7,7 @@ Ported from:
 Copyright (C) 2012 Sven Van Caekenberghe.
 	See (MIT) license in LICENSES directory.
 '!
-!provides: 'ExchangeFormat-STON' 1 36!
+!provides: 'ExchangeFormat-STON' 1 37!
 !requires: 'Cuis-Base' 60 5096 nil!
 !requires: 'Identities-UUID' 1 9 nil!
 !requires: 'SqueakCompatibility' 1 33 nil!
@@ -931,8 +931,20 @@ signalFor: unfoundObject
 !STONReader methodsFor: 'private'!
 ! !
 
-!STONReader methodsFor: 'private'!
-! !
+!STONReader methodsFor: 'private' stamp: 'KenD 5/10/2022 07:35:28'!
+lookupClass: arg1
+	self signal: #LookupNonClass.
+	Smalltalk globals
+		at: arg1
+		ifPresent: [ :argm0_2 |
+			^ argm0_2 ].
+	^ classes
+		at: arg1
+		ifAbsentPut: [
+			Object allSubclasses
+				detect: [ :argm1_2 |
+					argm1_2 isMeta not and: [ argm1_2 stonName = arg1 ]]
+				ifNone: [ "NotFound signalFor: arg1" arg1 asSymbol ]].! !
 
 !STONReader methodsFor: 'private'!
 ! !

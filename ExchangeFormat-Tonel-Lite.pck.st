@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5135] on 6 May 2022 at 4:07:29 pm'!
+'From Cuis 6.0 [latest update: #5171] on 17 May 2022 at 3:49:33 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 40!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 41!
 !requires: 'BeeCompatibility' 1 4 nil!
 !requires: 'ExchangeFormat-STON' 1 31 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
@@ -474,7 +474,7 @@ readDefinition
 		on: stream skipSeparators;
 		parseMapDo: [:key :value | classInfo at: key put: value]! !
 
-!TonelReader methodsFor: 'reading' stamp: 'KenD 4/28/2022 10:52:26'!
+!TonelReader methodsFor: 'reading' stamp: 'KenD 5/17/2022 15:47:53'!
 readMethod 
 	| metadata classname signature selector method |
 	metadata := STON fromStream: stream.
@@ -487,7 +487,7 @@ readMethod
 		at: #class 
 			put: classname withoutLineSeparators withBlanksTrimmed;
 		at: #signature 
-			put: signature withoutLineSeparators withBlanksTrimmed;
+			put: signature withBlanksCondensed;
 		at: #selector 
 			put: selector;
 		at: #body 

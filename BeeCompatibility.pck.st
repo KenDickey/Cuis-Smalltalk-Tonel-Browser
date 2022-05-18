@@ -1,6 +1,6 @@
-'From Cuis 6.0 [latest update: #5135] on 6 May 2022 at 8:06:07 am'!
+'From Cuis 6.0 [latest update: #5171] on 18 May 2022 at 2:01:02 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 21!
+!provides: 'BeeCompatibility' 1 23!
 !requires: 'SqueakCompatibility' 1 30 nil!
 SystemOrganization addCategory: 'BeeCompatibility'!
 
@@ -320,6 +320,15 @@ split: aString
 		keyStart := keyStop + 1].
 	^parts! !
 
+!SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 14:00:52'!
+ifAbsentAdd: anObject 
+	"Ensure anObject is part of the receiver. 
+	 Answer whether its membership was newly acquired."
+	| isCurrentMember |
+	isCurrentMember := self includes: anObject.
+	isCurrentMember 	ifFalse: [ self add: anObject ].
+	^ isCurrentMember! !
+
 !SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 5/5/2022 11:51:37'!
 sortBy: blockOrCriteria
 	"My elements to be ordered 
@@ -334,6 +343,13 @@ sortBy: blockOrCriteria
 		ifFalse: [ sortBlock := blockOrCriteria ].
 	sorted := self asSortedCollection: sortBlock.
 	^ self species withAll: sorted! !
+
+!SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 13:38:42'!
+withoutDuplicates
+	"Answer a copy of the receiver that preserves order but eliminates any duplicates."
+	| seen |
+	seen := Set new: self size.
+	^self select: [:each| seen ifAbsentAdd: each] ! !
 
 !String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 16:53:01'!
 arity 
@@ -469,6 +485,21 @@ classBinding
 source
 	"Answer source for method, including the signature"
 	^ self getSource ! !
+
+!Set methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 13:53:27'!
+ifAbsentAdd: anObject 
+	"Ensure anObject is part of the receiver.  Answer whether its membership was newly acquired."
+	| isCurrentMember |
+	isCurrentMember := self includes: anObject.
+	isCurrentMember 	ifFalse: [ self add: anObject ].
+	^ isCurrentMember! !
+
+!Dictionary methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 13:47:13'!
+at: key put: newValue ifPresent: transducerBlock
+	"If key->value is present, use transducerBlock to take the value and mutate it,
+	 otherwise just add key->newValue."
+	self at: key ifPresent: transducerBlock ifAbsent: [ self at: key put: newValue ]
+! !
 
 !PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 4/29/2022 17:12:08'!
 copyFrom: start to: stop

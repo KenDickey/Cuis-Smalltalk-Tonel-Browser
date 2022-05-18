@@ -1,4 +1,4 @@
-'From Cuis 6.0 [latest update: #5114] on 27 April 2022 at 2:04:48 pm'!
+'From Cuis 6.0 [latest update: #5171] on 18 May 2022 at 3:16:33 pm'!
 'Description STON implements serialization and materialization using the Smalltalk Object Notation format.
 
 Ported from:
@@ -7,7 +7,7 @@ Ported from:
 Copyright (C) 2012 Sven Van Caekenberghe.
 	See (MIT) license in LICENSES directory.
 '!
-!provides: 'ExchangeFormat-STON' 1 37!
+!provides: 'ExchangeFormat-STON' 1 38!
 !requires: 'Cuis-Base' 60 5096 nil!
 !requires: 'Identities-UUID' 1 9 nil!
 !requires: 'SqueakCompatibility' 1 33 nil!
@@ -642,66 +642,6 @@ Customization options are:
 Note that in default STON mode I only use the following named character escapes: \b \t \n \f \' and \\ while in JSON mode \' is replaced by \"
 !
 
-!STONFileReference class methodsFor: 'accessing' stamp: 'KenD 4/3/2022 16:50:28'!
-stonName
-
-	^ #FILE! !
-
-!STONAlternativeRepresentationTestObject methodsFor: 'ston persistence' stamp: 'KenD 4/12/2022 13:18:49'!
-stonOn: stonWriter	
-
-	stonWriter writeObject: self streamMap: [ :dictionary |
-		dictionary
-			at: #id put: self id;
-			at: #time put: self timeUTC;
-			at: #grid_reference put: self gridReferenceImperial ]! !
-
-!STONReference methodsFor: 'printing' stamp: 'KenD 4/3/2022 18:38:05'!
-printOn: stream
-
-	super printOn: stream.
-	stream nextPut: $(; print: index; nextPut: $)! !
-
-!STONTestUser class methodsFor: 'ston-core' stamp: 'KenD 4/4/2022 14:40:12'!
-stonName
-
-	^ #TestUser! !
-
-!STONTestUser2 class methodsFor: 'ston-core' stamp: 'KenD 4/4/2022 14:44:27'!
-stonName
-
-	^ #TestUser2! !
-
-!STONTestUser2 methodsFor: 'ston-core' stamp: 'KenD 4/4/2022 14:45:00'!
-stonOn: stonWriter	
-	stonWriter writeObject: self streamMap: [ :dictionary |
-		dictionary
-			at: #username put: username;
-			at: #password put: password;
-			at: #enabled put: enabled ]! !
-
-!STONTestUser3 class methodsFor: 'ston-core' stamp: 'KenD 4/4/2022 14:46:08'!
-stonName
-
-	^ #TestUser3! !
-
-!STONTestDomainObject class methodsFor: 'ston-core' stamp: 'KenD 4/16/2022 13:03:19'!
-stonName
-
-	^ #TestDomainObject! !
-
-!STONTestKnownObject methodsFor: 'printing' stamp: 'KenD 4/16/2022 13:16:31'!
-printOn: stream
-
-	super printOn: stream.
-	stream nextPut: $(; print: id; nextPut: $)! !
-
-!STONTestKnownObject methodsFor: 'ston-core' stamp: 'KenD 4/16/2022 13:16:10'!
-stonOn: stonWriter
-	"We only write out our id"
-	
-	stonWriter writeObject: self listSingleton: self id asString! !
-
 !STONTestAssociation methodsFor: 'accessing' stamp: 'KenD 4/15/2022 14:55:26'!
 key: aKey value: anObject 
 
@@ -750,6 +690,11 @@ signal: aString streamPosition: streamPosition
 		streamPosition: streamPosition;
 		signal: aString;
 		yourself! !
+
+!STONFileReference class methodsFor: 'accessing' stamp: 'KenD 4/3/2022 16:50:28'!
+stonName
+
+	^ #FILE! !
 
 !STONFileReference class methodsFor: 'instance creation' stamp: 'KenD 4/18/2022 08:04:51'!
 fromSton: stonReader
@@ -1786,6 +1731,15 @@ writer
 
 	^ STONWriter new! !
 
+!STONAlternativeRepresentationTestObject methodsFor: 'ston persistence' stamp: 'KenD 4/12/2022 13:18:49'!
+stonOn: stonWriter	
+
+	stonWriter writeObject: self streamMap: [ :dictionary |
+		dictionary
+			at: #id put: self id;
+			at: #time put: self timeUTC;
+			at: #grid_reference put: self gridReferenceImperial ]! !
+
 !STONAlternativeRepresentationTestObject methodsFor: 'accessing' stamp: 'KenD 4/12/2022 13:20:07'!
 fromSton: stonReader
 
@@ -2659,6 +2613,12 @@ on: readStream
 		on: readStream;
 		yourself! !
 
+!STONReference methodsFor: 'printing' stamp: 'KenD 4/3/2022 18:38:05'!
+printOn: stream
+
+	super printOn: stream.
+	stream nextPut: $(; print: index; nextPut: $)! !
+
 !STONReference methodsFor: 'accessing' stamp: 'KenD 4/3/2022 18:38:57'!
 index
 
@@ -2781,6 +2741,11 @@ initialize
 	super initialize.
 	enabled := true! !
 
+!STONTestUser class methodsFor: 'ston-core' stamp: 'KenD 4/4/2022 14:40:12'!
+stonName
+
+	^ #TestUser! !
+
 !STONTestUser class methodsFor: 'instance creation' stamp: 'KenD 4/4/2022 14:40:30'!
 dummy
 	"self dummy"
@@ -2803,6 +2768,19 @@ fromSton: stonReader
 		key = #password ifTrue: [ password := value ].
 		key = #enabled ifTrue: [ enabled := value ] ]! !
 
+!STONTestUser2 methodsFor: 'ston-core' stamp: 'KenD 4/4/2022 14:45:00'!
+stonOn: stonWriter	
+	stonWriter writeObject: self streamMap: [ :dictionary |
+		dictionary
+			at: #username put: username;
+			at: #password put: password;
+			at: #enabled put: enabled ]! !
+
+!STONTestUser2 class methodsFor: 'ston-core' stamp: 'KenD 4/4/2022 14:44:27'!
+stonName
+
+	^ #TestUser2! !
+
 !STONTestUser3 methodsFor: 'ston-core' stamp: 'KenD 4/4/2022 14:46:59'!
 stonShouldWriteNilInstVars
 
@@ -2812,6 +2790,11 @@ stonShouldWriteNilInstVars
 stonAllInstVarNames
 
 	^ #(username password enabled)! !
+
+!STONTestUser3 class methodsFor: 'ston-core' stamp: 'KenD 4/4/2022 14:46:08'!
+stonName
+
+	^ #TestUser3! !
 
 !STONTestDomainObject methodsFor: 'accessing' stamp: 'KenD 4/16/2022 13:08:54'!
 boolean
@@ -2946,6 +2929,11 @@ initialize
 
 	created := modified := DateAndTime now.! !
 
+!STONTestDomainObject class methodsFor: 'ston-core' stamp: 'KenD 4/16/2022 13:03:19'!
+stonName
+
+	^ #TestDomainObject! !
+
 !STONTestDomainObject class methodsFor: 'instance creation' stamp: 'KenD 4/16/2022 13:03:51'!
 dummy
 	^ self new
@@ -2960,6 +2948,18 @@ dummy
  			with: #(#alpha #beta #gamma) atRandom 
 			with: #(#low #medium #high) atRandom);
 		yourself! !
+
+!STONTestKnownObject methodsFor: 'printing' stamp: 'KenD 4/16/2022 13:16:31'!
+printOn: stream
+
+	super printOn: stream.
+	stream nextPut: $(; print: id; nextPut: $)! !
+
+!STONTestKnownObject methodsFor: 'ston-core' stamp: 'KenD 4/16/2022 13:16:10'!
+stonOn: stonWriter
+	"We only write out our id"
+	
+	stonWriter writeObject: self listSingleton: self id asString! !
 
 !STONTestKnownObject methodsFor: 'accessing' stamp: 'KenD 4/16/2022 13:17:58'!
 description
@@ -3695,7 +3695,7 @@ stonOn: stonWriter
 		ifFalse: [ 
 			stonWriter writeObject: self listSingleton: name ]! !
 
-!Color class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:39:42'!
+!Color class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 5/18/2022 14:17:07'!
 fromSton: stonReader
 	| representation |
 	representation := stonReader parseMapOrListRepresentation.
@@ -3705,7 +3705,10 @@ fromSton: stonReader
 		ifFalse: [ 
 			(representation includesKey: #rgb)
 				ifTrue: [ 
-					self basicNew setRGB: (representation at: #rgb); setAlpha: 1.0 "backwards compatibility" ]
+					self flag: #PossiblyBogus.
+					"self basicNew setRGB: (representation at: #rgb); setAlpha: 1.0"
+					self colorFromPixelValue: (representation at: #rgb) depth: 32
+				]
 				ifFalse: [ 
 					self 
 						r: (representation at: #red) 
@@ -3910,7 +3913,7 @@ stonOn: stonWriter
 	representation := self yyyymmdd.
 	stonWriter writeObject: self listSingleton: representation! !
 
-!Date class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:43:44'!
+!Date class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 5/18/2022 14:48:24'!
 fromSton: stonReader
 	"Read a ISO YYYY-MM-DD format.
 	Since my current implementation is time zone offset sensitive, the offset has to be taken into account.
@@ -3919,11 +3922,12 @@ fromSton: stonReader
 	| readStream date |
 	readStream := stonReader parseListSingleton readStream.
 	date := self readFrom: readStream.
-	readStream atEnd
+	"Cuis 'DateAndTime readFrom: aStream' reads the offset already..
+	 readStream atEnd
 		ifFalse: [ | offset |
 			offset := DateAndTime readTimezoneOffsetFrom: readStream.
 			offset = date offset 
-				ifFalse: [ date start: (date start translateTo: offset) ] ].
+				ifFalse: [ date start: (date start translateTo: offset) ] ]."
 	^ date! !
 
 !Collection methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:36:52'!

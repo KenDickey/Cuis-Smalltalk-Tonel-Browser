@@ -1,6 +1,6 @@
-'From Cuis 6.0 [latest update: #5171] on 18 May 2022 at 2:01:02 pm'!
+'From Cuis 6.0 [latest update: #5171] on 18 May 2022 at 3:16:25 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 23!
+!provides: 'BeeCompatibility' 1 24!
 !requires: 'SqueakCompatibility' 1 30 nil!
 SystemOrganization addCategory: 'BeeCompatibility'!
 
@@ -279,6 +279,11 @@ asParameter
 	"Answer machine value for 'no value'"
 	^ 0! !
 
+!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 14:58:51'!
+instanceBehavior
+	self flag: #PossiblyBogus. "Probably bogus"
+	^ self methodDict ! !
+
 !Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 14:24:21'!
 _instancesAreArrayed
 
@@ -500,6 +505,17 @@ at: key put: newValue ifPresent: transducerBlock
 	 otherwise just add key->newValue."
 	self at: key ifPresent: transducerBlock ifAbsent: [ self at: key put: newValue ]
 ! !
+
+!Dictionary methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 15:06:58'!
+select: aBlock in: aCollection 
+	"Evaluate aBlock with each of my values as the argument.  
+	 Collect into  aCollection, only those associations 
+	  for which aBlock evaluates to true."
+
+	self associationsDo: 
+		[:each | 
+		(aBlock value: each value) ifTrue: [ aCollection add: each ]].
+	^aCollection! !
 
 !PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 4/29/2022 17:12:08'!
 copyFrom: start to: stop

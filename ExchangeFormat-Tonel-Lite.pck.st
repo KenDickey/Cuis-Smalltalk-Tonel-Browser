@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5171] on 17 May 2022 at 3:49:33 pm'!
+'From Cuis 6.0 [latest update: #5173] on 24 May 2022 at 12:06:29 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 41!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 43!
 !requires: 'BeeCompatibility' 1 4 nil!
 !requires: 'ExchangeFormat-STON' 1 31 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
@@ -844,17 +844,25 @@ chunkFromTonel: aFileEntry
 
 	^ answer! !
 
-!TonelRepository methodsFor: 'processing' stamp: 'KenD 5/6/2022 07:55:23'!
+!TonelRepository methodsFor: 'processing' stamp: 'KenD 5/24/2022 11:43:02'!
 clean
 
-	self flag: #WTF.
-	self inform: 'RingEnv ''clean'' semantics ?!!?'! !
+	^self 
+		flag: #WTF;
+		inform: 'RingEnv ''clean'' semantics ?!!?';
+		yourself! !
 
-!TonelRepository methodsFor: 'initialization' stamp: 'KenD 5/6/2022 11:57:30'!
+!TonelRepository methodsFor: 'initialization' stamp: 'KenD 5/23/2022 15:45:19'!
 asRingEnvironmentWith: arrayofCategorySymbols
 
-	categories := arrayofCategorySymbols.
+	categories := Dictionary new.
 	self flag: #RingEnvironment.
+	arrayofCategorySymbols do: [ :sym | | readerDict |
+		readerDict := Dictionary new.
+		categories at: sym put: readerDict.
+		self packagesOf: sym into: readerDict.
+	].
+		
 	^ self	! !
 
 !TonelRepository methodsFor: 'initialization' stamp: 'KenD 5/6/2022 07:49:26'!
@@ -863,6 +871,26 @@ directory: pathOrDirEntry
 	(pathOrDirEntry is: #String)
 		ifTrue:  [ dirEntry := pathOrDirEntry asDirectoryEntry ]
 		ifFalse:  [ dirEntry := pathOrDirEntry ]
+	! !
+
+!TonelRepository methodsFor: 'initialization' stamp: 'KenD 5/23/2022 16:19:57'!
+packagesOf: sym into: readerDict
+
+	| pkgDir pkg pkgReader |
+	pkgDir := dirEntry / sym asString.
+	pkg := pkgDir // 'package.st'.
+	pkgReader := TonelReader on: pkg readStream.
+	pkgReader read.
+	readerDict at: #package put: (pkgReader classInfo at: #name).
+	(pkgReader classInfo at: #classes) do: [ :classNameString | |classReader|
+		classReader := TonelReader on: (pkgDir // (classNameString , '.st')) readStream.
+		readerDict 
+			at: classNameString asSymbol
+			put: classReader read.
+		].
+	^self
+	
+	
 	! !
 
 !TonelWriter methodsFor: 'accessing' stamp: 'KenD 4/19/2022 08:11:43'!

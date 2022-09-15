@@ -1,6 +1,6 @@
-'From Cuis 6.0 [latest update: #5171] on 18 May 2022 at 3:16:25 pm'!
+'From Cuis 6.0 [latest update: #5483] on 15 September 2022 at 1:39:42 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 24!
+!provides: 'BeeCompatibility' 1 25!
 !requires: 'SqueakCompatibility' 1 30 nil!
 SystemOrganization addCategory: 'BeeCompatibility'!
 
@@ -409,7 +409,7 @@ indexOfSubcollection: aCollection startingAt: anInteger
 		i := i + 1].
 	^0! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 5/30/2021 13:49:25'!
+!String methodsFor: '*BeeCompatibility' stamp: 'Install-PowerLang 9/15/2022 13:34:08'!
 replaceAllSubstrings: aString with: anotherString
 "
   'This-and-that-and-the-Other' replaceAllSubstrings: '-a' with: '_A'.
@@ -425,7 +425,7 @@ replaceAllSubstrings: aString with: anotherString
 	strm nextPutAll: fragment.
 	n := string size.
 	[index > 0] whileTrue: [| next limit |
-		next :=  self  findSubstring: string
+		next :=  String  findSubstring: string
 					in: self  
 					startingAt: index + n 
 					matchTable: CaseSensitiveOrder.

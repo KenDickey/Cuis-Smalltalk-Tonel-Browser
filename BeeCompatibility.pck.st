@@ -1,37 +1,37 @@
-'From Cuis 6.0 [latest update: #5483] on 15 September 2022 at 1:39:42 pm'!
+'From Cuis 6.0 [latest update: #5492] on 30 September 2022 at 3:38:55 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 25!
+!provides: 'BeeCompatibility' 1 28!
 !requires: 'SqueakCompatibility' 1 30 nil!
-SystemOrganization addCategory: 'BeeCompatibility'!
+SystemOrganization addCategory: #BeeCompatibility!
 
 
-!classDefinition: #PSharedPool category: 'BeeCompatibility'!
+!classDefinition: #PSharedPool category: #BeeCompatibility!
 SharedPool subclass: #PSharedPool
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'BeeCompatibility'!
-!classDefinition: 'PSharedPool class' category: 'BeeCompatibility'!
+!classDefinition: 'PSharedPool class' category: #BeeCompatibility!
 PSharedPool class
 	instanceVariableNames: ''!
 
-!classDefinition: #Stretch category: 'BeeCompatibility'!
+!classDefinition: #Stretch category: #BeeCompatibility!
 Object subclass: #Stretch
 	instanceVariableNames: 'start end'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'BeeCompatibility'!
-!classDefinition: 'Stretch class' category: 'BeeCompatibility'!
+!classDefinition: 'Stretch class' category: #BeeCompatibility!
 Stretch class
 	instanceVariableNames: ''!
 
-!classDefinition: #TargetOSPlatform category: 'BeeCompatibility'!
+!classDefinition: #TargetOSPlatform category: #BeeCompatibility!
 Object subclass: #TargetOSPlatform
 	instanceVariableNames: ''
 	classVariableNames: 'CPU OS WordSizeInBits'
 	poolDictionaries: ''
 	category: 'BeeCompatibility'!
-!classDefinition: 'TargetOSPlatform class' category: 'BeeCompatibility'!
+!classDefinition: 'TargetOSPlatform class' category: #BeeCompatibility!
 TargetOSPlatform class
 	instanceVariableNames: ''!
 
@@ -233,97 +233,20 @@ current
 
 	^self new initialize.! !
 
-!Boolean methodsFor: '*BeeCompatibility' stamp: 'KenD 6/8/2021 07:04:59'!
-andNot: aBlock
+!Object methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:17:36'!
+evaluate
 
-	self subclassResponsibility ! !
+	^self ! !
 
-!Boolean methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:40:34'!
-isBoolean 
+!Object methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:16:16'!
+evaluateWith: anObject 
 
-	^ true! !
+	^self evaluateWithArguments: {anObject}! !
 
-!False methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:39:02'!
-and: block1 andNot: block2 
+!Object methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:17:12'!
+evaluateWithArguments: anArray 
 
-	^self! !
-
-!False methodsFor: '*BeeCompatibility' stamp: 'KenD 6/8/2021 07:05:27'!
-andNot: aBlock
-
-	^ self! !
-
-!False methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 11:00:52'!
-asParameter 
-	"Answer machine value for falsity"
-	^ 0! !
-
-!True methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:37:43'!
-and: block1 andNot: block2 
-
-	^block1 value andNot: [block2 value]! !
-
-!True methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:37:54'!
-andNot: aBlock 
-
-	^aBlock value not
-! !
-
-!True methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 10:59:03'!
-asParameter 
-	"Answer machine value for truth"
-	^ 1! !
-
-!UndefinedObject methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 11:02:35'!
-asParameter 
-	"Answer machine value for 'no value'"
-	^ 0! !
-
-!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 14:58:51'!
-instanceBehavior
-	self flag: #PossiblyBogus. "Probably bogus"
-	^ self methodDict ! !
-
-!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 14:24:21'!
-_instancesAreArrayed
-
-	^ self isVariable ! !
-
-!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 14:23:46'!
-_instancesHavePointers
-
-	^ self isPointers ! !
-
-!Metaclass methodsFor: '*BeeCompatibility' stamp: 'KenD 4/22/2022 16:14:43'!
-isMetaclass
-
-	^ self isMeta ! !
-
-!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 2/16/2021 12:39:58'!
-isASCIILetter
-
-	^'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' includes: self! !
-
-!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 2/14/2021 18:46:33'!
-isHexDigit
-
-	^'0123456789abcdefABCDEF' includes: self! !
-
-!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 5/31/2021 08:03:14'!
-split: aString
-	"Answer a collection of Strings split at self -- include empty strings"
-	| delimiter parts keyStart keyStop |
-	delimiter := self asString.
-	parts _ OrderedCollection new.
-	keyStop _ 1.
-	keyStart _ 1.
-	[keyStop <= aString size] whileTrue:
-		[keyStop _ aString findDelimiters: delimiter startingAt: keyStart.
-		 (keyStart < keyStop)
-			ifTrue: [parts add: (aString copyFrom: keyStart to: (keyStop - 1))]
-			ifFalse: [parts add: ''].
-		keyStart := keyStop + 1].
-	^parts! !
+	^self evaluate! !
 
 !SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 14:00:52'!
 ifAbsentAdd: anObject 
@@ -355,6 +278,56 @@ withoutDuplicates
 	| seen |
 	seen := Set new: self size.
 	^self select: [:each| seen ifAbsentAdd: each] ! !
+
+!Array methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 14:44:01'!
+& otherArray
+	| combinedArray offset |
+	combinedArray := Array new: (self size + otherArray size).
+	1 to: self size do: [ :index | combinedArray at: index put: (self at: index) ].
+	offset := self size.
+	1 to: otherArray size do: [ :index | combinedArray at: index + offset put: (otherArray at: index) ].
+	^ combinedArray! !
+
+!Array methodsFor: '*BeeCompatibility' stamp: 'KenD 4/22/2022 16:12:51'!
+collect: aBlock in: aCollection
+
+	1 to: self size do:
+		[:index | aCollection add: (aBlock value: (self at: index))].
+	^ aCollection! !
+
+!CompiledMethod methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 15:02:12'!
+classBinding
+
+	^ self methodClass! !
+
+!CompiledMethod methodsFor: '*BeeCompatibility' stamp: 'KenD 4/22/2022 14:44:37'!
+source
+	"Answer source for method, including the signature"
+	^ self getSource ! !
+
+!OrderedCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:23:08'!
+removeDuplicates
+
+	"Remove duplicates; retain order"
+	| index |
+	index := 1.
+	[ index < self size ] 
+		whileTrue: [ | each newIndex |
+			each := self at: index.
+			newIndex := index + 1.
+			[ newIndex := (self indexOf: each startingAt: newIndex).
+			  newIndex > 0]
+				whileTrue: [self removeAt: index].
+			index := index + 1.
+		]! !
+
+!OrderedCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:12:27'!
+withIndexDo: aBlock 
+	| i |
+	i := 1.
+	self do: [:each | 
+		aBlock value: each value: i.
+		i := i + 1]! !
 
 !String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 16:53:01'!
 arity 
@@ -408,6 +381,11 @@ indexOfSubcollection: aCollection startingAt: anInteger
 			j > m ifTrue: [^i]].
 		i := i + 1].
 	^0! !
+
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 14:32:15'!
+reduced
+
+	^self! !
 
 !String methodsFor: '*BeeCompatibility' stamp: 'Install-PowerLang 9/15/2022 13:34:08'!
 replaceAllSubstrings: aString with: anotherString
@@ -465,32 +443,6 @@ withoutSeparators
 	
 	^self reject: [ :aCharacter | aCharacter isSeparator ]! !
 
-!Array methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 14:44:01'!
-& otherArray
-	| combinedArray offset |
-	combinedArray := Array new: (self size + otherArray size).
-	1 to: self size do: [ :index | combinedArray at: index put: (self at: index) ].
-	offset := self size.
-	1 to: otherArray size do: [ :index | combinedArray at: index + offset put: (otherArray at: index) ].
-	^ combinedArray! !
-
-!Array methodsFor: '*BeeCompatibility' stamp: 'KenD 4/22/2022 16:12:51'!
-collect: aBlock in: aCollection
-
-	1 to: self size do:
-		[:index | aCollection add: (aBlock value: (self at: index))].
-	^ aCollection! !
-
-!CompiledMethod methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 15:02:12'!
-classBinding
-
-	^ self methodClass! !
-
-!CompiledMethod methodsFor: '*BeeCompatibility' stamp: 'KenD 4/22/2022 14:44:37'!
-source
-	"Answer source for method, including the signature"
-	^ self getSource ! !
-
 !Set methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 13:53:27'!
 ifAbsentAdd: anObject 
 	"Ensure anObject is part of the receiver.  Answer whether its membership was newly acquired."
@@ -516,6 +468,14 @@ select: aBlock in: aCollection
 		[:each | 
 		(aBlock value: each value) ifTrue: [ aCollection add: each ]].
 	^aCollection! !
+
+!OrderedDictionary methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:13:20'!
+withIndexDo: aBlock 
+	| i |
+	i := 1.
+	self do: [:each | 
+		aBlock value: each value: i.
+		i := i + 1]! !
 
 !PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 4/29/2022 17:12:08'!
 copyFrom: start to: stop
@@ -547,6 +507,121 @@ nextWordOrNumber
 			ifTrue: [ self position: self position-1. ^ word ]
 		].
 	^ word! !
+
+!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 14:58:51'!
+instanceBehavior
+	self flag: #PossiblyBogus. "Probably bogus"
+	^ self methodDict ! !
+
+!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 14:24:21'!
+_instancesAreArrayed
+
+	^ self isVariable ! !
+
+!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 14:23:46'!
+_instancesHavePointers
+
+	^ self isPointers ! !
+
+!Metaclass methodsFor: '*BeeCompatibility' stamp: 'KenD 4/22/2022 16:14:43'!
+isMetaclass
+
+	^ self isMeta ! !
+
+!SmallInteger methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:33:32'!
+byteAt: n
+	"Treat me as a byte array"
+	(n = 1) ifTrue: [
+		"Negate, but watch case where I am 'SmallInteger minval'"
+		^ self < 0
+			ifTrue: [ -255 - self bitAnd: 255 ]
+			ifFalse: [ self bitAnd: 255 ]
+	].
+	^ self < 0
+		ifTrue: [  (-256 - self bitShift: -8) + 1 byteAt: n - 1 ] 
+		ifFalse: [ (self bitShift: 8 -  (n bitShift: 3)) bitAnd: 255 ]! !
+
+!SmallInteger methodsFor: '*BeeCompatibility' stamp: 'KenD 9/28/2022 13:49:02'!
+thru: largerNumber
+
+	^ Stretch from: self thru: largerNumber ! !
+
+!Boolean methodsFor: '*BeeCompatibility' stamp: 'KenD 6/8/2021 07:04:59'!
+andNot: aBlock
+
+	self subclassResponsibility ! !
+
+!Boolean methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:40:34'!
+isBoolean 
+
+	^ true! !
+
+!False methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:39:02'!
+and: block1 andNot: block2 
+
+	^self! !
+
+!False methodsFor: '*BeeCompatibility' stamp: 'KenD 6/8/2021 07:05:27'!
+andNot: aBlock
+
+	^ self! !
+
+!False methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 11:00:52'!
+asParameter 
+	"Answer machine value for falsity"
+	^ 0! !
+
+!True methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:37:43'!
+and: block1 andNot: block2 
+
+	^block1 value andNot: [block2 value]! !
+
+!True methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:37:54'!
+andNot: aBlock 
+
+	^aBlock value not
+! !
+
+!True methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 10:59:03'!
+asParameter 
+	"Answer machine value for truth"
+	^ 1! !
+
+!UndefinedObject methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 11:02:35'!
+asParameter 
+	"Answer machine value for 'no value'"
+	^ 0! !
+
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 13:00:20'!
+!!= aCodePointOrCharacter
+
+	^(self = aCodePointOrCharacter) not! !
+
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 2/16/2021 12:39:58'!
+isASCIILetter
+
+	^'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' includes: self! !
+
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 2/14/2021 18:46:33'!
+isHexDigit
+
+	^'0123456789abcdefABCDEF' includes: self! !
+
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 5/31/2021 08:03:14'!
+split: aString
+	"Answer a collection of Strings split at self -- include empty strings"
+	| delimiter parts keyStart keyStop |
+	delimiter := self asString.
+	parts _ OrderedCollection new.
+	keyStop _ 1.
+	keyStart _ 1.
+	[keyStop <= aString size] whileTrue:
+		[keyStop _ aString findDelimiters: delimiter startingAt: keyStart.
+		 (keyStart < keyStop)
+			ifTrue: [parts add: (aString copyFrom: keyStart to: (keyStop - 1))]
+			ifFalse: [parts add: ''].
+		keyStart := keyStop + 1].
+	^parts! !
 
 !DirectoryEntry methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 07:59:19'!
 \ pathString

@@ -1,19 +1,9 @@
-'From Cuis 6.0 [latest update: #5492] on 30 September 2022 at 3:38:55 pm'!
+'From Cuis 6.0 [latest update: #5492] on 2 October 2022 at 3:50:18 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 28!
+!provides: 'BeeCompatibility' 1 31!
 !requires: 'SqueakCompatibility' 1 30 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
-
-!classDefinition: #PSharedPool category: #BeeCompatibility!
-SharedPool subclass: #PSharedPool
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'BeeCompatibility'!
-!classDefinition: 'PSharedPool class' category: #BeeCompatibility!
-PSharedPool class
-	instanceVariableNames: ''!
 
 !classDefinition: #Stretch category: #BeeCompatibility!
 Object subclass: #Stretch
@@ -47,42 +37,6 @@ For current system, note:
 	Smalltalk platformSubtype. " 'aarch64' "
 	Smalltalk osVersion ." 'linux-gnu' "
 	!
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'Install-PowerLang 4/25/2021 10:33:58'!
-asArray 
-
-	^self classPool asArray! !
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'Install-PowerLang 4/25/2021 10:34:07'!
-at: aString 
-	| var |
-	var :=  self classPool
-		associationAt: aString asSymbol
-		ifAbsent: [ self error: 'no such pool var' ].
-	^var value! !
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'Install-PowerLang 4/25/2021 10:34:15'!
-at: aString ifAbsent: aBlock 
-	| var |
-	var := self classPool associationAt: aString asSymbol ifAbsent: [^aBlock value].
-	^ var value! !
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'Install-PowerLang 4/25/2021 10:34:30'!
-at: aString put: anObject 
-
-	^self classPool
-		at: aString 
-		put: anObject! !
-
-!PSharedPool class methodsFor: 'enumerating' stamp: 'Install-PowerLang 4/25/2021 10:33:29'!
-detect: aBlock ifNone: anotherBlock 
-
-	^self classPool detect: aBlock  ifNone: [ ^ anotherBlock value ]! !
-
-!PSharedPool class methodsFor: 'enumerating' stamp: 'Install-PowerLang 4/25/2021 10:32:41'!
-do: aBlock 
-
-	^self classPool do: aBlock! !
 
 !Stretch methodsFor: 'printing' stamp: 'KenD 2/21/2021 13:41:14'!
 printOn: aStream 
@@ -232,21 +186,6 @@ targetWordSizeInBits
 current
 
 	^self new initialize.! !
-
-!Object methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:17:36'!
-evaluate
-
-	^self ! !
-
-!Object methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:16:16'!
-evaluateWith: anObject 
-
-	^self evaluateWithArguments: {anObject}! !
-
-!Object methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:17:12'!
-evaluateWithArguments: anArray 
-
-	^self evaluate! !
 
 !SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 14:00:52'!
 ifAbsentAdd: anObject 
@@ -551,6 +490,11 @@ andNot: aBlock
 
 	self subclassResponsibility ! !
 
+!Boolean methodsFor: '*BeeCompatibility' stamp: 'KenD 10/2/2022 08:15:58'!
+asBit
+
+	self subclassResponsibility ! !
+
 !Boolean methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:40:34'!
 isBoolean 
 
@@ -565,6 +509,11 @@ and: block1 andNot: block2
 andNot: aBlock
 
 	^ self! !
+
+!False methodsFor: '*BeeCompatibility' stamp: 'KenD 10/2/2022 08:16:20'!
+asBit
+
+	^ 0! !
 
 !False methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 11:00:52'!
 asParameter 
@@ -581,6 +530,11 @@ andNot: aBlock
 
 	^aBlock value not
 ! !
+
+!True methodsFor: '*BeeCompatibility' stamp: 'KenD 10/2/2022 08:16:37'!
+asBit
+
+	^ 1! !
 
 !True methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 10:59:03'!
 asParameter 
@@ -627,4 +581,40 @@ split: aString
 \ pathString
 	
 	^ self // pathString! !
+
+!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 10/1/2022 15:27:25'!
+asArray 
+
+	^self classPool asArray! !
+
+!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 10/1/2022 15:27:35'!
+at: aString 
+	| var |
+	var :=  self classPool
+		associationAt: aString asSymbol
+		ifAbsent: [ self error: 'no such pool var' ].
+	^var value! !
+
+!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 10/1/2022 15:27:42'!
+at: aString ifAbsent: aBlock 
+	| var |
+	var := self classPool associationAt: aString asSymbol ifAbsent: [^aBlock value].
+	^ var value! !
+
+!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 10/1/2022 15:27:49'!
+at: aString put: anObject 
+
+	^self classPool
+		at: aString 
+		put: anObject! !
+
+!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 10/1/2022 15:27:56'!
+detect: aBlock ifNone: anotherBlock 
+
+	^self classPool detect: aBlock  ifNone: [ ^ anotherBlock value ]! !
+
+!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 10/1/2022 15:28:01'!
+do: aBlock 
+
+	^self classPool do: aBlock! !
 TargetOSPlatform initialize!

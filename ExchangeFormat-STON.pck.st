@@ -1,4 +1,4 @@
-'From Cuis 6.0 [latest update: #5173] on 23 May 2022 at 4:29:07 pm'!
+'From Cuis 6.0 [latest update: #5552] on 14 November 2022 at 2:20:48 pm'!
 'Description STON implements serialization and materialization using the Smalltalk Object Notation format.
 
 Ported from:
@@ -7,10 +7,10 @@ Ported from:
 Copyright (C) 2012 Sven Van Caekenberghe.
 	See (MIT) license in LICENSES directory.
 '!
-!provides: 'ExchangeFormat-STON' 1 39!
-!requires: 'Cuis-Base' 60 5096 nil!
+!provides: 'ExchangeFormat-STON' 1 45!
+!requires: 'Cuis-Base' 60 5552 nil!
 !requires: 'Identities-UUID' 1 9 nil!
-!requires: 'SqueakCompatibility' 1 33 nil!
+!requires: 'SqueakCompatibility' 1 35 nil!
 !requires: 'CSS3-NamedColors' 1 1 nil!
 SystemOrganization addCategory: 'ExchangeFormat-STON'!
 
@@ -1079,7 +1079,7 @@ testStrings
 	strings := { 
 		'foo'. 'Foo BAR'. ''. '	\\'''. 
 		'élève en Français'. 
-		String with: (Character codePoint: 16r20AC) " $� " }.
+		String with: (Character codePoint: 16r20AC) " $€ " }.
 	self serializeAndMaterialize: strings.! !
 
 !STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:29:05'!
@@ -1294,7 +1294,7 @@ testColor
 		assert: (self serialize: Color red lighter lighter) 
 		equals: 'Color{#red:1.0,#green:0.06,#blue:0.06,#alpha:1.0}'.! !
 
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:56:53'!
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 11/14/2022 14:17:55'!
 testCustomNewline
 	| output |
 	output := String streamContents: [ :out |
@@ -1304,7 +1304,7 @@ testCustomNewline
 			nextPut: #( 1 ) ].
 	self 
 		assert: output 
-		equals: ('[\	1\]' withCRs replaceAll: Character cr with: Character lf)! !
+		equals: ('[\	1\]' withCRs withLineEndings: String lf)! !
 
 !STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 13:16:19'!
 testDateAndTime
@@ -2496,9 +2496,9 @@ isClassStartChar: char
 
 	^ char isLetter and: [ char isUppercase ]! !
 
-!STONReader methodsFor: 'private' stamp: 'KenD 4/4/2022 10:39:47'!
+!STONReader methodsFor: 'private' stamp: 'KenD 11/14/2022 11:38:45'!
 isSimpleSymbolChar: char
-
+	"NB: this should be same definition as in STONWriter"
 	^char isLetter or: ['0123456789-_./' includes: char]! !
 
 !STONReader methodsFor: 'private' stamp: 'KenD 4/4/2022 10:39:24'!
@@ -3011,9 +3011,11 @@ knownObjects
 
 	^ KnownObjects ifNil: [ KnownObjects := OrderedCollection new ]! !
 
-!STONTestKnownObject class methodsFor: 'accessing' stamp: 'KenD 4/16/2022 13:14:04'!
+!STONTestKnownObject class methodsFor: 'accessing' stamp: 'KenD 11/14/2022 12:50:21'!
 resetKnownObjects
-
+"
+	STONTestKnownObject resetKnownObjects.
+"
 	KnownObjects ifNotNil: [ :collection | collection removeAll ]! !
 
 !STONTestKnownObject class methodsFor: 'instance creation' stamp: 'KenD 4/16/2022 13:14:41'!
@@ -3248,16 +3250,13 @@ indentedDo: block
 	block value.
 	level := level - 1! !
 
-!STONWriter methodsFor: 'private' stamp: 'KenD 4/5/2022 12:30:26'!
+!STONWriter methodsFor: 'private' stamp: 'KenD 11/14/2022 11:47:07'!
 isSimpleSymbol: symbol
 
-	self flag: #WideString.
-	(symbol isEmpty " or: [ symbol isWideString ]") 
-		ifTrue: [ ^ false ].
-	^ (symbol class 
-		findFirstInString: symbol 
-		inSet: STONSimpleSymbolCharacters 
-		startingAt: 1) = 0! !
+	^ (symbol isEmpty not) 
+		and:  [ symbol allSatisfy: 
+			[ :aChar | self class isSimpleSymbolChar: aChar ]
+		]! !
 
 !STONWriter methodsFor: 'private' stamp: 'KenD 4/3/2022 19:05:40'!
 listElementSeparator
@@ -3544,9 +3543,10 @@ on: writeStream
 		on: writeStream;
 		yourself! !
 
-!STONWriter class methodsFor: 'private' stamp: 'KenD 4/3/2022 18:51:34'!
+!STONWriter class methodsFor: 'private' stamp: 'KenD 11/14/2022 11:38:25'!
 isSimpleSymbolChar: char
-	^ 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./' includes: char! !
+	"NB: this should be same definition as in STONReader"
+	^char isLetter or: ['0123456789-_./' includes: char]! !
 
 !ProtoObject methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/16/2022 15:04:47'!
 environment
@@ -3668,6 +3668,97 @@ stonOn: stonWriter
 
 	stonWriter writeBoolean: self! !
 
+!Magnitude methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/17/2022 12:02:22'!
+putOn: aStream
+
+	(aStream isBinary ifTrue: [ self asByteArray ] ifFalse: [ self asString]) putOn: aStream! !
+
+!Number methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:57:19'!
+closeTo: num
+	"are these two numbers close?"
+
+	num isFloat ifTrue: [^ num closeTo: self asFloat].
+	^[self = num] ifError: [false]! !
+
+!Number methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:20:46'!
+stonContainSubObjects 
+
+	^ false! !
+
+!Number methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:20:37'!
+stonOn: stonWriter
+
+	stonWriter writeFloat: self asFloat! !
+
+!Float methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:56:59'!
+closeTo: num
+ 	"are these two numbers close?"
+	num isNumber ifFalse: [^[self = num] ifError: [false]].
+	self = 0.0 ifTrue: [^num abs < 0.0001].
+	num = 0 ifTrue: [^self abs < 0.0001].
+	^self = num asFloat or: [
+		| abs |
+		(abs := self abs) < 0.0001 ifTrue: [^num abs < 0.0001].
+		(self - num) abs / (abs max: num abs) < 0.0001]! !
+
+!Fraction methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 13:27:28'!
+stonOn: stonWriter
+
+	stonWriter writeFraction: self! !
+
+!Integer methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:14:27'!
+stonOn: stonWriter
+
+	stonWriter writeInteger: self! !
+
+!DateAndTime methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:52:01'!
+offset: delta
+
+	offset := delta! !
+
+!DateAndTime methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:45:34'!
+stonContainSubObjects 
+
+	^ false! !
+
+!DateAndTime methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:50:30'!
+stonOn: stonWriter
+	"Use an ISO representation with all details YYYY-MM-DDTHH:MM:SS.N+TZ (with optional nanoseconds and timezone offset)"
+	
+	stonWriter writeObject: self listSingleton: 
+		(String streamContents: [ :stream |
+			self printOn: stream "withLeadingSpace: false" ])! !
+
+!DateAndTime class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:45:03'!
+fromSton: stonReader
+
+	^ self readFrom: stonReader parseListSingleton readStream! !
+
+!Time methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:30:59'!
+stonContainSubObjects 
+
+	^ false! !
+
+!Time methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 13:00:35'!
+stonOn: stonWriter
+	"Use an ISO style HH:MM:SS.N representation (with optional nanoseconds)"
+	 
+	stonWriter writeObject: self listSingleton: 
+		(String streamContents: [ :stream |
+			self print24: true showSeconds: true showSecondsFraction: true on: stream ])! !
+
+!Time class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:30:29'!
+fromSton: stonReader
+
+	^ self readFrom: stonReader parseListSingleton readStream! !
+
+!Association methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:27:29'!
+stonOn: stonWriter
+
+	self class == STON associationClass
+		ifTrue: [ stonWriter writeAssociation: self ]
+		ifFalse: [ super stonOn: stonWriter ]! !
+
 !Color methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/16/2022 12:55:35'!
 closeTo: another 
 	self == another ifTrue: [ ^ true ].
@@ -3784,103 +3875,22 @@ fromSton: stonReader
 	theMetaclass := theClass class.
 	^ theMetaclass! !
 
-!Magnitude methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/17/2022 12:02:22'!
-putOn: aStream
-
-	(aStream isBinary ifTrue: [ self asByteArray ] ifFalse: [ self asString]) putOn: aStream! !
-
-!Number methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:57:19'!
-closeTo: num
-	"are these two numbers close?"
-
-	num isFloat ifTrue: [^ num closeTo: self asFloat].
-	^[self = num] ifError: [false]! !
-
-!Number methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:20:46'!
-stonContainSubObjects 
-
-	^ false! !
-
-!Number methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:20:37'!
-stonOn: stonWriter
-
-	stonWriter writeFloat: self asFloat! !
-
-!Float methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:56:59'!
-closeTo: num
- 	"are these two numbers close?"
-	num isNumber ifFalse: [^[self = num] ifError: [false]].
-	self = 0.0 ifTrue: [^num abs < 0.0001].
-	num = 0 ifTrue: [^self abs < 0.0001].
-	^self = num asFloat or: [
-		| abs |
-		(abs := self abs) < 0.0001 ifTrue: [^num abs < 0.0001].
-		(self - num) abs / (abs max: num abs) < 0.0001]! !
-
-!Fraction methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 13:27:28'!
-stonOn: stonWriter
-
-	stonWriter writeFraction: self! !
-
-!Integer methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:14:27'!
-stonOn: stonWriter
-
-	stonWriter writeInteger: self! !
-
-!DateAndTime methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:52:01'!
-offset: delta
-
-	offset := delta! !
-
-!DateAndTime methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:45:34'!
-stonContainSubObjects 
-
-	^ false! !
-
-!DateAndTime methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:50:30'!
-stonOn: stonWriter
-	"Use an ISO representation with all details YYYY-MM-DDTHH:MM:SS.N+TZ (with optional nanoseconds and timezone offset)"
-	
-	stonWriter writeObject: self listSingleton: 
-		(String streamContents: [ :stream |
-			self printOn: stream "withLeadingSpace: false" ])! !
-
-!DateAndTime class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:45:03'!
-fromSton: stonReader
-
-	^ self readFrom: stonReader parseListSingleton readStream! !
-
-!Time methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:30:59'!
-stonContainSubObjects 
-
-	^ false! !
-
-!Time methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 13:00:35'!
-stonOn: stonWriter
-	"Use an ISO style HH:MM:SS.N representation (with optional nanoseconds)"
-	 
-	stonWriter writeObject: self listSingleton: 
-		(String streamContents: [ :stream |
-			self print24: true showSeconds: true showSecondsFraction: true on: stream ])! !
-
-!Time class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:30:29'!
-fromSton: stonReader
-
-	^ self readFrom: stonReader parseListSingleton readStream! !
-
-!Association methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:27:29'!
-stonOn: stonWriter
-
-	self class == STON associationClass
-		ifTrue: [ stonWriter writeAssociation: self ]
-		ifFalse: [ super stonOn: stonWriter ]! !
-
 !Character methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:32:19'!
 stonOn: stonWriter
 
 	stonWriter writeObject: self listSingleton: self asString! !
 
 !Character class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:31:23'!
+fromSton: stonReader
+
+	^ stonReader parseListSingleton first! !
+
+!UnicodeCodePoint methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 11/12/2022 13:28:31'!
+stonOn: stonWriter
+
+	stonWriter writeObject: self listSingleton: self asString! !
+
+!UnicodeCodePoint class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 11/14/2022 12:45:30'!
 fromSton: stonReader
 
 	^ stonReader parseListSingleton first! !
@@ -4013,6 +4023,32 @@ stonOn: stonWriter
 	stonWriter writeString: self! !
 
 !Symbol methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:29:37'!
+stonOn: stonWriter
+
+	stonWriter writeSymbol: self! !
+
+!Utf8String methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 11/12/2022 13:18:53'!
+asFileSystemEntry
+	"See examples in #asFileEntry method comment"
+	^FileSystemEntry withPathName: self! !
+
+!Utf8String methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 11/12/2022 13:19:00'!
+putOn:aStream
+
+	^ aStream nextPutAll: self.
+! !
+
+!Utf8String methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 11/12/2022 13:19:05'!
+stonContainSubObjects
+
+	^ false! !
+
+!Utf8String methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 11/12/2022 13:32:54'!
+stonOn: stonWriter
+
+	stonWriter writeString: self! !
+
+!Utf8Symbol methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 11/12/2022 13:21:07'!
 stonOn: stonWriter
 
 	stonWriter writeSymbol: self! !

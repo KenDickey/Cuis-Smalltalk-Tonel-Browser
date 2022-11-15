@@ -1,6 +1,6 @@
-'From Cuis 6.0 [latest update: #5552] on 12 November 2022 at 1:33:59 pm'!
+'From Cuis 6.0 [latest update: #5554] on 15 November 2022 at 8:07:28 am'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 33!
+!provides: 'BeeCompatibility' 1 34!
 !requires: 'SqueakCompatibility' 1 35 nil!
 SystemOrganization addCategory: 'BeeCompatibility'!
 
@@ -497,6 +497,16 @@ withoutSeparators
 arity 
 
 	^self numArgs! !
+
+!Utf8String methodsFor: '*BeeCompatibility' stamp: 'KenD 11/15/2022 08:06:33'!
+trimBlanks
+
+	^self withBlanksTrimmed! !
+
+!Utf8String methodsFor: '*BeeCompatibility' stamp: 'KenD 11/15/2022 08:05:55'!
+withoutLineSeparators
+	
+	^self reject: [ :aCharacter | aCharacter isLineSeparator ]! !
 
 !Array methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 14:44:01'!
 & otherArray

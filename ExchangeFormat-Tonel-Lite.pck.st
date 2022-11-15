@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5173] on 24 May 2022 at 12:06:29 pm'!
+'From Cuis 6.0 [latest update: #5552] on 14 November 2022 at 4:10:50 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 43!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 44!
 !requires: 'BeeCompatibility' 1 4 nil!
 !requires: 'ExchangeFormat-STON' 1 31 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
@@ -247,13 +247,12 @@ test030writeTwoMethods
 		assert: cm2 source lines size = 3;
 		assert: m2 withBlanksTrimmed lines = cm2 source withBlanksTrimmed lines! !
 
-!TonelTest methodsFor: 'testing' stamp: 'KenD 4/19/2022 12:27:10'!
+!TonelTest methodsFor: 'testing' stamp: 'KenD 11/14/2022 14:30:51'!
 testClassDefinition 
-	| tonel writer reader definition |
-	tonel := '' writeStream.
-	writer := TonelWriter on: tonel.
+	| writer reader definition |
+	writer := TonelWriter on: '' writeStream.
 	writer writeClass: Point.
-	reader := TonelReader on: tonel contents readStream.
+	reader := TonelReader on: writer contents readStream.
 	reader read.
 	definition := reader definition.
 	self
@@ -404,7 +403,7 @@ initialize
 	classInfo      := OrderedDictionary new.
 	methodInfos := OrderedCollection new! !
 
-!TonelReader methodsFor: 'reading' stamp: 'KenD 5/2/2022 15:49:20'!
+!TonelReader methodsFor: 'reading' stamp: 'KenD 11/14/2022 16:07:13'!
 nextBlock 
 	"(stream at: position) is $[, find matching unnested $]
 	 and answer the body "
@@ -414,10 +413,10 @@ nextBlock
 	char := $[.
 	self skipLine.
 	start := stream position.
-	[	(char == $[ andNot: [prev == $$]) ifTrue: [nested := nested + 1].
-		(char = $]   andNot: [prev == $$]) ifTrue: [nested := nested - 1].
-		(char = $' andNot: [prev == $$]) ifTrue: [prev := char. self skipString].
-		(char = $" andNot: [prev == $$]) ifTrue: [prev := char. self skipComment].
+	[	(char = $[ andNot: [prev = $$]) ifTrue: [nested := nested + 1].
+		(char = $]   andNot: [prev = $$]) ifTrue: [nested := nested - 1].
+		(char = $' andNot: [prev = $$]) ifTrue: [prev := char. self skipString].
+		(char = $" andNot: [prev = $$]) ifTrue: [prev := char. self skipComment].
 		prev := char. 
 		nested = 0]
 		whileFalse: [char := stream next].
@@ -902,6 +901,11 @@ category: aString
 class: aClass 
 
 	class := aClass! !
+
+!TonelWriter methodsFor: 'accessing' stamp: 'KenD 11/14/2022 14:30:07'!
+contents
+
+	^ stream contents! !
 
 !TonelWriter methodsFor: 'accessing' stamp: 'KenD 4/19/2022 10:36:31'!
 methods 

@@ -1,6 +1,7 @@
-'From Cuis 6.0 [latest update: #5554] on 16 November 2022 at 1:52:19 pm'!
+'From Cuis 6.0 [latest update: #5593] on 14 December 2022 at 9:15:49 am'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 35!
+!provides: 'BeeCompatibility' 1 36!
+!requires: 'Cuis-Base' 60 5593 nil!
 !requires: 'SqueakCompatibility' 1 35 nil!
 SystemOrganization addCategory: 'BeeCompatibility'!
 
@@ -493,22 +494,22 @@ withoutSeparators
 	
 	^self reject: [ :aCharacter | aCharacter isSeparator ]! !
 
-!Utf8String methodsFor: '*BeeCompatibility' stamp: 'KenD 11/10/2022 12:29:03'!
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 11/10/2022 12:29:03'!
 arity 
 
 	^self numArgs! !
 
-!Utf8String methodsFor: '*BeeCompatibility' stamp: 'KenD 11/15/2022 10:38:39'!
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 11/15/2022 10:38:39'!
 existingSymbol 
 
 	^Symbol findInterned: self! !
 
-!Utf8String methodsFor: '*BeeCompatibility' stamp: 'KenD 11/15/2022 08:06:33'!
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 11/15/2022 08:06:33'!
 trimBlanks
 
 	^self withBlanksTrimmed! !
 
-!Utf8String methodsFor: '*BeeCompatibility' stamp: 'KenD 11/15/2022 08:05:55'!
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 11/15/2022 08:05:55'!
 withoutLineSeparators
 	
 	^self reject: [ :aCharacter | aCharacter isLineSeparator ]! !

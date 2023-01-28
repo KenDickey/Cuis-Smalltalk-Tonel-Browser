@@ -1,11 +1,12 @@
-'From Cuis 6.0 [latest update: #5593] on 14 December 2022 at 9:16:23 am'!
+'From Cuis 6.0 [latest update: #5657] on 27 January 2023 at 4:20:14 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 45!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 46!
 !requires: 'BeeCompatibility' 1 36 nil!
+!requires: 'Cuis-Base' 60 5657 nil!
 !requires: 'ExchangeFormat-STON' 1 46 nil!
 SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
 
@@ -781,6 +782,17 @@ fileOutPackageDoItTo: aFileStream
 		nextPutAll: ' ).';
 		newLine! !
 
+!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 1/27/2023 15:48:35'!
+forceWriteStreamForFileOut: dirPathString
+	"Answer an appropriate stream or nil.
+	 Stream will be opened on a fresh (empty) file.
+	 Do NOT ask if file exists."
+	| fileName fileEntry |
+	fileName := dirPathString, '/', self baseNameForFileOut.
+	fileEntry := fileName asFileEntry.
+	^ fileEntry forceWriteStream.
+! !
+
 !TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/30/2022 07:56:29'!
 writeStreamForFileOut
 	"Answer an appropriate stream or nil.
@@ -843,6 +855,28 @@ chunkFromTonel: aFileEntry
 
 	^ answer! !
 
+!TonelReader class methodsFor: 'translteration' stamp: 'KenD 1/27/2023 15:52:51'!
+forceChunkFromTonel: aFileEntry
+	"FileEntry is assumed to be a Tonel file.
+	 Read it in an write a Chunk file to correspond.
+	OK if chunk file pre-exists (just overwrite).
+	Answer nil or a fileEntry on the chunk file"
+	| reader parentDirName answer outFile newName |
+	answer := nil.
+	parentDirName := aFileEntry parent pathName.
+	reader := self on: aFileEntry readStream.
+	[ reader read.
+	  outFile := reader forceWriteStreamForFileOut: parentDirName.
+	  outFile ifNotNil: [
+		newName := outFile name.
+		reader fileOutToStream: outFile.
+		outFile close.
+		answer := newName asFileEntry.
+		].
+	] ensure: [ "empty" ].
+
+	^ answer! !
+
 !TonelRepository methodsFor: 'processing' stamp: 'KenD 5/24/2022 11:43:02'!
 clean
 
@@ -850,6 +884,20 @@ clean
 		flag: #WTF;
 		inform: 'RingEnv ''clean'' semantics ?!!?';
 		yourself! !
+
+!TonelRepository methodsFor: 'processing' stamp: 'KenD 1/27/2023 15:58:35'!
+writeChunkFilesFromTonelFiles
+	"Look in directory for tonel files and write corresponding chunk files.
+	Descend into subdirectories and process those files as well.
+	OK to overwrite existing chunk files"
+	dirEntry allFilesDo: [ :aChild | 
+		"Both Chunk and Tonel files end in '.st' "
+		"Chunk files typically begin with $!! or $' (From Cuis..) "
+		(('*.st' match: aChild name) 
+			and: [('package.st' !!= aChild name) "ignore 'package.st' files"
+				and: [('!!''' includes: aChild readStream peek) not]])
+			ifTrue: [TonelReader forceChunkFromTonel: aChild]
+		].! !
 
 !TonelRepository methodsFor: 'initialization' stamp: 'KenD 5/23/2022 15:45:19'!
 asRingEnvironmentWith: arrayofCategorySymbols
@@ -891,6 +939,11 @@ packagesOf: sym into: readerDict
 	
 	
 	! !
+
+!TonelRepository class methodsFor: 'instance creation' stamp: 'KenD 1/27/2023 15:26:17'!
+fromPath: aPath
+
+	^self new directory: aPath! !
 
 !TonelWriter methodsFor: 'accessing' stamp: 'KenD 4/19/2022 08:11:43'!
 category: aString 

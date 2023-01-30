@@ -1,10 +1,30 @@
-'From Cuis 6.0 [latest update: #5593] on 14 December 2022 at 9:15:49 am'!
+'From Cuis 6.0 [latest update: #5658] on 30 January 2023 at 3:22:46 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 36!
+!provides: 'BeeCompatibility' 1 38!
 !requires: 'Cuis-Base' 60 5593 nil!
 !requires: 'SqueakCompatibility' 1 35 nil!
 SystemOrganization addCategory: 'BeeCompatibility'!
 
+
+!classDefinition: #PSharedPool category: 'BeeCompatibility'!
+SharedPool subclass: #PSharedPool
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'BeeCompatibility'!
+!classDefinition: 'PSharedPool class' category: 'BeeCompatibility'!
+PSharedPool class
+	instanceVariableNames: ''!
+
+!classDefinition: #PoolDictionary category: 'BeeCompatibility'!
+Dictionary subclass: #PoolDictionary
+	instanceVariableNames: 'constant'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'BeeCompatibility'!
+!classDefinition: 'PoolDictionary class' category: 'BeeCompatibility'!
+PoolDictionary class
+	instanceVariableNames: ''!
 
 !classDefinition: #Stretch category: 'BeeCompatibility'!
 Object subclass: #Stretch
@@ -38,6 +58,110 @@ For current system, note:
 	Smalltalk platformSubtype. " 'aarch64' "
 	Smalltalk osVersion ." 'linux-gnu' "
 	!
+
+!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+asArray
+	^self classPool asArray
+! !
+
+!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+at: aString
+	| var |
+	var :=  self classPool
+		associationAt: aString asSymbol
+		ifAbsent: [ self error: 'no such pool var' ].
+	^var value
+! !
+
+!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+at: aString ifAbsent: aBlock
+	| var |
+	var := self classPool associationAt: aString asSymbol ifAbsent: [^aBlock value].
+	^ var value
+! !
+
+!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+at: aString put: anObject
+	^self classPool
+		at: aString 
+		put: anObject
+! !
+
+!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+detect: aBlock ifNone: anotherBlock
+	^self classPool detect: aBlock  ifNone: [ ^ anotherBlock value ].
+	
+! !
+
+!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+do: aBlock
+	^self classPool do: aBlock
+
+! !
+
+!PoolDictionary methodsFor: 'testing' stamp: 'KenD 1/30/2023 10:10:46'!
+isConstant
+	^constant
+! !
+
+!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+at: key
+	^super at: key asString reduced
+! !
+
+!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+at: key ifAbsent: aBlock
+	^super at: key asString reduced ifAbsent: aBlock
+! !
+
+!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+at: key ifPresent: aBlock
+	^super at: key asString reduced ifPresent: aBlock
+! !
+
+!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+at: key put: value
+	^super at: key asString put: value
+! !
+
+!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+beConstant: aBoolean
+	constant := aBoolean
+! !
+
+!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+beConstantPool
+	constant := true
+! !
+
+!PoolDictionary methodsFor: 'removing' stamp: 'KenD 1/30/2023 10:10:46'!
+removeKey: key ifAbsent: aBlock
+	super removeKey: key asString reduced ifAbsent: aBlock.
+	^key
+! !
+
+!PoolDictionary methodsFor: 'adding' stamp: 'KenD 1/30/2023 10:10:46'!
+add: anAssociation
+	anAssociation key isString
+		ifFalse: [self error: 'Pools are keyed with Strings'].
+	^super add: anAssociation
+! !
+
+!PoolDictionary methodsFor: 'initialization' stamp: 'KenD 1/30/2023 10:10:46'!
+initialize: anInteger
+	super initialize: anInteger.
+	constant := false
+! !
+
+!PoolDictionary methodsFor: 'inquiries' stamp: 'KenD 1/30/2023 10:10:46'!
+includesKey: key
+	^super includesKey: key asString reduced
+! !
+
+!PoolDictionary class methodsFor: 'instance creation' stamp: 'KenD 1/30/2023 10:10:46'!
+newConstantPool
+	^self new beConstantPool
+! !
 
 !Stretch methodsFor: 'printing' stamp: 'KenD 2/21/2021 13:41:14'!
 printOn: aStream 
@@ -131,6 +255,11 @@ length
 
 	^end - start + 1! !
 
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 1/30/2023 10:10:45'!
+mask
+	^(2 raisedTo: end) - (2 raisedTo: start - 1)
+! !
+
 !Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:40:04'!
 max 
 
@@ -145,6 +274,11 @@ min
 negated 
 
 	^start negated thru: end negated! !
+
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 1/30/2023 10:10:45'!
+shift
+	^(start - 1) negated
+! !
 
 !Stretch class methodsFor: 'instance creation' stamp: 'KenD 2/21/2021 13:35:42'!
 from: start thru: end 

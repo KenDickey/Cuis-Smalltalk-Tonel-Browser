@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5657] on 27 January 2023 at 4:20:14 pm'!
+'From Cuis 6.0 [latest update: #5658] on 30 January 2023 at 10:10:36 am'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 46!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 47!
 !requires: 'BeeCompatibility' 1 36 nil!
 !requires: 'Cuis-Base' 60 5657 nil!
 !requires: 'ExchangeFormat-STON' 1 46 nil!
@@ -113,7 +113,10 @@ codeType  is either:
 
 !TonelRepository commentStamp: '<historical>' prior: 0!
 Directory of Tonel formatted source files.
-!
+
+Translate directory and subdirectory Tonel .st files to Chunk format:
+
+(TonelRepository fromPath: '/home/pi/BeePowerLang/PowerLang/src') writeChunkFilesFromTonelFiles.!
 
 !TonelWriter commentStamp: '<historical>' prior: 0!
 I take a Cuis Class and write it out to a file in the Tonel exchange format.

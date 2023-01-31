@@ -1,6 +1,6 @@
-'From Cuis 6.0 [latest update: #5658] on 30 January 2023 at 3:22:46 pm'!
+'From Cuis 6.0 [latest update: #5658] on 31 January 2023 at 9:56:58 am'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 38!
+!provides: 'BeeCompatibility' 1 39!
 !requires: 'Cuis-Base' 60 5593 nil!
 !requires: 'SqueakCompatibility' 1 35 nil!
 SystemOrganization addCategory: 'BeeCompatibility'!
@@ -405,6 +405,22 @@ asParameter
 instanceBehavior
 	self flag: #PossiblyBogus. "Probably bogus"
 	^ self methodDict ! !
+
+!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 1/31/2023 09:48:16'!
+methodNamed: selector 
+	"Answer the compiled method associated with the argument, selector (a 
+	Symbol), a message selector in the receiver's method dictionary. If the 
+	selector is not in the dictionary, create an error notification."
+
+	^self compiledMethodAt: selector 
+! !
+
+!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 1/31/2023 09:50:45'!
+removeLocalMethod: selector 
+	"Assuming that the argument, selector (a Symbol), is a message selector 
+	in my method dictionary, remove it and its method."
+
+	self basicRemoveSelector: selector ! !
 
 !Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 14:24:21'!
 _instancesAreArrayed

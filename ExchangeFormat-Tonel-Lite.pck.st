@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5658] on 30 January 2023 at 10:10:36 am'!
+'From Cuis 6.0 [latest update: #5658] on 1 February 2023 at 3:00:56 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 47!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 48!
 !requires: 'BeeCompatibility' 1 36 nil!
 !requires: 'Cuis-Base' 60 5657 nil!
 !requires: 'ExchangeFormat-STON' 1 46 nil!
@@ -923,11 +923,11 @@ directory: pathOrDirEntry
 		ifFalse:  [ dirEntry := pathOrDirEntry ]
 	! !
 
-!TonelRepository methodsFor: 'initialization' stamp: 'KenD 5/23/2022 16:19:57'!
+!TonelRepository methodsFor: 'initialization' stamp: 'KenD 2/1/2023 14:31:04'!
 packagesOf: sym into: readerDict
 
 	| pkgDir pkg pkgReader |
-	pkgDir := dirEntry / sym asString.
+	pkgDir := dirEntry / (sym asString).
 	pkg := pkgDir // 'package.st'.
 	pkgReader := TonelReader on: pkg readStream.
 	pkgReader read.
@@ -943,9 +943,9 @@ packagesOf: sym into: readerDict
 	
 	! !
 
-!TonelRepository class methodsFor: 'instance creation' stamp: 'KenD 1/27/2023 15:26:17'!
+!TonelRepository class methodsFor: 'instance creation' stamp: 'KenD 2/1/2023 13:36:54'!
 fromPath: aPath
-
+	"Transliterate Tonel files to Chunk equivalents in `aPath` and its subdirectories."
 	^self new directory: aPath! !
 
 !TonelWriter methodsFor: 'accessing' stamp: 'KenD 4/19/2022 08:11:43'!

@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5658] on 1 February 2023 at 3:00:56 pm'!
+'From Cuis 6.0 [latest update: #5658] on 12 February 2023 at 11:29:07 am'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 48!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 49!
 !requires: 'BeeCompatibility' 1 36 nil!
 !requires: 'Cuis-Base' 60 5657 nil!
 !requires: 'ExchangeFormat-STON' 1 46 nil!
@@ -880,6 +880,13 @@ forceChunkFromTonel: aFileEntry
 
 	^ answer! !
 
+!TonelRepository methodsFor: 'accessing' stamp: 'KenD 2/12/2023 11:05:59'!
+at: aSymbol
+	"Answer category content at aSymbol, or `nil`"
+	categories do: [ :dict | (dict at: aSymbol) ifNotNil: [:ent | ^ent]].
+	^nil
+	! !
+
 !TonelRepository methodsFor: 'processing' stamp: 'KenD 5/24/2022 11:43:02'!
 clean
 
@@ -923,17 +930,23 @@ directory: pathOrDirEntry
 		ifFalse:  [ dirEntry := pathOrDirEntry ]
 	! !
 
-!TonelRepository methodsFor: 'initialization' stamp: 'KenD 2/1/2023 14:31:04'!
+!TonelRepository methodsFor: 'initialization' stamp: 'KenD 2/12/2023 10:50:52'!
 packagesOf: sym into: readerDict
 
-	| pkgDir pkg pkgReader |
+	| pkgDir pkg pkgReader  |
 	pkgDir := dirEntry / (sym asString).
 	pkg := pkgDir // 'package.st'.
 	pkgReader := TonelReader on: pkg readStream.
 	pkgReader read.
 	readerDict at: #package put: (pkgReader classInfo at: #name).
-	(pkgReader classInfo at: #classes) do: [ :classNameString | |classReader|
-		classReader := TonelReader on: (pkgDir // (classNameString , '.st')) readStream.
+	(pkgReader classInfo at: #classes) do: [ :classNameString |
+		 |classReader classFileName classFileEntry|
+		classFileName := (classNameString , '.st').
+		classFileEntry := pkgDir findEntryForFile: classFileName.
+		"Look in subling directories"
+		classFileEntry ifNil: [classFileEntry := pkgDir parent findEntryForFile: classFileName].
+		classFileEntry ifNil: [self inform: 'Can''t find file ', classFileName. ^nil]. "Signal exception?"
+		classReader := TonelReader on: classFileEntry readStream.
 		readerDict 
 			at: classNameString asSymbol
 			put: classReader read.

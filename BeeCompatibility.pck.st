@@ -1,6 +1,6 @@
-'From Cuis 6.0 [latest update: #5658] on 31 January 2023 at 9:56:58 am'!
+'From Cuis 6.0 [latest update: #5658] on 12 February 2023 at 11:29:00 am'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 39!
+!provides: 'BeeCompatibility' 1 40!
 !requires: 'Cuis-Base' 60 5593 nil!
 !requires: 'SqueakCompatibility' 1 35 nil!
 SystemOrganization addCategory: 'BeeCompatibility'!
@@ -783,6 +783,20 @@ nextWordOrNumber
 \ pathString
 	
 	^ self // pathString! !
+
+!DirectoryEntry methodsFor: '*BeeCompatibility' stamp: 'KenD 2/12/2023 10:38:02'!
+findEntryForFile: fileNameString
+	"In me or one of my subdirectories, match fileNameString
+	 and return its fileEntry or return `nil`."
+
+	| probe |
+	probe := self fileMatching: fileNameString.
+	probe ifNotNil: [ ^probe ].
+	self directoriesDo: [ :dirEnt | 
+		probe := dirEnt findEntryForFile: fileNameString.
+		probe ifNotNil: [ ^probe ].
+	].
+	^probe! !
 
 !SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 10/1/2022 15:27:25'!
 asArray 

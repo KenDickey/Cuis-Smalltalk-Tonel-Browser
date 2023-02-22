@@ -1,6 +1,6 @@
-'From Cuis 6.0 [latest update: #5658] on 12 February 2023 at 11:29:00 am'!
+'From Cuis 6.0 [latest update: #5661] on 22 February 2023 at 5:09:36 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 40!
+!provides: 'BeeCompatibility' 1 41!
 !requires: 'Cuis-Base' 60 5593 nil!
 !requires: 'SqueakCompatibility' 1 35 nil!
 SystemOrganization addCategory: 'BeeCompatibility'!
@@ -14,16 +14,6 @@ SharedPool subclass: #PSharedPool
 	category: 'BeeCompatibility'!
 !classDefinition: 'PSharedPool class' category: 'BeeCompatibility'!
 PSharedPool class
-	instanceVariableNames: ''!
-
-!classDefinition: #PoolDictionary category: 'BeeCompatibility'!
-Dictionary subclass: #PoolDictionary
-	instanceVariableNames: 'constant'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'BeeCompatibility'!
-!classDefinition: 'PoolDictionary class' category: 'BeeCompatibility'!
-PoolDictionary class
 	instanceVariableNames: ''!
 
 !classDefinition: #Stretch category: 'BeeCompatibility'!
@@ -97,70 +87,6 @@ detect: aBlock ifNone: anotherBlock
 do: aBlock
 	^self classPool do: aBlock
 
-! !
-
-!PoolDictionary methodsFor: 'testing' stamp: 'KenD 1/30/2023 10:10:46'!
-isConstant
-	^constant
-! !
-
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-at: key
-	^super at: key asString reduced
-! !
-
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-at: key ifAbsent: aBlock
-	^super at: key asString reduced ifAbsent: aBlock
-! !
-
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-at: key ifPresent: aBlock
-	^super at: key asString reduced ifPresent: aBlock
-! !
-
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-at: key put: value
-	^super at: key asString put: value
-! !
-
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-beConstant: aBoolean
-	constant := aBoolean
-! !
-
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-beConstantPool
-	constant := true
-! !
-
-!PoolDictionary methodsFor: 'removing' stamp: 'KenD 1/30/2023 10:10:46'!
-removeKey: key ifAbsent: aBlock
-	super removeKey: key asString reduced ifAbsent: aBlock.
-	^key
-! !
-
-!PoolDictionary methodsFor: 'adding' stamp: 'KenD 1/30/2023 10:10:46'!
-add: anAssociation
-	anAssociation key isString
-		ifFalse: [self error: 'Pools are keyed with Strings'].
-	^super add: anAssociation
-! !
-
-!PoolDictionary methodsFor: 'initialization' stamp: 'KenD 1/30/2023 10:10:46'!
-initialize: anInteger
-	super initialize: anInteger.
-	constant := false
-! !
-
-!PoolDictionary methodsFor: 'inquiries' stamp: 'KenD 1/30/2023 10:10:46'!
-includesKey: key
-	^super includesKey: key asString reduced
-! !
-
-!PoolDictionary class methodsFor: 'instance creation' stamp: 'KenD 1/30/2023 10:10:46'!
-newConstantPool
-	^self new beConstantPool
 ! !
 
 !Stretch methodsFor: 'printing' stamp: 'KenD 2/21/2021 13:41:14'!
@@ -378,19 +304,6 @@ asParameter
 	"Answer machine value for truth"
 	^ 1! !
 
-!SmallInteger methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:33:32'!
-byteAt: n
-	"Treat me as a byte array"
-	(n = 1) ifTrue: [
-		"Negate, but watch case where I am 'SmallInteger minval'"
-		^ self < 0
-			ifTrue: [ -255 - self bitAnd: 255 ]
-			ifFalse: [ self bitAnd: 255 ]
-	].
-	^ self < 0
-		ifTrue: [  (-256 - self bitShift: -8) + 1 byteAt: n - 1 ] 
-		ifFalse: [ (self bitShift: 8 -  (n bitShift: 3)) bitAnd: 255 ]! !
-
 !SmallInteger methodsFor: '*BeeCompatibility' stamp: 'KenD 9/28/2022 13:49:02'!
 thru: largerNumber
 
@@ -583,11 +496,6 @@ indexOfSubcollection: aCollection startingAt: anInteger
 		i := i + 1].
 	^0! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 14:32:15'!
-reduced
-
-	^self! !
-
 !String methodsFor: '*BeeCompatibility' stamp: 'Install-PowerLang 9/15/2022 13:34:08'!
 replaceAllSubstrings: aString with: anotherString
 "
@@ -654,6 +562,11 @@ existingSymbol
 
 	^Symbol findInterned: self! !
 
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 2/21/2023 22:31:20'!
+includesString: subString
+	self flag: #FixMe.
+	^(self asByteString findString: subString asByteString) ~= 0! !
+
 !UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 11/15/2022 08:06:33'!
 trimBlanks
 
@@ -690,22 +603,6 @@ source
 	"Answer source for method, including the signature"
 	^ self getSource ! !
 
-!OrderedCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:23:08'!
-removeDuplicates
-
-	"Remove duplicates; retain order"
-	| index |
-	index := 1.
-	[ index < self size ] 
-		whileTrue: [ | each newIndex |
-			each := self at: index.
-			newIndex := index + 1.
-			[ newIndex := (self indexOf: each startingAt: newIndex).
-			  newIndex > 0]
-				whileTrue: [self removeAt: index].
-			index := index + 1.
-		]! !
-
 !OrderedCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:12:27'!
 withIndexDo: aBlock 
 	| i |
@@ -739,14 +636,6 @@ select: aBlock in: aCollection
 		[:each | 
 		(aBlock value: each value) ifTrue: [ aCollection add: each ]].
 	^aCollection! !
-
-!OrderedDictionary methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:13:20'!
-withIndexDo: aBlock 
-	| i |
-	i := 1.
-	self do: [:each | 
-		aBlock value: each value: i.
-		i := i + 1]! !
 
 !PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 4/29/2022 17:12:08'!
 copyFrom: start to: stop

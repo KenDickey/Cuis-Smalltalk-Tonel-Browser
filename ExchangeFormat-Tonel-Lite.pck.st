@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #5658] on 12 February 2023 at 11:29:07 am'!
+'From Cuis 6.0 [latest update: #5661] on 22 February 2023 at 5:10:15 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 49!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 50!
 !requires: 'BeeCompatibility' 1 36 nil!
 !requires: 'Cuis-Base' 60 5657 nil!
 !requires: 'ExchangeFormat-STON' 1 46 nil!
@@ -956,9 +956,10 @@ packagesOf: sym into: readerDict
 	
 	! !
 
-!TonelRepository class methodsFor: 'instance creation' stamp: 'KenD 2/1/2023 13:36:54'!
+!TonelRepository class methodsFor: 'instance creation' stamp: 'KenD 2/22/2023 16:56:34'!
 fromPath: aPath
-	"Transliterate Tonel files to Chunk equivalents in `aPath` and its subdirectories."
+	"NB use `self writeChunkFilesFromTonelFiles` to transliterate 
+	 Tonel files to Chunk equivalents in `aPath` and its subdirectories."
 	^self new directory: aPath! !
 
 !TonelWriter methodsFor: 'accessing' stamp: 'KenD 4/19/2022 08:11:43'!

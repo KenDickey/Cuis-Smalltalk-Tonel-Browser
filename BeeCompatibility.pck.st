@@ -1,48 +1,48 @@
-'From Cuis 6.0 [latest update: #5661] on 22 February 2023 at 6:09:36 pm'!
+'From Cuis 6.0 [latest update: #6069] on 14 November 2023 at 1:51:53 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 41!
+!provides: 'BeeCompatibility' 1 42!
 !requires: 'Cuis-Base' 60 5593 nil!
 !requires: 'SqueakCompatibility' 1 35 nil!
-SystemOrganization addCategory: 'BeeCompatibility'!
+SystemOrganization addCategory: #BeeCompatibility!
 
 
-!classDefinition: #PSharedPool category: 'BeeCompatibility'!
+!classDefinition: #PSharedPool category: #BeeCompatibility!
 SharedPool subclass: #PSharedPool
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'BeeCompatibility'!
-!classDefinition: 'PSharedPool class' category: 'BeeCompatibility'!
+!classDefinition: 'PSharedPool class' category: #BeeCompatibility!
 PSharedPool class
 	instanceVariableNames: ''!
 
-!classDefinition: #PoolDictionary category: 'BeeCompatibility'!
+!classDefinition: #PoolDictionary category: #BeeCompatibility!
 Dictionary subclass: #PoolDictionary
 	instanceVariableNames: 'constant'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'BeeCompatibility'!
-!classDefinition: 'PoolDictionary class' category: 'BeeCompatibility'!
+!classDefinition: 'PoolDictionary class' category: #BeeCompatibility!
 PoolDictionary class
 	instanceVariableNames: ''!
 
-!classDefinition: #Stretch category: 'BeeCompatibility'!
+!classDefinition: #Stretch category: #BeeCompatibility!
 Object subclass: #Stretch
 	instanceVariableNames: 'start end'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'BeeCompatibility'!
-!classDefinition: 'Stretch class' category: 'BeeCompatibility'!
+!classDefinition: 'Stretch class' category: #BeeCompatibility!
 Stretch class
 	instanceVariableNames: ''!
 
-!classDefinition: #TargetOSPlatform category: 'BeeCompatibility'!
+!classDefinition: #TargetOSPlatform category: #BeeCompatibility!
 Object subclass: #TargetOSPlatform
 	instanceVariableNames: ''
 	classVariableNames: 'CPU OS WordSizeInBits'
 	poolDictionaries: ''
 	category: 'BeeCompatibility'!
-!classDefinition: 'TargetOSPlatform class' category: 'BeeCompatibility'!
+!classDefinition: 'TargetOSPlatform class' category: #BeeCompatibility!
 TargetOSPlatform class
 	instanceVariableNames: ''!
 
@@ -530,6 +530,11 @@ withoutDuplicates
 	seen := Set new: self size.
 	^self select: [:each| seen ifAbsentAdd: each] ! !
 
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 11/14/2023 13:51:13'!
+!!= aString
+	
+	^(self = aString) not! !
+
 !String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 16:53:01'!
 arity 
 
@@ -644,6 +649,11 @@ withoutSeparators
 	
 	^self reject: [ :aCharacter | aCharacter isSeparator ]! !
 
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 11/14/2023 13:51:30'!
+!!= aString
+	
+	^(self = aString) not! !
+
 !UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 11/10/2022 12:29:03'!
 arity 
 
@@ -654,6 +664,11 @@ existingSymbol
 
 	^Symbol findInterned: self! !
 
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 2/21/2023 22:31:20'!
+includesString: subString
+	self flag: #FixMe.
+	^(self asByteString findString: subString asByteString) ~= 0! !
+
 !UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 11/15/2022 08:06:33'!
 trimBlanks
 
@@ -663,12 +678,6 @@ trimBlanks
 withoutLineSeparators
 	
 	^self reject: [ :aCharacter | aCharacter isLineSeparator ]! !
-
-!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 2/21/2023 22:31:20'!
-includesString: subString
-	self flag: #FixMe.
-	^(self asByteString findString: subString asByteString) ~= 0! !
-
 
 !Array methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 14:44:01'!
 & otherArray

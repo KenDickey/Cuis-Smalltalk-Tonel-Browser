@@ -1,73 +1,73 @@
-'From Cuis 6.0 [latest update: #5661] on 22 February 2023 at 5:10:15 pm'!
+'From Cuis 6.0 [latest update: #6069] on 15 November 2023 at 3:14:21 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 50!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 55!
 !requires: 'BeeCompatibility' 1 36 nil!
 !requires: 'Cuis-Base' 60 5657 nil!
 !requires: 'ExchangeFormat-STON' 1 46 nil!
-SystemOrganization addCategory: 'ExchangeFormat-Tonel-Lite'!
+SystemOrganization addCategory: #'ExchangeFormat-Tonel-Lite'!
 
 
-!classDefinition: #TonelTest category: 'ExchangeFormat-Tonel-Lite'!
+!classDefinition: #TonelTest category: #'ExchangeFormat-Tonel-Lite'!
 TestCase subclass: #TonelTest
 	instanceVariableNames: 'streams'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-Tonel-Lite'!
-!classDefinition: 'TonelTest class' category: 'ExchangeFormat-Tonel-Lite'!
+!classDefinition: 'TonelTest class' category: #'ExchangeFormat-Tonel-Lite'!
 TonelTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #TrivialExample category: 'ExchangeFormat-Tonel-Lite'!
+!classDefinition: #TrivialExample category: #'ExchangeFormat-Tonel-Lite'!
 TonelTest subclass: #TrivialExample
 	instanceVariableNames: 'larry joe curley'
 	classVariableNames: 'Stooges'
 	poolDictionaries: ''
 	category: 'ExchangeFormat-Tonel-Lite'!
-!classDefinition: 'TrivialExample class' category: 'ExchangeFormat-Tonel-Lite'!
+!classDefinition: 'TrivialExample class' category: #'ExchangeFormat-Tonel-Lite'!
 TrivialExample class
 	instanceVariableNames: ''!
 
-!classDefinition: #TonelPackage category: 'ExchangeFormat-Tonel-Lite'!
+!classDefinition: #TonelPackage category: #'ExchangeFormat-Tonel-Lite'!
 Object subclass: #TonelPackage
 	instanceVariableNames: 'category classList'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-Tonel-Lite'!
-!classDefinition: 'TonelPackage class' category: 'ExchangeFormat-Tonel-Lite'!
+!classDefinition: 'TonelPackage class' category: #'ExchangeFormat-Tonel-Lite'!
 TonelPackage class
 	instanceVariableNames: ''!
 
-!classDefinition: #TonelReader category: 'ExchangeFormat-Tonel-Lite'!
+!classDefinition: #TonelReader category: #'ExchangeFormat-Tonel-Lite'!
 Object subclass: #TonelReader
 	instanceVariableNames: 'classComment classInfo methodInfos stream codeType'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-Tonel-Lite'!
-!classDefinition: 'TonelReader class' category: 'ExchangeFormat-Tonel-Lite'!
+!classDefinition: 'TonelReader class' category: #'ExchangeFormat-Tonel-Lite'!
 TonelReader class
 	instanceVariableNames: ''!
 
-!classDefinition: #TonelRepository category: 'ExchangeFormat-Tonel-Lite'!
+!classDefinition: #TonelRepository category: #'ExchangeFormat-Tonel-Lite'!
 Object subclass: #TonelRepository
 	instanceVariableNames: 'dirEntry categories'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-Tonel-Lite'!
-!classDefinition: 'TonelRepository class' category: 'ExchangeFormat-Tonel-Lite'!
+!classDefinition: 'TonelRepository class' category: #'ExchangeFormat-Tonel-Lite'!
 TonelRepository class
 	instanceVariableNames: ''!
 
-!classDefinition: #TonelWriter category: 'ExchangeFormat-Tonel-Lite'!
+!classDefinition: #TonelWriter category: #'ExchangeFormat-Tonel-Lite'!
 Object subclass: #TonelWriter
 	instanceVariableNames: 'stream class category methods'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-Tonel-Lite'!
-!classDefinition: 'TonelWriter class' category: 'ExchangeFormat-Tonel-Lite'!
+!classDefinition: 'TonelWriter class' category: #'ExchangeFormat-Tonel-Lite'!
 TonelWriter class
 	instanceVariableNames: ''!
 
@@ -895,6 +895,25 @@ clean
 		inform: 'RingEnv ''clean'' semantics ?!!?';
 		yourself! !
 
+!TonelRepository methodsFor: 'processing' stamp: 'KenD 11/14/2023 15:25:51'!
+writeChunkFilesFromTonelAndLoad
+	"Write Chunk FIle for each Tonel file, then load when class exists.
+	 We need to keep a set of class-symbol -> file-name and
+	 re-process as more classes are loaded.
+	Descend into subdirectories and process those files as well.
+	OK to overwrite existing chunk files"
+	| refsToLoad |
+	refsToLoad := OrderedCollection new.
+	self processDirEntry: dirEntry withRefs: refsToLoad.
+	self processRefs: refsToLoad.
+	"This is a fragile process.
+	 [A] Class initializers compiled before referenced classes.
+	 [B] We don't support Traits.
+	 [C] Some bootstraps redefine core classes -- so can't be loaded
+	"
+	(refsToLoad size > 0) ifTrue: [refsToLoad error: 'Not all classes have superclass in system'].
+! !
+
 !TonelRepository methodsFor: 'processing' stamp: 'KenD 1/27/2023 15:58:35'!
 writeChunkFilesFromTonelFiles
 	"Look in directory for tonel files and write corresponding chunk files.
@@ -955,6 +974,52 @@ packagesOf: sym into: readerDict
 	
 	
 	! !
+
+!TonelRepository methodsFor: 'private' stamp: 'KenD 11/14/2023 11:29:33'!
+processDirEntry: someDir withRefs: refsToLoad
+	"Write Chunk FIle for each Tonel file, then load when class exists.
+	 We need to keep a set of class-symbol -> file-name and
+	 re-process as more classes are loaded.
+	Descend into subdirectories and process those files as well.
+	OK to overwrite existing chunk files"
+	someDir filesDo: [ :aChild | 
+		"Both Chunk and Tonel files end in '.st' "
+		"Chunk files typically begin with $!! or $' (From Cuis..) "
+		(('*.st' match: aChild name) 
+			and: [(('package.st' = aChild name) not)"ignore 'package.st' files"
+				and: [('!!''' includes: aChild readStream peek) not]])
+			ifTrue: [ | classSym chunkEntry |
+				chunkEntry := TonelReader forceChunkFromTonel: aChild.
+				classSym := chunkEntry chunkFileClass.
+				(Smalltalk classNamed: classSym) 
+					ifNotNil: [ chunkEntry readStream fileIn ] "NB: writes to transcript"
+					ifNil: [ refsToLoad add: (classSym -> chunkEntry pathName) ].
+			]
+		
+	].
+	self processRefs: refsToLoad.
+	someDir directoriesDo: [ :aDir | self processDirEntry: aDir withRefs: refsToLoad]! !
+
+!TonelRepository methodsFor: 'private' stamp: 'KenD 11/15/2023 14:31:59'!
+processRefs: refsToLoad
+	"refsToLoad is an OrderedCollection of (superclass-sym -> filename).
+	 Files are, by construction, in chunk format.
+	 Load each file which refs an existing class
+	 and remove ref from the collection.
+	 Because loading a file typically adds a class,
+	 this process is iterative."
+	| startSize |
+	startSize := refsToLoad size + 1.
+	[(startSize > 0) and: [refsToLoad size < startSize]]
+	whileTrue: [
+		startSize := refsToLoad size.
+		refsToLoad removeAllSuchThat: [ :ref |
+			(Smalltalk  classNamed: ref key)
+				ifNil: [false] "keep me"
+			 	ifNotNil: [ ref value asFileEntry readStream fileIn. true ]
+			]
+		].
+	refsToLoad ! !
 
 !TonelRepository class methodsFor: 'instance creation' stamp: 'KenD 2/22/2023 16:56:34'!
 fromPath: aPath
@@ -1210,4 +1275,17 @@ browseCodeFileEntry: aFileEntry
 	].
 	
 	^ self browseCodeSource: (CodeFile newFromFile: entryToUse )! !
+
+!FileEntry methodsFor: '*exchangeformat-tonel-lite' stamp: 'KenD 11/14/2023 15:42:52'!
+chunkFileClass
+	"Unchecked.  Precondition is that we denote a source file in chunk format.
+	 By construction, this is a transduced Tonel file with class name in 4th chunk.
+	 The chunk expected is a class definition or extension.)"
+	self readStreamDo: [ :fstream | | aChunk aParser aClassSym  |
+		1 to: 4 do: [ :ignore | aChunk := fstream nextChunk ].
+		aParser := Parser new.
+		aClassSym := aParser parseSelector: aChunk.
+		aClassSym ifNil: [ aClassSym := aParser advance ].
+		^aClassSym
+	]! !
 TrivialExample initialize!

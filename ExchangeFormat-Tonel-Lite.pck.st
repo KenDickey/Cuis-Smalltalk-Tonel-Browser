@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #6069] on 16 November 2023 at 8:11:29 am'!
+'From Cuis 6.0 [latest update: #6072] on 16 November 2023 at 2:05:12 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 56!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 57!
 !requires: 'BeeCompatibility' 1 36 nil!
 !requires: 'Cuis-Base' 60 5657 nil!
 !requires: 'ExchangeFormat-STON' 1 46 nil!
@@ -109,7 +109,7 @@ codeType  is either:
 	'Class' -- indicarting code for an entire class definition
 	    or
 	'Extension' -- indicating a set of methods extending an existing type
-!
+Nota Bene: NOT 'Trait' (unsupported)!
 
 !TonelRepository commentStamp: '<historical>' prior: 0!
 Directory of Tonel formatted source files.
@@ -975,7 +975,7 @@ packagesOf: sym into: readerDict
 	
 	! !
 
-!TonelRepository methodsFor: 'private' stamp: 'KenD 11/14/2023 11:29:33'!
+!TonelRepository methodsFor: 'private' stamp: 'KenD 11/16/2023 10:27:20'!
 processDirEntry: someDir withRefs: refsToLoad
 	"Write Chunk FIle for each Tonel file, then load when class exists.
 	 We need to keep a set of class-symbol -> file-name and
@@ -988,12 +988,12 @@ processDirEntry: someDir withRefs: refsToLoad
 		(('*.st' match: aChild name) 
 			and: [(('package.st' = aChild name) not)"ignore 'package.st' files"
 				and: [('!!''' includes: aChild readStream peek) not]])
-			ifTrue: [ | classSym chunkEntry |
+			ifTrue: [ | superclassSym chunkEntry |
 				chunkEntry := TonelReader forceChunkFromTonel: aChild.
-				classSym := chunkEntry chunkFileClass.
-				(Smalltalk classNamed: classSym) 
-					ifNotNil: [ chunkEntry readStream fileIn ] "NB: writes to transcript"
-					ifNil: [ refsToLoad add: (classSym -> chunkEntry pathName) ].
+				superclassSym := chunkEntry chunkFileSuperclass.
+				(Smalltalk classNamed: superclassSym) 
+					ifNotNil: [ chunkEntry readStream fileIn ] "NB: displays to screen"
+					ifNil: [ refsToLoad add: (superclassSym -> chunkEntry pathName) ].
 			]
 		
 	].
@@ -1276,8 +1276,19 @@ browseCodeFileEntry: aFileEntry
 	
 	^ self browseCodeSource: (CodeFile newFromFile: entryToUse )! !
 
-!FileEntry methodsFor: '*exchangeformat-tonel-lite' stamp: 'KenD 11/16/2023 08:08:37'!
-chunkFileClass
+!Class methodsFor: '*ExchangeFormat-Tonel-Lite' stamp: 'KenD 11/16/2023 10:45:50'!
+classSide
+
+	^ self class! !
+
+!Metaclass methodsFor: '*ExchangeFormat-Tonel-Lite' stamp: 'KenD 11/16/2023 10:46:37'!
+classSide
+
+	^ self
+! !
+
+!FileEntry methodsFor: '*exchangeformat-tonel-lite' stamp: 'KenD 11/16/2023 14:00:55'!
+chunkFileSuperclass
 	"Unchecked.  Precondition is that we denote a source file in chunk format.
 	 By construction, this is a transduced Tonel file with class name in 4th chunk.
 	 The chunk expected is a class definition or extension.)"
@@ -1286,6 +1297,11 @@ chunkFileClass
 		[aChunk = ''] whileTrue: [aChunk := fstream nextChunk].
 		aParser := Parser new.
 		aClassSym := aParser parseSelector: aChunk.
+		((aClassSym = #classDefinition:) or: [aClassSym isNil] )
+			ifTrue: [
+				aChunk := fstream nextChunk.
+				aClassSym := aParser parseSelector: aChunk.
+		].
 		aClassSym ifNil: [ aClassSym := aParser advance ].
 		^aClassSym
 	]! !

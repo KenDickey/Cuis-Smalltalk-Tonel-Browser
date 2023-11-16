@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #6069] on 15 November 2023 at 3:14:21 pm'!
+'From Cuis 6.0 [latest update: #6069] on 16 November 2023 at 8:11:29 am'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 55!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 56!
 !requires: 'BeeCompatibility' 1 36 nil!
 !requires: 'Cuis-Base' 60 5657 nil!
 !requires: 'ExchangeFormat-STON' 1 46 nil!
@@ -1276,13 +1276,14 @@ browseCodeFileEntry: aFileEntry
 	
 	^ self browseCodeSource: (CodeFile newFromFile: entryToUse )! !
 
-!FileEntry methodsFor: '*exchangeformat-tonel-lite' stamp: 'KenD 11/14/2023 15:42:52'!
+!FileEntry methodsFor: '*exchangeformat-tonel-lite' stamp: 'KenD 11/16/2023 08:08:37'!
 chunkFileClass
 	"Unchecked.  Precondition is that we denote a source file in chunk format.
 	 By construction, this is a transduced Tonel file with class name in 4th chunk.
 	 The chunk expected is a class definition or extension.)"
 	self readStreamDo: [ :fstream | | aChunk aParser aClassSym  |
-		1 to: 4 do: [ :ignore | aChunk := fstream nextChunk ].
+		1 to: 3 do: [ :ignore | aChunk := fstream nextChunk ].
+		[aChunk = ''] whileTrue: [aChunk := fstream nextChunk].
 		aParser := Parser new.
 		aClassSym := aParser parseSelector: aChunk.
 		aClassSym ifNil: [ aClassSym := aParser advance ].

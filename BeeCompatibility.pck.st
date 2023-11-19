@@ -1,40 +1,10 @@
-'From Cuis 6.0 [latest update: #6069] on 14 November 2023 at 1:51:53 pm'!
+'From Cuis 6.0 [latest update: #6072] on 19 November 2023 at 1:19:09 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 42!
+!provides: 'BeeCompatibility' 1 45!
 !requires: 'Cuis-Base' 60 5593 nil!
 !requires: 'SqueakCompatibility' 1 35 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
-
-!classDefinition: #PSharedPool category: #BeeCompatibility!
-SharedPool subclass: #PSharedPool
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'BeeCompatibility'!
-!classDefinition: 'PSharedPool class' category: #BeeCompatibility!
-PSharedPool class
-	instanceVariableNames: ''!
-
-!classDefinition: #PoolDictionary category: #BeeCompatibility!
-Dictionary subclass: #PoolDictionary
-	instanceVariableNames: 'constant'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'BeeCompatibility'!
-!classDefinition: 'PoolDictionary class' category: #BeeCompatibility!
-PoolDictionary class
-	instanceVariableNames: ''!
-
-!classDefinition: #Stretch category: #BeeCompatibility!
-Object subclass: #Stretch
-	instanceVariableNames: 'start end'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'BeeCompatibility'!
-!classDefinition: 'Stretch class' category: #BeeCompatibility!
-Stretch class
-	instanceVariableNames: ''!
 
 !classDefinition: #TargetOSPlatform category: #BeeCompatibility!
 Object subclass: #TargetOSPlatform
@@ -58,232 +28,6 @@ For current system, note:
 	Smalltalk platformSubtype. " 'aarch64' "
 	Smalltalk osVersion ." 'linux-gnu' "
 	!
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-asArray
-	^self classPool asArray
-! !
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-at: aString
-	| var |
-	var :=  self classPool
-		associationAt: aString asSymbol
-		ifAbsent: [ self error: 'no such pool var' ].
-	^var value
-! !
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-at: aString ifAbsent: aBlock
-	| var |
-	var := self classPool associationAt: aString asSymbol ifAbsent: [^aBlock value].
-	^ var value
-! !
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-at: aString put: anObject
-	^self classPool
-		at: aString 
-		put: anObject
-! !
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-detect: aBlock ifNone: anotherBlock
-	^self classPool detect: aBlock  ifNone: [ ^ anotherBlock value ].
-	
-! !
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-do: aBlock
-	^self classPool do: aBlock
-
-! !
-
-!PoolDictionary methodsFor: 'testing' stamp: 'KenD 1/30/2023 10:10:46'!
-isConstant
-	^constant
-! !
-
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-at: key
-	^super at: key asString reduced
-! !
-
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-at: key ifAbsent: aBlock
-	^super at: key asString reduced ifAbsent: aBlock
-! !
-
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-at: key ifPresent: aBlock
-	^super at: key asString reduced ifPresent: aBlock
-! !
-
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-at: key put: value
-	^super at: key asString put: value
-! !
-
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-beConstant: aBoolean
-	constant := aBoolean
-! !
-
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-beConstantPool
-	constant := true
-! !
-
-!PoolDictionary methodsFor: 'removing' stamp: 'KenD 1/30/2023 10:10:46'!
-removeKey: key ifAbsent: aBlock
-	super removeKey: key asString reduced ifAbsent: aBlock.
-	^key
-! !
-
-!PoolDictionary methodsFor: 'adding' stamp: 'KenD 1/30/2023 10:10:46'!
-add: anAssociation
-	anAssociation key isString
-		ifFalse: [self error: 'Pools are keyed with Strings'].
-	^super add: anAssociation
-! !
-
-!PoolDictionary methodsFor: 'initialization' stamp: 'KenD 1/30/2023 10:10:46'!
-initialize: anInteger
-	super initialize: anInteger.
-	constant := false
-! !
-
-!PoolDictionary methodsFor: 'inquiries' stamp: 'KenD 1/30/2023 10:10:46'!
-includesKey: key
-	^super includesKey: key asString reduced
-! !
-
-!PoolDictionary class methodsFor: 'instance creation' stamp: 'KenD 1/30/2023 10:10:46'!
-newConstantPool
-	^self new beConstantPool
-! !
-
-!Stretch methodsFor: 'printing' stamp: 'KenD 2/21/2021 13:41:14'!
-printOn: aStream 
-
-	aStream
-		nextPutAll: start asString;
-		nextPutAll: ' thru: ';
-		nextPutAll: end asString! !
-
-!Stretch methodsFor: 'comparing' stamp: 'KenD 2/21/2021 13:37:03'!
-= aStretch 
-
-	self class == aStretch class ifFalse: [^false].
-	^start = aStretch start and: [end = aStretch end]! !
-
-!Stretch methodsFor: 'comparing' stamp: 'KenD 2/21/2021 13:38:19'!
-hash 
-
-	^start hashWith: end! !
-
-!Stretch methodsFor: 'testing' stamp: 'KenD 2/21/2021 13:39:03'!
-includes: anInteger 
-
-	^anInteger between: start and: end! !
-
-!Stretch methodsFor: 'testing' stamp: 'KenD 2/21/2021 13:39:26'!
-intersects: aStretch 
-
-	self isEmpty ifTrue: [^false].
-	(aStretch includes: start) ifTrue: [^true].
-	^aStretch includes: end! !
-
-!Stretch methodsFor: 'testing' stamp: 'KenD 2/21/2021 13:39:38'!
-isEmpty 
-
-	^end < start! !
-
-!Stretch methodsFor: 'testing' stamp: 'KenD 2/21/2021 13:40:40'!
-notEmpty 
-
-	^start <= end! !
-
-!Stretch methodsFor: 'accessing' stamp: 'KenD 2/21/2021 13:37:58'!
-end 
-
-	^end! !
-
-!Stretch methodsFor: 'accessing' stamp: 'KenD 2/21/2021 13:38:07'!
-end: anInteger 
-
-	end := anInteger! !
-
-!Stretch methodsFor: 'accessing' stamp: 'KenD 2/21/2021 13:41:30'!
-start 
-
-	^start! !
-
-!Stretch methodsFor: 'accessing' stamp: 'KenD 2/21/2021 13:41:38'!
-start: anInteger 
-
-	start := anInteger! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:36:10'!
-+ delta 
-
-	delta isInteger ifTrue: [^start + delta thru: end + delta].
-	delta isPoint ifTrue: [^start + delta x thru: end + delta y].
-	^start + delta start thru: end + delta end! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:36:25'!
-- delta 
-
-	^self + delta negated! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:36:38'!
-// anInteger 
-	^start // anInteger thru: end // anInteger! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:37:14'!
-center 
-
-	^start + end // 2! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:37:28'!
-down: anInteger 
-
-	^start thru: end + anInteger! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:39:53'!
-length 
-
-	^end - start + 1! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 1/30/2023 10:10:45'!
-mask
-	^(2 raisedTo: end) - (2 raisedTo: start - 1)
-! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:40:04'!
-max 
-
-	^start max: end! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:40:13'!
-min 
-
-	^start min: end! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:40:25'!
-negated 
-
-	^start negated thru: end negated! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 1/30/2023 10:10:45'!
-shift
-	^(start - 1) negated
-! !
-
-!Stretch class methodsFor: 'instance creation' stamp: 'KenD 2/21/2021 13:35:42'!
-from: start thru: end 
-
-	^self new start: start; end: end! !
 
 !TargetOSPlatform methodsFor: 'testing' stamp: 'KenD 2/24/2021 14:36:38'!
 isUnix64
@@ -332,21 +76,6 @@ asBit
 
 	self subclassResponsibility ! !
 
-!Boolean methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:40:34'!
-isBoolean 
-
-	^ true! !
-
-!False methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:39:02'!
-and: block1 andNot: block2 
-
-	^self! !
-
-!False methodsFor: '*BeeCompatibility' stamp: 'KenD 6/8/2021 07:05:27'!
-andNot: aBlock
-
-	^ self! !
-
 !False methodsFor: '*BeeCompatibility' stamp: 'KenD 10/2/2022 08:16:20'!
 asBit
 
@@ -356,17 +85,6 @@ asBit
 asParameter 
 	"Answer machine value for falsity"
 	^ 0! !
-
-!True methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:37:43'!
-and: block1 andNot: block2 
-
-	^block1 value andNot: [block2 value]! !
-
-!True methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:37:54'!
-andNot: aBlock 
-
-	^aBlock value not
-! !
 
 !True methodsFor: '*BeeCompatibility' stamp: 'KenD 10/2/2022 08:16:37'!
 asBit
@@ -447,11 +165,6 @@ isASCIILetter
 
 	^'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' includes: self! !
 
-!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 2/14/2021 18:46:33'!
-isHexDigit
-
-	^'0123456789abcdefABCDEF' includes: self! !
-
 !Character methodsFor: '*BeeCompatibility' stamp: 'KenD 5/31/2021 08:03:14'!
 split: aString
 	"Answer a collection of Strings split at self -- include empty strings"
@@ -499,6 +212,12 @@ split: aString
 		keyStart := keyStop + 1].
 	^parts! !
 
+!Collection methodsFor: '*BeeCompatibility' stamp: 'KenD 11/19/2023 13:19:05'!
+reject: rejectBlock thenDo: doBlock 	
+"Utility method to improve readability.	Do not create the intermediate collection."	
+
+	self do: [ :each |		(rejectBlock value: each)			ifFalse: [ doBlock value: each ] ].! !
+
 !SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 14:00:52'!
 ifAbsentAdd: anObject 
 	"Ensure anObject is part of the receiver. 
@@ -507,6 +226,17 @@ ifAbsentAdd: anObject
 	isCurrentMember := self includes: anObject.
 	isCurrentMember 	ifFalse: [ self add: anObject ].
 	^ isCurrentMember! !
+
+!SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 11/18/2023 14:38:31'!
+reject: rejectBlock thenDo: aBlock	
+"Refer to the comment in Collection>>#reject:thenDo:"		
+"(Array streamContents: [:stream | #(1 2 3 4) 
+	reject: [:each | each = 3 ] 
+	thenDo: [:each | stream nextPut: each + 10]])
+  >>> #(11 12 14)"
+	|  each |		
+	1 to: self size do: [ :index |		
+		(rejectBlock value: (each := self at: index))			ifFalse: [ aBlock value: each ]].! !
 
 !SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 5/5/2022 11:51:37'!
 sortBy: blockOrCriteria
@@ -535,94 +265,10 @@ withoutDuplicates
 	
 	^(self = aString) not! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 16:53:01'!
-arity 
-
-	^self numArgs! !
-
 !String methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 08:05:47'!
 asFile
 
 	^ self asFileEntry ! !
-
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 16:53:12'!
-existingSymbol 
-
-	^Symbol findInterned: self! !
-
-!String methodsFor: '*BeeCompatibility' stamp: 'Install-PowerLang 4/25/2021 07:43:45'!
-includesString: subString
-
-	^(self findString: subString) ~= 0! !
-
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 16:53:45'!
-indexOfString: aString from: start to: stop 
-	| n limit base i |
-	n := aString size.
-	limit := stop - n.
-	base := start - 1.
-	i := 1.
-	[
-		base > limit ifTrue: [^0].
-		i <= n]
-		whileTrue: [
-			i := (self at: base + i) = (aString at: i) ifTrue: [i + 1] ifFalse: [
-				base := base + 1.
-				1]].
-	^i > 1 ifTrue: [base + 1] ifFalse: [0]! !
-
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 16:54:02'!
-indexOfSubcollection: aCollection startingAt: anInteger 
-	| m n i first |
-	m := aCollection size.
-	m = 0 ifTrue: [^0].
-	n := self size - m + 1.
-	i := anInteger.
-	first := aCollection at: 1.
-	[i <= n] whileTrue: [| j |
-		(self at: i) = first ifTrue: [
-			j := 2.
-			[j <= m and: [(self at: i + j - 1) = (aCollection at: j)]]
-				whileTrue: [j := j + 1].
-			j > m ifTrue: [^i]].
-		i := i + 1].
-	^0! !
-
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 14:32:15'!
-reduced
-
-	^self! !
-
-!String methodsFor: '*BeeCompatibility' stamp: 'Install-PowerLang 9/15/2022 13:34:08'!
-replaceAllSubstrings: aString with: anotherString
-"
-  'This-and-that-and-the-Other' replaceAllSubstrings: '-a' with: '_A'.
-  ==> 'This_And-that_And-the-Other' 
-"
-	| string strm index fragment n |
-	string := aString asString.
-	string isEmpty ifTrue: [^self].
-	index := self findString: string.
-	index = 0 ifTrue: [^self].
-	strm := self asString class new writeStream.
-	fragment := self copyFrom: 1 to: index - 1.
-	strm nextPutAll: fragment.
-	n := string size.
-	[index > 0] whileTrue: [| next limit |
-		next :=  String  findSubstring: string
-					in: self  
-					startingAt: index + n 
-					matchTable: CaseSensitiveOrder.
-		limit := next = 0 ifTrue: [self size + 1] ifFalse: [next].
-		fragment := self copyFrom: index + n - 1 + 1 to: limit - 1.
-		strm nextPutAll: anotherString; nextPutAll: fragment.
-		index := next].
-	^strm contents! !
-
-!String methodsFor: '*BeeCompatibility' stamp: 'Install-PowerLang 5/30/2021 14:25:33'!
-trimBlanks
-
-	^self withBlanksTrimmed! !
 
 !String methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 07:41:44'!
 trimTail: suffixString
@@ -754,14 +400,6 @@ select: aBlock in: aCollection
 		[:each | 
 		(aBlock value: each value) ifTrue: [ aCollection add: each ]].
 	^aCollection! !
-
-!OrderedDictionary methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:13:20'!
-withIndexDo: aBlock 
-	| i |
-	i := 1.
-	self do: [:each | 
-		aBlock value: each value: i.
-		i := i + 1]! !
 
 !PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 4/29/2022 17:12:08'!
 copyFrom: start to: stop

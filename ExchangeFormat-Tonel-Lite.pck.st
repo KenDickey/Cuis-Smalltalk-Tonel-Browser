@@ -1,10 +1,10 @@
-'From Cuis 6.0 [latest update: #6072] on 16 November 2023 at 2:05:12 pm'!
+'From Cuis 6.0 [latest update: #6072] on 21 November 2023 at 2:22:02 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 57!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 59!
 !requires: 'BeeCompatibility' 1 36 nil!
 !requires: 'Cuis-Base' 60 5657 nil!
 !requires: 'ExchangeFormat-STON' 1 46 nil!
@@ -407,25 +407,32 @@ initialize
 	classInfo      := OrderedDictionary new.
 	methodInfos := OrderedCollection new! !
 
-!TonelReader methodsFor: 'reading' stamp: 'KenD 11/14/2022 16:07:13'!
+!TonelReader methodsFor: 'reading' stamp: 'KenD 11/21/2023 14:10:39'!
 nextBlock 
 	"(stream at: position) is $[, find matching unnested $]
 	 and answer the body "
-	| nested char start  prev |
+	| nested char prev startPos endPos charCount result |
 	nested := 0.
 	prev := nil.
 	char := $[.
 	self skipLine.
-	start := stream position.
+	startPos := stream position.
+	charCount := 0.
 	[	(char = $[ andNot: [prev = $$]) ifTrue: [nested := nested + 1].
-		(char = $]   andNot: [prev = $$]) ifTrue: [nested := nested - 1].
-		(char = $' andNot: [prev = $$]) ifTrue: [prev := char. self skipString].
-		(char = $" andNot: [prev = $$]) ifTrue: [prev := char. self skipComment].
+		(char = $] andNot: [prev = $$]) ifTrue: [nested := nested - 1].
+		(char = $' andNot: [prev = $$]) ifTrue: [prev := char. charCount := charCount +  self skipString].
+		(char = $" andNot: [prev = $$]) ifTrue: [prev := char. charCount := charCount +  self skipComment].
 		prev := char. 
-		nested = 0]
-		whileFalse: [char := stream next].
-	
-	^ stream copyFrom: start to: stream position - 1 "Elide final $]"
+		nested = 0
+	]  whileFalse: [
+			char := stream next. 		
+			charCount := charCount + 1.
+	].
+	endPos := ​ stream position.
+	stream position: startPos.
+	result := stream next: charCount- 1. "Elide final $]"
+	stream position: endPos.
+	^ result
 ! !
 
 !TonelReader methodsFor: 'reading' stamp: 'KenD 4/26/2022 15:38:06'!
@@ -477,7 +484,7 @@ readDefinition
 		on: stream skipSeparators;
 		parseMapDo: [:key :value | classInfo at: key put: value]! !
 
-!TonelReader methodsFor: 'reading' stamp: 'KenD 5/17/2022 15:47:53'!
+!TonelReader methodsFor: 'reading' stamp: 'KenD 11/21/2023 13:40:16'!
 readMethod 
 	| metadata classname signature selector method |
 	metadata := STON fromStream: stream.
@@ -527,10 +534,10 @@ methods
 
 	^ self methodInfos ! !
 
-!TonelReader methodsFor: 'private' stamp: 'KenD 4/20/2022 14:18:18'!
+!TonelReader methodsFor: 'private' stamp: 'KenD 11/21/2023 14:09:32'!
 skipComment 
 
-	self skipToMatch: $"! !
+	^ self skipToMatch: $"! !
 
 !TonelReader methodsFor: 'private' stamp: 'KenD 4/20/2022 14:29:43'!
 skipLine
@@ -539,20 +546,28 @@ skipLine
 		whileFalse:
 		[stream next isLineSeparator ifTrue: [^ self ]]! !
 
-!TonelReader methodsFor: 'private' stamp: 'KenD 4/20/2022 14:18:33'!
+!TonelReader methodsFor: 'private' stamp: 'KenD 11/21/2023 14:09:09'!
 skipString 
 
-	self skipToMatch: $'! !
+	^ self skipToMatch: $'! !
 
-!TonelReader methodsFor: 'private' stamp: 'KenD 4/20/2022 14:18:51'!
+!TonelReader methodsFor: 'private' stamp: 'KenD 11/21/2023 14:09:01'!
 skipToMatch: aCharacter 
-	[| found |
-		found := stream skipTo: aCharacter.
-		found ifFalse: [self error: aCharacter storeString , ' end expected'].
-		stream peek = aCharacter ifTrue: [
-			stream next.
-			found := false].
-		found] whileFalse! !
+	"Scan forward to matching character.
+	 Answer the number of characters skipped."
+	| nextChar charCount |
+	
+	charCount := 1.
+	nextChar := stream next.
+	[ nextChar = aCharacter ] 
+	whileFalse:
+	[	nextChar := stream next.
+ 		(stream atEnd) 
+		    ifTrue: [ self error: 'Fell off end of streem looking for $', aCharacter asString ].
+		charCount := charCount + 1
+	].
+	^charCount
+! !
 
 !TonelReader methodsFor: 'private fileOut' stamp: 'KenD 4/29/2022 15:13:39'!
 fileOutClassCommentTo: aFileStream

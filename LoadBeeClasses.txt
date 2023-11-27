@@ -3,9 +3,9 @@ Feature require: 'ExchangeFormat-Tonel-Lite'.
 
 prefix ​ '/home/pi/BeePowerLangVariants/Egg/bootstrap/pharo/'.
 " Order matters here "
-#(	'Powerlang-Compatibility-Pharo' 
+#("	'Powerlang-Compatibility-Pharo' 
 	'Powerlang-SCompiler'
-	'Powerlang-Core'
+	'Powerlang-Core' "
 	'OCompiler-Core'
 	) 
 do: [ :dirName |
@@ -18,7 +18,8 @@ TonelReader forceChunkFromTonel: fname asFileEntry.
 
 prefix ​ '/home/pi/BeePowerLangVariants/Egg/modules/'.
 " Order matters here "
-#(	'LMR' 
+#("	'LMR' "
+	'LMR/Nativization'
 	) 
 do: [ :dirName |
 	repo ​ TonelRepository fromPath: prefix , dirName.
@@ -28,6 +29,8 @@ do: [ :dirName |
 repo ​ TonelRepository fromPath: '/home/pi/BeePowerLangVariants/Egg/modules'.
 repo​ writeChunkFilesFromTonelAndLoad.
 "Expect 17 outliers"
+
+ 1 notYetImplemented 
 
 '/home/pi/Smalltalk/Zag-Smalltalk/Smalltalk/ASTSmalltalk/True.Extension.st' asFileEntry chunkFileSuperclass.
 '/home/pi/Smalltalk/Zag-Smalltalk/Smalltalk/ASTSmalltalk/ASMethodNode.Class.st' asFileEntry chunkFileSuperclass.

@@ -1,6 +1,6 @@
-'From Cuis 6.0 [latest update: #6072] on 19 November 2023 at 1:19:09 pm'!
+'From Cuis 6.0 [latest update: #6072] on 27 November 2023 at 2:14:21 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 45!
+!provides: 'BeeCompatibility' 1 46!
 !requires: 'Cuis-Base' 60 5593 nil!
 !requires: 'SqueakCompatibility' 1 35 nil!
 SystemOrganization addCategory: #BeeCompatibility!
@@ -259,6 +259,11 @@ withoutDuplicates
 	| seen |
 	seen := Set new: self size.
 	^self select: [:each| seen ifAbsentAdd: each] ! !
+
+!CharacterSequence methodsFor: '*BeeCompatibility' stamp: 'KenD 11/22/2023 13:14:33'!
+includesSubstring: subString
+
+	^ self is: subString substringAt: 0! !
 
 !String methodsFor: '*BeeCompatibility' stamp: 'KenD 11/14/2023 13:51:13'!
 !!= aString

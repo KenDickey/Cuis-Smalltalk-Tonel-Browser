@@ -1,10 +1,10 @@
-'From Cuis6.3 [latest update: #6245] on 29 February 2024 at 1:44:12 pm'!
+'From Cuis6.3 [latest update: #6245] on 29 February 2024 at 2:56:52 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 62!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 63!
 !requires: 'Cuis-Base' 63 6188 nil!
 !requires: 'BeeCompatibility' 1 49 nil!
 !requires: 'ExchangeFormat-STON' 1 48 nil!
@@ -909,24 +909,29 @@ categories
 
 	^categories! !
 
-!TonelRepository methodsFor: 'accessing' stamp: 'KenD 2/29/2024 13:43:07'!
+!TonelRepository methodsFor: 'accessing' stamp: 'KenD 2/29/2024 14:55:34'!
 orderedClassInfoForCategory: catSym
 	| categoryClassInfos orderedClassInfos proto |
-
+	"Answer a weak ordering where superclasses come before subclasses"
+	
 	categoryClassInfos := categories at: catSym.
 	orderedClassInfos := OrderedCollection new.
 	"Order based on SuperClass from ProtoObject if included"
 	proto := categoryClassInfos at: #ProtoObject ifAbsent: [nil].
 	proto ifNotNil: [ orderedClassInfos addFirst: proto ].
-	categoryClassInfos keysAndValuesDo: [ :classSym :tonelInfo | | superSym |
-		superSym := tonelInfo classInfo at: #superclass.
-		superSym 
-			ifNotNil:  [
+	categoryClassInfos keysAndValuesDo: [ :myClassSym :myInfo | | mySuperSym |
+		mySuperSym := myInfo classInfo at: #superclass.
+		mySuperSym 
+			ifNotNil:  [ "Skip ProtoObject"
 				orderedClassInfos 
-					detect:  [ :info | (info classInfo at: #name) = superSym ]
-					ifFound: [ :elt | orderedClassInfos add: tonelInfo after: elt ]
-					ifNone: [ orderedClassInfos addLast: tonelInfo ]
-		]
+					detect:  [ :info | (info classInfo at: #name) = mySuperSym ] 
+					ifFound: [ :mySuper | orderedClassInfos add: myInfo after: mySuper ]
+					ifNone: [ orderedClassInfos 
+							detect: [ :eltInfo | (eltInfo classInfo at: #superclass) = myClassSym ] 
+							ifFound: [ :mySub | orderedClassInfos add: myInfo before: mySub ]
+							ifNone: [ orderedClassInfos addLast: myInfo ]
+					]
+			]
 	].
 	^orderedClassInfos 
 	! !

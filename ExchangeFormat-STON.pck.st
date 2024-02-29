@@ -1,4 +1,4 @@
-'From Cuis6.3 [latest update: #6188] on 28 February 2024 at 3:47:56 pm'!
+'From Cuis6.3 [latest update: #6245] on 29 February 2024 at 9:54:20 am'!
 'Description STON implements serialization and materialization using the Smalltalk Object Notation format.
 
 Ported from:
@@ -7,9 +7,9 @@ Ported from:
 Copyright (C) 2012 Sven Van Caekenberghe.
 	See (MIT) license in LICENSES directory.
 '!
-!provides: 'ExchangeFormat-STON' 1 46!
-!requires: 'Cuis-Base' 60 5593 nil!
-!requires: 'Identities-UUID' 1 9 nil!
+!provides: 'ExchangeFormat-STON' 1 48!
+!requires: 'Cuis-Base' 63 6245 nil!
+!requires: 'Identities-UUID' 1 10 nil!
 !requires: 'CSS3-NamedColors' 1 1 nil!
 SystemOrganization addCategory: #'ExchangeFormat-STON'!
 
@@ -3880,16 +3880,6 @@ stonOn: stonWriter
 	stonWriter writeObject: self listSingleton: self asString! !
 
 !Character class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:31:23'!
-fromSton: stonReader
-
-	^ stonReader parseListSingleton first! !
-
-!UnicodeCodePoint methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 11/12/2022 13:28:31'!
-stonOn: stonWriter
-
-	stonWriter writeObject: self listSingleton: self asString! !
-
-!UnicodeCodePoint class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 11/14/2022 12:45:30'!
 fromSton: stonReader
 
 	^ stonReader parseListSingleton first! !

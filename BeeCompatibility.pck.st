@@ -1,7 +1,7 @@
-'From Cuis6.3 [latest update: #6188] on 28 February 2024 at 4:28:32 pm'!
+'From Cuis6.3 [latest update: #6245] on 29 February 2024 at 8:44:39 am'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 48!
-!requires: 'Cuis-Base' 60 5593 nil!
+!provides: 'BeeCompatibility' 1 49!
+!requires: 'Cuis-Base' 63 6245 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
 
@@ -452,37 +452,6 @@ isHexDigit
 	^'0123456789abcdefABCDEF' includes: self! !
 
 !Character methodsFor: '*BeeCompatibility' stamp: 'KenD 5/31/2021 08:03:14'!
-split: aString
-	"Answer a collection of Strings split at self -- include empty strings"
-	| delimiter parts keyStart keyStop |
-	delimiter := self asString.
-	parts _ OrderedCollection new.
-	keyStop _ 1.
-	keyStart _ 1.
-	[keyStop <= aString size] whileTrue:
-		[keyStop _ aString findDelimiters: delimiter startingAt: keyStart.
-		 (keyStart < keyStop)
-			ifTrue: [parts add: (aString copyFrom: keyStart to: (keyStop - 1))]
-			ifFalse: [parts add: ''].
-		keyStart := keyStop + 1].
-	^parts! !
-
-!UnicodeCodePoint methodsFor: '*BeeCompatibility' stamp: 'KenD 11/12/2022 13:27:49'!
-!!= aCodePointOrCharacter
-
-	^(self = aCodePointOrCharacter) not! !
-
-!UnicodeCodePoint methodsFor: '*BeeCompatibility' stamp: 'KenD 11/12/2022 13:27:58'!
-isASCIILetter
-
-	^'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' includes: self! !
-
-!UnicodeCodePoint methodsFor: '*BeeCompatibility' stamp: 'KenD 11/12/2022 13:28:05'!
-isHexDigit
-
-	^'0123456789abcdefABCDEF' includes: self! !
-
-!UnicodeCodePoint methodsFor: '*BeeCompatibility' stamp: 'KenD 11/12/2022 13:28:12'!
 split: aString
 	"Answer a collection of Strings split at self -- include empty strings"
 	| delimiter parts keyStart keyStop |

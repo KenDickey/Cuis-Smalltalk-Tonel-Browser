@@ -1,13 +1,13 @@
-'From Cuis6.3 [latest update: #6188] on 28 February 2024 at 4:29:36 pm'!
+'From Cuis6.3 [latest update: #6245] on 29 February 2024 at 1:44:12 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 61!
-!requires: 'BeeCompatibility' 1 48 nil!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 62!
 !requires: 'Cuis-Base' 63 6188 nil!
-!requires: 'ExchangeFormat-STON' 1 46 nil!
+!requires: 'BeeCompatibility' 1 49 nil!
+!requires: 'ExchangeFormat-STON' 1 48 nil!
 SystemOrganization addCategory: #'ExchangeFormat-Tonel-Lite'!
 
 
@@ -904,6 +904,33 @@ at: aSymbol
 	^nil
 	! !
 
+!TonelRepository methodsFor: 'accessing' stamp: 'KenD 2/29/2024 12:07:46'!
+categories
+
+	^categories! !
+
+!TonelRepository methodsFor: 'accessing' stamp: 'KenD 2/29/2024 13:43:07'!
+orderedClassInfoForCategory: catSym
+	| categoryClassInfos orderedClassInfos proto |
+
+	categoryClassInfos := categories at: catSym.
+	orderedClassInfos := OrderedCollection new.
+	"Order based on SuperClass from ProtoObject if included"
+	proto := categoryClassInfos at: #ProtoObject ifAbsent: [nil].
+	proto ifNotNil: [ orderedClassInfos addFirst: proto ].
+	categoryClassInfos keysAndValuesDo: [ :classSym :tonelInfo | | superSym |
+		superSym := tonelInfo classInfo at: #superclass.
+		superSym 
+			ifNotNil:  [
+				orderedClassInfos 
+					detect:  [ :info | (info classInfo at: #name) = superSym ]
+					ifFound: [ :elt | orderedClassInfos add: tonelInfo after: elt ]
+					ifNone: [ orderedClassInfos addLast: tonelInfo ]
+		]
+	].
+	^orderedClassInfos 
+	! !
+
 !TonelRepository methodsFor: 'processing' stamp: 'KenD 5/24/2022 11:43:02'!
 clean
 
@@ -945,7 +972,7 @@ writeChunkFilesFromTonelFiles
 			ifTrue: [TonelReader forceChunkFromTonel: aChild]
 		].! !
 
-!TonelRepository methodsFor: 'initialization' stamp: 'KenD 5/23/2022 15:45:19'!
+!TonelRepository methodsFor: 'initialization' stamp: 'KenD 2/29/2024 13:22:47'!
 asRingEnvironmentWith: arrayofCategorySymbols
 
 	categories := Dictionary new.
@@ -955,7 +982,8 @@ asRingEnvironmentWith: arrayofCategorySymbols
 		categories at: sym put: readerDict.
 		self packagesOf: sym into: readerDict.
 	].
-		
+	"Elide #package infos"
+	categories do: [ :cat | cat removeKey: #package ifAbsent: []].
 	^ self	! !
 
 !TonelRepository methodsFor: 'initialization' stamp: 'KenD 5/6/2022 07:49:26'!

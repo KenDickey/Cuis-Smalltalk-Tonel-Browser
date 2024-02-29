@@ -1,4 +1,4 @@
-'From Cuis 6.0 [latest update: #5593] on 14 December 2022 at 9:16:01 am'!
+'From Cuis6.3 [latest update: #6188] on 28 February 2024 at 3:47:56 pm'!
 'Description STON implements serialization and materialization using the Smalltalk Object Notation format.
 
 Ported from:
@@ -10,258 +10,257 @@ Copyright (C) 2012 Sven Van Caekenberghe.
 !provides: 'ExchangeFormat-STON' 1 46!
 !requires: 'Cuis-Base' 60 5593 nil!
 !requires: 'Identities-UUID' 1 9 nil!
-!requires: 'SqueakCompatibility' 1 35 nil!
 !requires: 'CSS3-NamedColors' 1 1 nil!
-SystemOrganization addCategory: 'ExchangeFormat-STON'!
+SystemOrganization addCategory: #'ExchangeFormat-STON'!
 
 
-!classDefinition: #STONTestAssociation category: 'ExchangeFormat-STON'!
+!classDefinition: #STONTestAssociation category: #'ExchangeFormat-STON'!
 Association subclass: #STONTestAssociation
 	instanceVariableNames: 'timestamp'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONTestAssociation class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONTestAssociation class' category: #'ExchangeFormat-STON'!
 STONTestAssociation class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONReaderError category: 'ExchangeFormat-STON'!
+!classDefinition: #STONReaderError category: #'ExchangeFormat-STON'!
 Error subclass: #STONReaderError
 	instanceVariableNames: 'streamPosition'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONReaderError class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONReaderError class' category: #'ExchangeFormat-STON'!
 STONReaderError class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONWriterError category: 'ExchangeFormat-STON'!
+!classDefinition: #STONWriterError category: #'ExchangeFormat-STON'!
 Error subclass: #STONWriterError
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONWriterError class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONWriterError class' category: #'ExchangeFormat-STON'!
 STONWriterError class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONFileReference category: 'ExchangeFormat-STON'!
+!classDefinition: #STONFileReference category: #'ExchangeFormat-STON'!
 FileEntry subclass: #STONFileReference
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONFileReference class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONFileReference class' category: #'ExchangeFormat-STON'!
 STONFileReference class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONWriteReadTest category: 'ExchangeFormat-STON'!
+!classDefinition: #STONWriteReadTest category: #'ExchangeFormat-STON'!
 TestCase subclass: #STONWriteReadTest
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONWriteReadTest class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONWriteReadTest class' category: #'ExchangeFormat-STON'!
 STONWriteReadTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONWriteAsciiOnlyReadTest category: 'ExchangeFormat-STON'!
+!classDefinition: #STONWriteAsciiOnlyReadTest category: #'ExchangeFormat-STON'!
 STONWriteReadTest subclass: #STONWriteAsciiOnlyReadTest
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONWriteAsciiOnlyReadTest class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONWriteAsciiOnlyReadTest class' category: #'ExchangeFormat-STON'!
 STONWriteAsciiOnlyReadTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONWritePrettyPrinterReadTest category: 'ExchangeFormat-STON'!
+!classDefinition: #STONWritePrettyPrinterReadTest category: #'ExchangeFormat-STON'!
 STONWriteReadTest subclass: #STONWritePrettyPrinterReadTest
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONWritePrettyPrinterReadTest class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONWritePrettyPrinterReadTest class' category: #'ExchangeFormat-STON'!
 STONWritePrettyPrinterReadTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONWriteReadCommentsTest category: 'ExchangeFormat-STON'!
+!classDefinition: #STONWriteReadCommentsTest category: #'ExchangeFormat-STON'!
 STONWriteReadTest subclass: #STONWriteReadCommentsTest
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONWriteReadCommentsTest class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONWriteReadCommentsTest class' category: #'ExchangeFormat-STON'!
 STONWriteReadCommentsTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONWriterTest category: 'ExchangeFormat-STON'!
+!classDefinition: #STONWriterTest category: #'ExchangeFormat-STON'!
 TestCase subclass: #STONWriterTest
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONWriterTest class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONWriterTest class' category: #'ExchangeFormat-STON'!
 STONWriterTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #STON category: 'ExchangeFormat-STON'!
+!classDefinition: #STON category: #'ExchangeFormat-STON'!
 Object subclass: #STON
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STON class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STON class' category: #'ExchangeFormat-STON'!
 STON class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONAlternativeRepresentationTestObject category: 'ExchangeFormat-STON'!
+!classDefinition: #STONAlternativeRepresentationTestObject category: #'ExchangeFormat-STON'!
 Object subclass: #STONAlternativeRepresentationTestObject
 	instanceVariableNames: 'id time gridReference'
 	classVariableNames: 'KnownObjects'
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONAlternativeRepresentationTestObject class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONAlternativeRepresentationTestObject class' category: #'ExchangeFormat-STON'!
 STONAlternativeRepresentationTestObject class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONCStyleCommentsSkipStream category: 'ExchangeFormat-STON'!
+!classDefinition: #STONCStyleCommentsSkipStream category: #'ExchangeFormat-STON'!
 Object subclass: #STONCStyleCommentsSkipStream
 	instanceVariableNames: 'stream peekedCharacter delimiter escape'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONCStyleCommentsSkipStream class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONCStyleCommentsSkipStream class' category: #'ExchangeFormat-STON'!
 STONCStyleCommentsSkipStream class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONJSON category: 'ExchangeFormat-STON'!
+!classDefinition: #STONJSON category: #'ExchangeFormat-STON'!
 Object subclass: #STONJSON
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONJSON class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONJSON class' category: #'ExchangeFormat-STON'!
 STONJSON class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONReader category: 'ExchangeFormat-STON'!
+!classDefinition: #STONReader category: #'ExchangeFormat-STON'!
 Object subclass: #STONReader
 	instanceVariableNames: 'readStream objects classes unresolvedReferences stringStream acceptUnknownClasses newLine convertNewLines'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONReader class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONReader class' category: #'ExchangeFormat-STON'!
 STONReader class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONReference category: 'ExchangeFormat-STON'!
+!classDefinition: #STONReference category: #'ExchangeFormat-STON'!
 Object subclass: #STONReference
 	instanceVariableNames: 'index'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONReference class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONReference class' category: #'ExchangeFormat-STON'!
 STONReference class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONStreamWriter category: 'ExchangeFormat-STON'!
+!classDefinition: #STONStreamWriter category: #'ExchangeFormat-STON'!
 Object subclass: #STONStreamWriter
 	instanceVariableNames: 'writer first'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONStreamWriter class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONStreamWriter class' category: #'ExchangeFormat-STON'!
 STONStreamWriter class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONListWriter category: 'ExchangeFormat-STON'!
+!classDefinition: #STONListWriter category: #'ExchangeFormat-STON'!
 STONStreamWriter subclass: #STONListWriter
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONListWriter class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONListWriter class' category: #'ExchangeFormat-STON'!
 STONListWriter class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONShortListWriter category: 'ExchangeFormat-STON'!
+!classDefinition: #STONShortListWriter category: #'ExchangeFormat-STON'!
 STONListWriter subclass: #STONShortListWriter
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONShortListWriter class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONShortListWriter class' category: #'ExchangeFormat-STON'!
 STONShortListWriter class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONMapWriter category: 'ExchangeFormat-STON'!
+!classDefinition: #STONMapWriter category: #'ExchangeFormat-STON'!
 STONStreamWriter subclass: #STONMapWriter
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONMapWriter class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONMapWriter class' category: #'ExchangeFormat-STON'!
 STONMapWriter class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONTestUser category: 'ExchangeFormat-STON'!
+!classDefinition: #STONTestUser category: #'ExchangeFormat-STON'!
 STONStreamWriter subclass: #STONTestUser
 	instanceVariableNames: 'username password enabled'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONTestUser class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONTestUser class' category: #'ExchangeFormat-STON'!
 STONTestUser class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONTestUser2 category: 'ExchangeFormat-STON'!
+!classDefinition: #STONTestUser2 category: #'ExchangeFormat-STON'!
 STONTestUser subclass: #STONTestUser2
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONTestUser2 class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONTestUser2 class' category: #'ExchangeFormat-STON'!
 STONTestUser2 class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONTestUser3 category: 'ExchangeFormat-STON'!
+!classDefinition: #STONTestUser3 category: #'ExchangeFormat-STON'!
 STONTestUser subclass: #STONTestUser3
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONTestUser3 class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONTestUser3 class' category: #'ExchangeFormat-STON'!
 STONTestUser3 class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONTestDomainObject category: 'ExchangeFormat-STON'!
+!classDefinition: #STONTestDomainObject category: #'ExchangeFormat-STON'!
 Object subclass: #STONTestDomainObject
 	instanceVariableNames: 'created modified integer float description color tags bytes boolean'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONTestDomainObject class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONTestDomainObject class' category: #'ExchangeFormat-STON'!
 STONTestDomainObject class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONTestKnownObject category: 'ExchangeFormat-STON'!
+!classDefinition: #STONTestKnownObject category: #'ExchangeFormat-STON'!
 Object subclass: #STONTestKnownObject
 	instanceVariableNames: 'id description'
 	classVariableNames: 'KnownObjects'
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONTestKnownObject class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONTestKnownObject class' category: #'ExchangeFormat-STON'!
 STONTestKnownObject class
 	instanceVariableNames: ''!
 
-!classDefinition: #STONWriter category: 'ExchangeFormat-STON'!
+!classDefinition: #STONWriter category: #'ExchangeFormat-STON'!
 Object subclass: #STONWriter
 	instanceVariableNames: 'writeStream prettyPrint stonCharacters newLine asciiOnly jsonMode keepNewLines referencePolicy level objects'
 	classVariableNames: 'STONCharacters STONSimpleSymbolCharacters'
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONWriter class' category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONWriter class' category: #'ExchangeFormat-STON'!
 STONWriter class
 	instanceVariableNames: ''!
 
@@ -3525,14 +3524,14 @@ initializeSTONCharacters
 	escapes pairsDo: [ :code :escape | 
 		STONCharacters at: code + 1 put: escape ]! !
 
-!STONWriter class methodsFor: 'class initialization' stamp: 'KenD 4/3/2022 18:52:04'!
+!STONWriter class methodsFor: 'class initialization' stamp: 'Install-ExchangeFormat-STON 2/28/2024 15:45:58'!
 initializeSTONSimpleSymbolCharacters
 	"STONSimpleSymbolCharacters asArray collectWithIndex: [ :each :index |
 		each isZero ifTrue: [ (index - 1) asCharacter ] ]."
 		
-	STONSimpleSymbolCharacters := ByteArray new: 256 withAll: 1.
+	STONSimpleSymbolCharacters := Array new: 256 withAll: 1.
 	1 to: 256 do: [ :each | | char |
-		char := (each - 1) asCharacter.
+		char := Character codePoint: (each - 1).
 		(self isSimpleSymbolChar: char)
 			ifTrue: [ 
 				STONSimpleSymbolCharacters at: each put: 0 ] ]! !

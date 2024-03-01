@@ -1,6 +1,6 @@
-'From Cuis6.3 [latest update: #6245] on 29 February 2024 at 8:44:39 am'!
+'From Cuis6.3 [latest update: #6245] on 1 March 2024 at 2:37:13 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 49!
+!provides: 'BeeCompatibility' 1 52!
 !requires: 'Cuis-Base' 63 6245 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
@@ -377,6 +377,62 @@ asParameter
 	"Answer machine value for truth"
 	^ 1! !
 
+!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 14:06:27'!
+bitShiftRight: anInteger
+
+	^self bitShift: 0 - anInteger! !
+
+!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 14:05:17'!
+bitsAt: aStretch
+	"
+	(2r001101010 bitField: (3 thru: 6)) bin = '1010'
+	(-16r40000000 bitField: (29 thru: 31)) bin = '100'
+	"
+	| shifted mask |
+	shifted := self bitShiftRight: aStretch start - 1.
+	mask := 1 bitShift: aStretch length.
+	^shifted bitAnd: mask - 1! !
+
+!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 13:54:59'!
+bitsAt: aStretch put: anInteger
+	"
+	((2r001101100 bitsAt: (3 thru: 6) put: 2r1101) bitField: (3 thru: 6)) bin = '1101'
+	((2r100 bitsAt: (29 thru: 31) put: 2r101) bitField: (29 thru: 31)) bin = '101'
+	((2r100 bitsAt: (29 thru: 31) put: 2r101) bitField: (1 thru: 3)) bin = '100'
+	"
+	| shifted max |
+	shifted := anInteger bitShift: aStretch start - 1.
+	max := 1 bitShift: aStretch length.
+	anInteger < max ifFalse: [self error: 'invalid argument'].
+	^(self bitsClear: aStretch) bitOr: shifted! !
+
+!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 13:56:10'!
+bitsClear: aStretch
+	"
+	(2r111100110 bitsClear: (3 thru: 6)) = 2r111000010
+	"
+	| mask |
+	mask := (1 bitShift: aStretch end) - (1 bitShift: aStretch start - 1).
+	^self bitAnd: mask bitInvert! !
+
+!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 14:08:24'!
+isOnBit: n
+
+	^(self bitAnd: n) = n! !
+
+!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 14:08:54'!
+linearFeedbackShiftRandom: key
+	"
+	LFSR implementation (avoids 0 by definition).
+	More keys at: https://users.ece.cmu.edu/~koopman/lfsr/index.html
+	"
+
+	| shifted |
+	shifted := self bitShift: -1.
+	^ (self bitAnd: 1) = 0
+		ifTrue: [ shifted ]
+		ifFalse: [ shifted bitXor: key ]! !
+
 !SmallInteger methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:33:32'!
 byteAt: n
 	"Treat me as a byte array"
@@ -441,10 +497,29 @@ isMetaclass
 
 	^(self = aCodePointOrCharacter) not! !
 
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 12:00:20'!
+asInteger
+
+	^ self codePoint! !
+
 !Character methodsFor: '*BeeCompatibility' stamp: 'KenD 2/16/2021 12:39:58'!
 isASCIILetter
 
 	^'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' includes: self! !
+
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 11:59:33'!
+isBlank
+	| value |
+	value := self codePoint.
+	value <= 32 ifTrue: [^true].
+	value = 160 ifTrue: [^true].
+	value < 16r2000 ifTrue: [^false].
+	value < 16r200C ifTrue: [^true].
+	value = 16r202F ifTrue: [^true].
+	value = 16r205F ifTrue: [^true].
+	value = 16r3000 ifTrue: [^true].
+	^false
+! !
 
 !Character methodsFor: '*BeeCompatibility' stamp: 'KenD 2/14/2021 18:46:33'!
 isHexDigit
@@ -504,6 +579,15 @@ cull: firstArg cull: secondArg cull: thirdArg cull: fourthArg
 	numArgs = 1 ifTrue: [ ^self value: firstArg ].
 	^self value! !
 
+!Collection methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 13:35:07'!
+conform: evaluable
+	self
+		detect: [:x | | fx |
+			fx := evaluable value: x.
+			fx not]
+		ifNone: [^true].
+	^false! !
+
 !Collection methodsFor: '*BeeCompatibility' stamp: 'KenD 11/19/2023 13:19:05'!
 reject: rejectBlock thenDo: doBlock 	
 "Utility method to improve readability.	Do not create the intermediate collection."	
@@ -545,11 +629,11 @@ sortBy: blockOrCriteria
 	sorted := self asSortedCollection: sortBlock.
 	^ self species withAll: sorted! !
 
-!SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 13:38:42'!
+!SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 14:30:24'!
 withoutDuplicates
 	"Answer a copy of the receiver that preserves order but eliminates any duplicates."
 	| seen |
-	seen := Set new: self size.
+	seen := Set new.
 	^self select: [:each| seen ifAbsentAdd: each] ! !
 
 !CharacterSequence methodsFor: '*BeeCompatibility' stamp: 'KenD 11/22/2023 13:14:33'!
@@ -647,9 +731,10 @@ indexOfSubcollection: aCollection startingAt: anInteger
 		i := i + 1].
 	^0! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 14:32:15'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 12:07:32'!
 reduced
 
+	self flag: #UnknownSemantics.
 	^self! !
 
 !String methodsFor: '*BeeCompatibility' stamp: 'Install-PowerLang 9/15/2022 13:34:08'!
@@ -769,6 +854,12 @@ existingSymbol
 includesString: subString
 	self flag: #FixMe.
 	^(self asByteString findString: subString asByteString) ~= 0! !
+
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 12:07:13'!
+reduced
+	
+	self flag: #UnknownSemantics.
+	^ self! !
 
 !UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 11/15/2022 08:06:33'!
 trimBlanks
@@ -894,6 +985,41 @@ nextWordOrNumber
 			ifTrue: [ self position: self position-1. ^ word ]
 		].
 	^ word! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 2/29/2024 09:38:50'!
+prev
+	^self position > 0
+		ifTrue: [self position: self position - 1; peek]
+		ifFalse: [self error: 'read beyond start of stream']
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 2/29/2024 09:38:50'!
+prevChunk
+	| bulk token index n m bytes chunk |
+	token := self isBinary ifTrue: [$!! asInteger] ifFalse: [$!!].
+	bulk := self reverseUpTo: token.
+	[self atBeginning orNot: [self reversePeekFor: token]]
+		whileFalse: [bulk := (self reverseUpTo: token) , '!!' , bulk].
+	index := 1.
+	n := bulk size.
+	[
+		index <= n and: [| char |
+			char := bulk at: index.
+			char asInteger <= 32]]
+		whileTrue: [index := index + 1].
+	m := n - index + 1.
+	m = 0 ifTrue: [^''].
+	bytes := ByteArray new: m.
+	bytes isEmpty ifTrue: [^''].
+	bytes replaceFrom: 1 to: m with: bulk startingAt: index.
+	chunk := UTF8 current decode: bytes.
+	^chunk copyWithout: Lf
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 2/29/2024 09:38:50'!
+skipWhitespace
+	[self atEnd orNot: [self peek isBlank]] whileFalse: [self next]
+! !
 
 !DirectoryEntry methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 07:59:19'!
 \ pathString

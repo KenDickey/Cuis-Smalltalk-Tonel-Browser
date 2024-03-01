@@ -1,10 +1,10 @@
-'From Cuis6.3 [latest update: #6245] on 29 February 2024 at 2:56:52 pm'!
+'From Cuis6.3 [latest update: #6245] on 1 March 2024 at 1:02:42 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 63!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 65!
 !requires: 'Cuis-Base' 63 6188 nil!
 !requires: 'BeeCompatibility' 1 49 nil!
 !requires: 'ExchangeFormat-STON' 1 48 nil!
@@ -932,6 +932,32 @@ orderedClassInfoForCategory: catSym
 							ifNone: [ orderedClassInfos addLast: myInfo ]
 					]
 			]
+	].
+	^orderedClassInfos 
+	! !
+
+!TonelRepository methodsFor: 'accessing' stamp: 'KenD 3/1/2024 13:02:32'!
+orderedClassInfos
+	|  orderedClassInfos  |
+	"Answer a weak ordering where superclasses come before subclasses
+	  -- acrosss all categories"
+	
+	orderedClassInfos := OrderedCollection new.
+	categories do: [ :catInfo |
+		catInfo keysAndValuesDo: [ :myClassSym :myInfo | 
+			(myInfo classInfo at: #superclass) 
+				ifNil: [ orderedClassInfos addFirst: myInfo ] "ProtoObject"
+				ifNotNil:  [ :mySuperSym |
+					orderedClassInfos 
+						detect:  [ :info | (info classInfo at: #name) = mySuperSym ] 
+						ifFound: [ :mySuper | orderedClassInfos add: myInfo after: mySuper ]
+						ifNone: [ orderedClassInfos 
+								detect: [ :eltInfo | (eltInfo classInfo at: #superclass) = myClassSym ] 
+								ifFound: [ :mySub | orderedClassInfos add: myInfo before: mySub ]
+								ifNone: [ orderedClassInfos addLast: myInfo ]
+						]
+				]
+		]
 	].
 	^orderedClassInfos 
 	! !

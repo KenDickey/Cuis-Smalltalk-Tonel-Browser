@@ -1,6 +1,6 @@
-'From Cuis6.3 [latest update: #6245] on 1 March 2024 at 2:37:13 pm'!
+'From Cuis6.3 [latest update: #6245] on 1 March 2024 at 3:09:07 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 52!
+!provides: 'BeeCompatibility' 1 53!
 !requires: 'Cuis-Base' 63 6245 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
@@ -15,6 +15,16 @@ SharedPool subclass: #PSharedPool
 PSharedPool class
 	instanceVariableNames: ''!
 
+!classDefinition: #Namespace category: #BeeCompatibility!
+Dictionary subclass: #Namespace
+	instanceVariableNames: 'parent'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'BeeCompatibility'!
+!classDefinition: 'Namespace class' category: #BeeCompatibility!
+Namespace class
+	instanceVariableNames: ''!
+
 !classDefinition: #PoolDictionary category: #BeeCompatibility!
 Dictionary subclass: #PoolDictionary
 	instanceVariableNames: 'constant'
@@ -23,6 +33,16 @@ Dictionary subclass: #PoolDictionary
 	category: 'BeeCompatibility'!
 !classDefinition: 'PoolDictionary class' category: #BeeCompatibility!
 PoolDictionary class
+	instanceVariableNames: ''!
+
+!classDefinition: #NumberParser category: #BeeCompatibility!
+Object subclass: #NumberParser
+	instanceVariableNames: 'stream error return'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'BeeCompatibility'!
+!classDefinition: 'NumberParser class' category: #BeeCompatibility!
+NumberParser class
 	instanceVariableNames: ''!
 
 !classDefinition: #Stretch category: #BeeCompatibility!
@@ -45,6 +65,16 @@ Object subclass: #TargetOSPlatform
 TargetOSPlatform class
 	instanceVariableNames: ''!
 
+
+!Namespace commentStamp: '<historical>' prior: 0!
+Copyright (c) 2022 Javier Pimás. 
+    See (MIT) license in root directory.
+!
+
+!NumberParser commentStamp: '<historical>' prior: 0!
+Copyright (c) 2020 Aucerna. 
+    See (MIT) license in root directory.
+!
 
 !TargetOSPlatform commentStamp: '<historical>' prior: 0!
 I am working around current target system assumptions.
@@ -96,6 +126,25 @@ detect: aBlock ifNone: anotherBlock
 do: aBlock
 	^self classPool do: aBlock
 
+! !
+
+!Namespace methodsFor: 'lookup' stamp: 'KenD 2/29/2024 09:38:51'!
+_namespaceLookup: aSymbol
+	| table |
+	table := namespace _basicAt: 2.
+	2
+		to: table _size
+		do: [:j | | assoc |
+			assoc := (table _basicAt: j).
+			assoc == nil ifFalse: [
+				assoc key == aSymbol
+					ifTrue: [^table _basicAt: j + 1]]].
+	^nil
+! !
+
+!Namespace class methodsFor: 'instance creation' stamp: 'KenD 2/29/2024 09:38:51'!
+new
+	^super new
 ! !
 
 !PoolDictionary methodsFor: 'testing' stamp: 'KenD 1/30/2023 10:10:46'!
@@ -160,6 +209,220 @@ initialize: anInteger
 !PoolDictionary class methodsFor: 'instance creation' stamp: 'KenD 1/30/2023 10:10:46'!
 newConstantPool
 	^self new beConstantPool
+! !
+
+!NumberParser methodsFor: 'accessing' stamp: 'KenD 3/1/2024 11:54:08'!
+error
+	^error
+! !
+
+!NumberParser methodsFor: 'accessing' stamp: 'KenD 3/1/2024 11:54:08'!
+on: aString
+	stream := aString readStream.
+	return := nil
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+checkNumberEnd: position
+	| char |
+	stream atEnd ifTrue: [^self].
+	char := stream peek.
+	char = $. ifFalse: [^self].
+	stream skip: 1.
+	stream atEnd
+		ifFalse: [stream peek isDigit
+			ifTrue: [self error: 'invalid number' at: position]].
+	stream skip: -1
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+completeFloat: anInteger
+	| tenth |
+	tenth := 10 raisedToInteger: self nextExponent.
+	^(anInteger * tenth) asFloat
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+completeNumber: anInteger after: aCharacter
+	aCharacter = $. ifTrue: [
+		^(stream peekFor: $s)
+			ifTrue: [self nextScaledFrom: anInteger fractionDigits: 0]
+			ifFalse: [self nextFloat: anInteger]].
+	(aCharacter = $e or: [aCharacter = $E])
+		ifTrue: [^self completeFloat: anInteger].
+	aCharacter = $r ifTrue: [^self nextIntegerRadix: anInteger].
+	aCharacter = $s ifTrue: [^self nextScaledFrom: anInteger fractionDigits: 0].
+	(anInteger = 0 and: [aCharacter = $x or: [aCharacter = $X]])
+		ifTrue: [^self nextIntegerRadix: 16].
+	stream skip: -1.
+	^anInteger
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+completeNumber: anInteger at: start
+	| number |
+	stream atEnd ifTrue: [^anInteger].
+	number := anInteger.
+	number := self completeNumber: anInteger after: stream next.
+	self checkNumberEnd: start.
+	^number
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+digitFromChar: char base: radix
+	| c |
+	char isDigit ifTrue: [^char digitValue].
+	char = $r ifTrue: [^nil].
+	char = $x ifTrue: [^nil].
+	char = $X ifTrue: [^nil].
+	c := char asUppercase.
+	(c asInteger between: $A asInteger and: $Z asInteger) ifFalse: [^nil].
+	(c !!= $E and: [radix <= c digitValue]) ifTrue: [^nil].
+	(c = $E and: [radix = 10]) ifTrue: [^nil].
+	^c digitValue
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+endToken
+	self error: 'end of stream' at: stream position
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+error: aString at: position
+	error := aString -> position.
+	return value: nil
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+negativeNumber
+	| position |
+	stream atEnd ifTrue: [^nil].
+	stream peek isDigit ifFalse: [^nil].
+	position := stream position.
+	^self next key negated -> position
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+next
+	| char |
+	return isNil ifTrue: [return := [:value | ^value]].
+	char := self nextChar.
+	char isNil ifTrue: [^self endToken].
+	char = $- ifTrue: [^self negativeNumber].
+	char = $+ ifTrue: [^self positiveNumber].
+	char isDigit ifTrue: [^self nextNumber: char].
+	^nil
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+nextChar
+	^stream skipWhitespace atEnd ifFalse: [stream next]
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+nextDigit: radix
+	| char digit |
+	stream atEnd ifTrue: [^nil].
+	char := stream next.
+	digit := self digitFromChar: char base: radix.
+	digit isNil ifTrue: [
+		stream skip: -1.
+		^nil].
+	radix <= digit
+		ifTrue: [self error: 'digit greater than radix' at: stream position].
+	^digit
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+nextExponent
+	| negated exp |
+	negated := false.
+	(stream peekFor: $+) ifFalse: [negated := stream peekFor: $-].
+	exp := self nextIntegerRadix: 10.
+	negated ifTrue: [exp := exp negated].
+	^exp
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+nextFloat: aNumber
+	| base digit e exp |
+	digit := self nextDigit: 10.
+	digit isNil ifTrue: [
+		stream skip: -1.
+		^aNumber].
+	e := 1.
+	base := aNumber * 10 + digit.
+	[
+		digit := self nextDigit: 10.
+		digit isNil]
+		whileFalse: [
+			base := base * 10 + digit.
+			e := e + 1].
+	((stream peekFor: $E) or: [stream peekFor: $e]) ifTrue: [
+		exp := self nextExponent.
+		^(base * (10 raisedToInteger: exp - e)) asFloat].
+	(stream peekFor: $s) ifTrue: [^self nextScaledFrom: base fractionDigits: e].
+	^(base * (10 raisedToInteger: e negated)) asFloat
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+nextIntegerRadix: radix
+	| value valid digit |
+	value := 0.
+	valid := false.
+	[
+		digit := self nextDigit: radix.
+		digit isNil]
+		whileFalse: [
+			valid := true.
+			value := value * radix + digit].
+	valid ifFalse: [self error: 'digit missing' at: stream position + 1].
+	^value
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+nextNumber: aCharacter
+	| start number digit |
+	start := stream position.
+	number := aCharacter digitValue.
+	[
+		digit := self nextDigit: 10.
+		digit isNil]
+		whileFalse: [number := number * 10 + digit].
+	number := self completeNumber: number at: start.
+	^number -> (start thru: stream position)
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+nextScaledFrom: aNumber fractionDigits: digits
+	| scale denominator sd |
+	scale := (stream atEnd not and: [stream peek isDigit])
+		ifTrue: [self nextIntegerRadix: 10].
+	denominator := 10 raisedToInteger: digits.
+	sd := ScaledDecimal
+		numerator: aNumber
+		denominator: denominator
+		scale: scale.
+	^sd reduced
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+positiveNumber
+	| position |
+	stream peek isDigit ifFalse: [^nil].
+	position := stream position.
+	^self next key -> position
+! !
+
+!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+reset
+	stream reset.
+	return := nil
+! !
+
+!NumberParser methodsFor: 'services' stamp: 'KenD 3/1/2024 11:54:08'!
+nextValue
+	^self next ifNil: [0] ifNotNil: [:assoc | assoc key]
 ! !
 
 !Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:36:10'!

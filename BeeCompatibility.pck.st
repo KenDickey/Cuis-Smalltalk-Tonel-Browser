@@ -1,6 +1,6 @@
-'From Cuis6.3 [latest update: #6245] on 1 March 2024 at 3:09:07 pm'!
+'From Cuis6.3 [latest update: #6245] on 1 March 2024 at 3:47:44 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 53!
+!provides: 'BeeCompatibility' 1 54!
 !requires: 'Cuis-Base' 63 6245 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
@@ -1249,6 +1249,255 @@ nextWordOrNumber
 		].
 	^ word! !
 
+!PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:32:45'!
+sizeToEnd
+
+	^  readLimit - position! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:14:52'!
+alignTo: boundary
+	| n |
+	n := boundary - (self position \\ boundary) \\ boundary.
+	self skip: n
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:14:57'!
+atBeginning
+	^self position = 0
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:15:03'!
+back
+	self skip: -1
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:15:08'!
+backToAny: aCollection
+	"
+	'Smalltalk' readStream position: 'Smallta' size; backToAny: 'ml'
+	"
+	[self position = 0] whileFalse: [| token |
+		token := self prev.
+		(aCollection includes: token) ifTrue: [^self]]
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:15:12'!
+backToOpen: open
+	"
+	'--|things||some|-}blah' readStream next: '--|things||some' size; backToOpen: $|; yourself
+	"
+	| start |
+	start := self position.
+	[self position > 0] whileTrue: [
+		self prev = open ifTrue: [
+			self position = 0 ifTrue: [^self].
+			self prev = open ifFalse: [^self next; yourself]]].
+	self position: start
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:15:18'!
+backToOpen: close with: open
+	"
+	'-{things{some}-}blah' readStream position: '-{things{some}-}' size - 1; backToOpen: ${ with: $}
+	"
+	| start tokens count |
+	open = close ifTrue: [^self backToOpen: close].
+	start := self position.
+	tokens := {open. close}.
+	count := -1.
+	[self position = 0 or: [count = 0]] whileFalse: [| token |
+		self backToAny: tokens.
+		token := self peek.
+		token = open ifTrue: [count := count + 1].
+		token = close ifTrue: [count := count - 1]].
+	count = 0 ifFalse: [self position: start]
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:15:23'!
+basicNextChunk
+	| token bulk |
+	token := self isBinary ifTrue: [$!! asInteger] ifFalse: [$!!].
+	bulk := self upTo: token.
+	[self atEnd orNot: [self peekFor: token]] whileFalse: [
+		bulk := bulk copyWith: token.
+		bulk := bulk , (self upTo: token)].
+	^bulk
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:16:15'!
+copyFrom: start to: stop
+	| pos result |
+	pos := self position.
+	self position: start - 1.
+	result := self next: stop - start + 1.
+	self position: pos.
+	^result
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:16:22'!
+countBlanks
+	| count tab space |
+	count := 0.
+	tab := Character tab.
+	space := $ .
+	[self atEnd] whileFalse: [| char |
+		char := self next.
+		char = space ifTrue: [count := count + 1] ifFalse: [
+			char = tab ifTrue: [count := count + 4] ifFalse: [
+				self skip: -1.
+				^count]]].
+	^count
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:16:31'!
+getBytesFor: aByteArray
+	self readInto: aByteArray from: 1 to: aByteArray sizeInBytes
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:16:37'!
+getInteger
+	| byte |
+	byte := self nextByte.
+	^128 <= byte ifTrue: [self getInteger * 128 + byte - 128] ifFalse: [byte]
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:16:44'!
+isBinary
+	^false
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:16:49'!
+isEmpty
+	^self size = 0
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:17:09'!
+nextByte
+	^self next asInteger
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:17:23'!
+nextFloat
+	| float |
+	float := Float new.
+	self getBytesFor: float.
+	^float
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:17:30'!
+nextInteger
+	^Integer readFrom: self
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:17:56'!
+nextLong
+	| bytes |
+	bytes := ByteArray new: 4.
+	self getBytesFor: bytes.
+	^bytes longAtOffset: 0
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:18:02'!
+nextNoFail: anInteger
+	| n |
+	n := anInteger min: self size - self position.
+	^self next: n
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:18:08'!
+nextString
+	| size |
+	size := self nextULong.
+	^(self next: size) asString
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:18:14'!
+nextSubstring
+	| start |
+	[
+		self atEnd ifTrue: [^''].
+		self next isAlphaNumericOrUnderscore] whileFalse.
+	start := self position.
+	[self atEnd not and: [self peek isAlphaNumericOrUnderscore]]
+		whileTrue: [self next].
+	^self copyFrom: start to: self position
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:18:20'!
+nextSubstringOrNumber
+	| c numeric token writer |
+	[
+		self atEnd ifTrue: [^''].
+		c := self next.
+		c isAlphanumeric] whileFalse.
+	numeric := c isDigit.
+	writer := self newCollector writeStream.
+	writer nextPut: c.
+	[
+		self atEnd not and: [
+			c := self next.
+			numeric ifTrue: [c isDigit] ifFalse: [c isAlphanumeric]]]
+		whileTrue: [writer nextPut: c].
+	token := writer contents.
+	(numeric and: [c isLetter]) ifTrue: [self skip: -1].
+	^token first isDigit ifTrue: [token asInteger] ifFalse: [token]
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:18:33'!
+nextULong
+	| a0 a1 a2 a3 |
+	a0 := self nextByte.
+	a1 := self nextByte bitShift: 8.
+	a2 := self nextByte bitShift: 16.
+	a3 := self nextByte bitShift: 24.
+	^a3 + a2 + a1 + a0
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:18:38'!
+nextUShort
+	| a0 a1 |
+	a0 := self nextByte.
+	a1 := self nextByte bitShift: 8.
+	^a1 + a0
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:19:01'!
+nextWhile: aBlock
+	| write |
+	write := self newCollector writeStream.
+	[self atEnd not and: [aBlock evaluateWith: self peek]]
+		whileTrue: [write nextPut: self next].
+	^write contents
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:19:06'!
+notEmpty
+	^self isEmpty not
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:14:02'!
+peek: n
+	| pos safe data |
+	pos := self position.
+	safe := n min: self sizeToEnd.
+	data := self next: safe.
+	self position: pos.
+	^data! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:14:10'!
+peekFor: token
+	^self peek = token ifTrue: [self skip]; yourself
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:14:15'!
+peekForAll: aCollection
+	| n |
+	n := aCollection size.
+	^((self peek: n) equalsTo: aCollection)
+		ifTrue: [self skip: n];
+		yourself
+! !
+
 !ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 2/29/2024 09:38:50'!
 prev
 	^self position > 0
@@ -1256,32 +1505,36 @@ prev
 		ifFalse: [self error: 'read beyond start of stream']
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 2/29/2024 09:38:50'!
-prevChunk
-	| bulk token index n m bytes chunk |
-	token := self isBinary ifTrue: [$!! asInteger] ifFalse: [$!!].
-	bulk := self reverseUpTo: token.
-	[self atBeginning orNot: [self reversePeekFor: token]]
-		whileFalse: [bulk := (self reverseUpTo: token) , '!!' , bulk].
-	index := 1.
-	n := bulk size.
-	[
-		index <= n and: [| char |
-			char := bulk at: index.
-			char asInteger <= 32]]
-		whileTrue: [index := index + 1].
-	m := n - index + 1.
-	m = 0 ifTrue: [^''].
-	bytes := ByteArray new: m.
-	bytes isEmpty ifTrue: [^''].
-	bytes replaceFrom: 1 to: m with: bulk startingAt: index.
-	chunk := UTF8 current decode: bytes.
-	^chunk copyWithout: Lf
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:14:27'!
+readInto: aByteArray from: start to: stop
+	| data |
+	data := self next: stop - start + 1.
+	aByteArray replaceBytesFrom: start to: stop with: data startingAt: 1
 ! !
 
 !ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 2/29/2024 09:38:50'!
 skipWhitespace
 	[self atEnd orNot: [self peek isBlank]] whileFalse: [self next]
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:29:26'!
+upToToken: token
+	| write c |
+	write := WriteStream new.
+	[
+		self atEnd not and: [
+			c := self next.
+			c ~= token]]
+		whileTrue: [write nextPut: c].
+	^write contents
+! !
+
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:20:23'!
+utf8Trailing: byte
+	(byte bitAnd: 2r11100000) = 2r11000000 ifTrue: [^1].
+	(byte bitAnd: 2r11110000) = 2r11100000 ifTrue: [^2].
+	(byte bitAnd: 2r11111000) = 2r11110000 ifTrue: [^3].
+	^nil
 ! !
 
 !DirectoryEntry methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 07:59:19'!

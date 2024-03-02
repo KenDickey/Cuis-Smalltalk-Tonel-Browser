@@ -1,6 +1,6 @@
-'From Cuis6.3 [latest update: #6245] on 1 March 2024 at 3:47:44 pm'!
+'From Cuis6.3 [latest update: #6247] on 2 March 2024 at 8:27:42 am'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 54!
+!provides: 'BeeCompatibility' 1 56!
 !requires: 'Cuis-Base' 63 6245 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
@@ -805,6 +805,12 @@ split: aString
 		keyStart := keyStop + 1].
 	^parts! !
 
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 3/2/2024 07:25:21'!
+value: anInteger
+	"Answer the Character whose value is anInteger."
+
+	^ self codePoint: anInteger! !
+
 !BlockClosure methodsFor: '*BeeCompatibility' stamp: 'bp 11/29/2014 17:29'!
 cull: firstArg
 	"Activate the receiver, with one or zero arguments."
@@ -1025,30 +1031,6 @@ replaceAllSubstrings: aString with: anotherString
 		strm nextPutAll: anotherString; nextPutAll: fragment.
 		index := next].
 	^strm contents! !
-
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 2/28/2024 16:27:23'!
-subStrings: separators 
-	"Answer an array containing the substrings in the receiver separated 
-	by the elements of separators."
-	| char result sourceStream subString |
-	#Collectn.
-	"Changed 2000/04/08 For ANSI <readableString> protocol."
-	(separators isString or:[separators allSatisfy: [:element | element isCharacter]]) ifFalse:
-		[^ self error: 'separators must be Characters.'].
-	sourceStream := ReadStream on: self.
-	result := OrderedCollection new.
-	subString := String new.
-	[sourceStream atEnd]
-		whileFalse: 
-			[char := sourceStream next.
-			(separators includes: char)
-				ifTrue: [subString notEmpty
-						ifTrue: 
-							[result add: subString copy.
-							subString := String new]]
-				ifFalse: [subString := subString , (String with: char)]].
-	subString notEmpty ifTrue: [result add: subString copy].
-	^ result asArray! !
 
 !String methodsFor: '*BeeCompatibility' stamp: 'Install-PowerLang 5/30/2021 14:25:33'!
 trimBlanks
@@ -1536,6 +1518,11 @@ utf8Trailing: byte
 	(byte bitAnd: 2r11111000) = 2r11110000 ifTrue: [^3].
 	^nil
 ! !
+
+!WriteStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/2/2024 07:32:57'!
+<< aString
+
+	self nextPutAll: aString! !
 
 !DirectoryEntry methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 07:59:19'!
 \ pathString

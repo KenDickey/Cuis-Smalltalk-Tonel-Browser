@@ -1,10 +1,10 @@
-'From Cuis6.3 [latest update: #6245] on 1 March 2024 at 1:02:42 pm'!
+'From Cuis6.3 [latest update: #6245] on 2 March 2024 at 8:03:43 am'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 65!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 66!
 !requires: 'Cuis-Base' 63 6188 nil!
 !requires: 'BeeCompatibility' 1 49 nil!
 !requires: 'ExchangeFormat-STON' 1 48 nil!
@@ -189,7 +189,7 @@ test016writeDefinitionWithInstAndClassVars
 				= #('PrimitiveFailToken' 'QuickStep' 'ValueIndex');
 		assert: (definition at: #category) = #'Kernel-Methods'! !
 
-!TonelTest methodsFor: 'testing' stamp: 'KenD 4/22/2022 14:50:09'!
+!TonelTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 07:57:50'!
 test020writeOneMethod 
 	| writer reader methods cm reconsitutedMethod |
 	writer := self writerFor: Object.
@@ -199,6 +199,7 @@ test020writeOneMethod
 	methods := reader readMethods; methods.
 	reconsitutedMethod := 
 		(methods first at: #signature) , 
+		String newLineString,
 		(methods first at: #body).
 	self
 		assert: methods size = 1;
@@ -208,7 +209,7 @@ test020writeOneMethod
 		assert: reconsitutedMethod withBlanksTrimmed lines
 				= cm source withBlanksTrimmed lines! !
 
-!TonelTest methodsFor: 'testing' stamp: 'KenD 4/22/2022 15:16:08'!
+!TonelTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 07:58:54'!
 test025writeOneMethodWithArguments 
 	| writer reader methods cm reconsitutedMethod |
 	writer := self writerFor: Object.
@@ -218,6 +219,7 @@ test025writeOneMethodWithArguments
 	methods := reader readMethods; methods.
 	reconsitutedMethod := 
 		(methods first at: #signature) , 
+		String newLineString,
 		(methods first at: #body).
 	self
 		assert: methods size = 1;
@@ -227,7 +229,7 @@ test025writeOneMethodWithArguments
 		assert: reconsitutedMethod withBlanksTrimmed lines
 				= cm source withBlanksTrimmed lines! !
 
-!TonelTest methodsFor: 'testing' stamp: 'KenD 4/22/2022 15:10:50'!
+!TonelTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 07:59:17'!
 test030writeTwoMethods 
 	| cm1 cm2 writer reader methods m1 m2 |
 	cm1 := Object >> #species.
@@ -237,8 +239,10 @@ test030writeTwoMethods
 	reader := self readerFor: Object.
 	methods := reader readMethods; methods.
 	m1 := (methods first at: #signature) , 
+		  String newLineString,
 		  (methods first at: #body).
 	m2 := (methods second at: #signature) , 
+		  String newLineString,
 		  (methods second at: #body).
 	self
 		assert: methods size = 2;

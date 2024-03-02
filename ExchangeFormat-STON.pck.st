@@ -1,4 +1,4 @@
-'From Cuis6.3 [latest update: #6245] on 29 February 2024 at 9:54:20 am'!
+'From Cuis6.3 [latest update: #6247] on 2 March 2024 at 10:58:47 am'!
 'Description STON implements serialization and materialization using the Smalltalk Object Notation format.
 
 Ported from:
@@ -7,7 +7,7 @@ Ported from:
 Copyright (C) 2012 Sven Van Caekenberghe.
 	See (MIT) license in LICENSES directory.
 '!
-!provides: 'ExchangeFormat-STON' 1 48!
+!provides: 'ExchangeFormat-STON' 1 51!
 !requires: 'Cuis-Base' 63 6245 nil!
 !requires: 'Identities-UUID' 1 10 nil!
 !requires: 'CSS3-NamedColors' 1 1 nil!
@@ -46,7 +46,7 @@ STONWriterError class
 
 !classDefinition: #STONFileReference category: #'ExchangeFormat-STON'!
 FileEntry subclass: #STONFileReference
-	instanceVariableNames: ''
+	instanceVariableNames: 'initialPath'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ExchangeFormat-STON'!
@@ -613,7 +613,7 @@ Use my class side's #fromId: to access existing instances
 !
 
 !STONWriter commentStamp: '<historical>' prior: 0!
-STONWriter serializes objects using the Smalltalk Object Notation format. 
+STONWriter serializes objects using the SmallTalk Object Notation format. 
 
 Customization options are:
 
@@ -689,6 +689,35 @@ signal: aString streamPosition: streamPosition
 		streamPosition: streamPosition;
 		signal: aString;
 		yourself! !
+
+!STONFileReference methodsFor: 'accessing' stamp: 'KenD 3/2/2024 09:41:43'!
+initialPath
+
+	^initialPath ! !
+
+!STONFileReference methodsFor: 'accessing' stamp: 'KenD 3/2/2024 09:41:30'!
+initialPath: aString
+
+	initialPath := aString! !
+
+!STONFileReference methodsFor: 'accessing' stamp: 'KenD 3/2/2024 10:39:24'!
+stonOn: stoneWriter
+
+	stoneWriter writeRawString:  'FILE[''', self stoneName, ''']'! !
+
+!STONFileReference methodsFor: 'accessing' stamp: 'KenD 3/2/2024 10:57:55'!
+stoneName
+	"If no prefix answer initialPath prefixed by './' and elide trailing $/"
+	| pathName |
+	pathName := (initialPath withoutSuffix: (FileIOAccessor default) slash asString)
+		ifNil: [initialPath] ifNotNil: [:trimmed|trimmed ].
+	^self hasPrefix ifTrue: [pathName] ifFalse: [ './',  pathName ]! !
+
+!STONFileReference methodsFor: 'testing' stamp: 'KenD 3/2/2024 10:17:08'!
+hasPrefix
+	"Answer if file name without prefix"
+	
+	^ (self name = self initialPath) not! !
 
 !STONFileReference class methodsFor: 'accessing' stamp: 'KenD 4/3/2022 16:50:28'!
 stonName
@@ -1271,10 +1300,11 @@ testBoolean
 	self assert: (self serialize: true) equals: 'true'.
 	self assert: (self serialize: false) equals: 'false'! !
 
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 15:00:23'!
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 07:37:45'!
 testByteArray
 
-	self assert: (self serialize: #(1 2 3) asByteArray) equals: 'ByteArray[''010203'']'! !
+	self assert: (self serialize: #(1 2 3) asByteArray) equals: 'ByteArray[1,2,3]'
+	"NB: was 'ByteArray[''010203'']' "! !
 
 !STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 15:00:11'!
 testClass
@@ -1334,13 +1364,13 @@ testDictionaryWithComplexKeys
 	collection := STON mapClass new at: true put: 1; at: #(foo) put: 2; yourself.
 	self assert: (#('{true:1,[#foo]:2}' '{[#foo]:2,true:1}') includes: (self serialize: collection))! !
 
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/12/2022 12:39:02'!
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 09:48:24'!
 testDiskFile
-	self assert: (self serialize: 'foo.txt' asFileEntry) equals: 'FILE[''./foo.txt'']'.
-	self assert: (self serialize: '/tmp/foo.txt' asFileEntry) equals: 'FILE[''/tmp/foo.txt'']'.
-"	self assert: (self serialize: 'tmp/foo.txt' asFileEntry) equals: 'FILE[''tmp/foo.txt'']'."
-	self assert: (self serialize: '/tmp' asFileEntry) equals: 'FILE[''/tmp'']'.
-	self assert: (self serialize: '/tmp/' asFileEntry) equals: 'FILE[''/tmp'']'.! !
+	self assert: (self serialize: 'foo.txt' asFileReference) equals: 'FILE[''./foo.txt'']'.
+	self assert: (self serialize: '/tmp/foo.txt' asFileReference) equals: 'FILE[''/tmp/foo.txt'']'.
+	self assert: (self serialize: 'tmp/foo.txt' asFileReference) equals: 'FILE[''tmp/foo.txt'']'.
+	self assert: (self serialize: '/tmp' asFileReference) equals: 'FILE[''/tmp'']'.
+	self assert: (self serialize: '/tmp/' asFileReference) equals: 'FILE[''/tmp'']'.! !
 
 !STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:54:11'!
 testDoubleQuotedString
@@ -3461,6 +3491,11 @@ writeObject: object streamShortList: block
 		self prettyPrintSpace.
 		writeStream nextPut: $] ]! !
 
+!STONWriter methodsFor: 'writing' stamp: 'KenD 3/2/2024 10:39:14'!
+writeRawString: string
+
+	writeStream nextPutAll: string! !
+
 !STONWriter methodsFor: 'writing' stamp: 'KenD 4/3/2022 18:56:12'!
 writeReference: index
 
@@ -3990,23 +4025,36 @@ fromSton: stonReader
 			stream nextPut: each ] 
 	  ]! !
 
-!String methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/17/2022 14:35:11'!
-asFileSystemEntry
-	"See examples in #asFileEntry method comment"
-	^FileSystemEntry withPathName: self! !
+!CharacterSequence methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 09:47:45'!
+asFileReference
 
-!String methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/17/2022 12:01:05'!
+	| ref |
+	self isRelativeMark ifTrue: [ ^self error: 'Maybe you need to call #asDirectoryEntry!!' ].
+	ref := self isAbsolutePathName
+		ifTrue: [
+			STONFileReference withAbsolutePathName: self ]
+		ifFalse: [
+			STONFileReference withRelativePathName: self to: DirectoryEntry currentDirectory ].
+	ref initialPath: self.
+	^ref! !
+
+!CharacterSequence methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 09:56:07'!
+asFileSystemEntry
+
+	^self asFileReference! !
+
+!CharacterSequence methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 08:31:02'!
 putOn:aStream
 
 	^ aStream nextPutAll: self.
 ! !
 
-!String methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:29:12'!
+!CharacterSequence methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 08:31:11'!
 stonContainSubObjects
 
 	^ false! !
 
-!String methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:28:58'!
+!CharacterSequence methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 08:31:19'!
 stonOn: stonWriter
 
 	stonWriter writeString: self! !
@@ -4015,4 +4063,67 @@ stonOn: stonWriter
 stonOn: stonWriter
 
 	stonWriter writeSymbol: self! !
+
+!UnicodeSymbol methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 08:31:53'!
+stonOn: stonWriter
+
+	stonWriter writeSymbol: self! !
+
+!Bag methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 08:57:13'!
+stonOn: stonWriter
+	"Use a map with element-occurrences pairs as representation"
+
+	stonWriter
+		writeObject: self
+		do: [ stonWriter encodeMap: contents ]! !
+
+!Bag class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 08:56:20'!
+fromSton: stonReader
+	"Read a map representation containing element/occurrences pairs"
+
+	| bag |
+	bag := self new.
+	stonReader parseMapDo: [ :key :value |
+		bag add: key withOccurrences: value ].
+	^ bag! !
+
+!Dictionary methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 08:53:22'!
+stonOn: stonWriter
+	"Instances of STON mapClass will be encoded directly, without a class tag.
+	Other (sub)classes will be encoded with a class tag and will use a map representation. "
+
+	self class == STON mapClass
+		ifTrue: [
+			stonWriter writeMap: self ]
+		ifFalse: [
+			stonWriter
+				writeObject: self
+				do: [ stonWriter encodeMap: self ] ]! !
+
+!Dictionary class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 08:51:57'!
+fromSton: stonReader
+	"Instances of STON mapClass will be read directly and won't arrive here.
+	Other (sub)classes will use this method."
+
+	| dictionary |
+	dictionary := self new.
+	stonReader parseMapDo: [ :key :value |
+		dictionary at: key put: value ].
+	^ dictionary! !
+
+!FileSystemEntry methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 09:11:40'!
+pathString
+
+	^(String streamContents: [ :strm | self printPathOn: strm ]) ! !
+
+!Point methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 08:59:00'!
+fromSton: stonReader
+	stonReader parseListDo: [ :each :index |
+		index = 1 ifTrue: [ x := each ].
+		index = 2 ifTrue: [ y := each ] ]! !
+
+!Point methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 08:59:27'!
+stonOn: stonWriter
+	stonWriter writeObject: self streamShortList: [ :array |
+		array add: x; add: y ]! !
 STONWriter initialize!

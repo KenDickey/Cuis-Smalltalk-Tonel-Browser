@@ -1,4 +1,4 @@
-'From Cuis6.3 [latest update: #6247] on 2 March 2024 at 10:58:47 am'!
+'From Cuis6.3 [latest update: #6247] on 2 March 2024 at 1:24:19 pm'!
 'Description STON implements serialization and materialization using the Smalltalk Object Notation format.
 
 Ported from:
@@ -7,7 +7,7 @@ Ported from:
 Copyright (C) 2012 Sven Van Caekenberghe.
 	See (MIT) license in LICENSES directory.
 '!
-!provides: 'ExchangeFormat-STON' 1 51!
+!provides: 'ExchangeFormat-STON' 1 53!
 !requires: 'Cuis-Base' 63 6245 nil!
 !requires: 'Identities-UUID' 1 10 nil!
 !requires: 'CSS3-NamedColors' 1 1 nil!
@@ -1051,12 +1051,12 @@ testSmallIntegers
 	integers := STON listClass withAll: (-10 to: 10).
 	self serializeAndMaterialize: integers! !
 
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 13:36:30'!
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 11:58:14'!
 testSortedCollections
 	| collections |
 	collections := STON listClass withAll: {
 		SortedCollection new.
-		SortedCollection new: 0.
+		SortedCollection new.
 		#(5 3 7 2 1 4 10 9 8 6) asSortedCollection.
 		"self flag: #Unsupported.   No SortFunctions"
 "		#(5 3 7 2 1 4 10 9 8 6) asSortedCollection: #yourself ascending.
@@ -1069,15 +1069,15 @@ testSortedCollections
 		#(5 3 7 2 1 4 10 nil 9 8 6) asSortedCollection: #yourself ascending reversed undefinedLast" }.
 	self serializeAndMaterialize: collections! !
 
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 11:47:29'!
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 11:48:08'!
 testSpecialCharacters
 	| primitives |
 	primitives := STON listClass withAll: { 
 		String withAll: { Character tab. Character lf. Character cr }.
-		String withAll: { $'. $". $\. $/ }.
+		UnicodeString withAll: { $'. $". $\. $/ }.
 		'élèves français'.
 		'Düsseldorf Königsallee'.
-		(#(1 10 20 30 127 140 150 160 200 255) collect: #asCharacter) as: String }.
+		(#(1 10 20 30 127 140 150 160 200 255) collect: #asCharacter) as: UnicodeString }.
 	self serializeAndMaterialize: primitives! !
 
 !STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 11:49:03'!
@@ -1098,7 +1098,7 @@ testSpecialClassNames
 	self assert: object class equals: specialClass.
 	self assert: object key equals: key"! !
 
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 11:42:42'!
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 11:47:01'!
 testStrings
 	| strings |
 	strings := Collection allSubclasses 
@@ -1107,7 +1107,7 @@ testStrings
 	strings := { 
 		'foo'. 'Foo BAR'. ''. '	\\'''. 
 		'élève en Français'. 
-		String with: (Character codePoint: 16r20AC) " $€ " }.
+		UnicodeString with: (Character codePoint: 16r20AC) " $€ " }.
 	self serializeAndMaterialize: strings.! !
 
 !STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:29:05'!
@@ -1300,11 +1300,10 @@ testBoolean
 	self assert: (self serialize: true) equals: 'true'.
 	self assert: (self serialize: false) equals: 'false'! !
 
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 07:37:45'!
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 13:23:51'!
 testByteArray
 
-	self assert: (self serialize: #(1 2 3) asByteArray) equals: 'ByteArray[1,2,3]'
-	"NB: was 'ByteArray[''010203'']' "! !
+	self assert: (self serialize: #(1 2 3) asByteArray) equals: 'ByteArray[''010203'']' ! !
 
 !STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 15:00:11'!
 testClass
@@ -4059,6 +4058,16 @@ stonOn: stonWriter
 
 	stonWriter writeString: self! !
 
+!String methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 12:09:44'!
+stonContainSubObjects
+	^ false! !
+
+!String methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 12:09:23'!
+stonDecoded
+	"Decode me as an STON textual representation"
+	
+	^ STON fromString: self! !
+
 !Symbol methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:29:37'!
 stonOn: stonWriter
 
@@ -4068,6 +4077,62 @@ stonOn: stonWriter
 stonOn: stonWriter
 
 	stonWriter writeSymbol: self! !
+
+!ByteArray methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 13:12:36'!
+stonContainSubObjects
+	^ false! !
+
+!ByteArray methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 13:12:57'!
+stonOn: stonWriter
+	"Use a hex representation"
+
+	stonWriter writeObject: self listSingleton: self hex! !
+
+!ByteArray class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 13:12:03'!
+fromSton: stonReader
+	"Use a hex representation"
+
+	^ self readHexFrom: stonReader parseListSingleton! !
+
+!Interval methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 11:44:46'!
+fromSton: stonReader
+	"Overwritten to get back the standard object behavior"
+
+	stonReader parseNamedInstVarsFor: self! !
+
+!Interval methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 11:45:11'!
+stonOn: stonWriter
+	"Overwritten to get back the standard object behavior"
+
+	stonWriter writeObject: self! !
+
+!Interval class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 11:44:00'!
+fromSton: stonReader
+	"Overwritten to get back the standard object behavior"
+
+	^ self new
+		fromSton: stonReader;
+		yourself! !
+
+!SortedCollection methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 12:02:23'!
+fromSton: stonReader
+	"Overwritten to get back the standard object behavior"
+
+	stonReader parseNamedInstVarsFor: self! !
+
+!SortedCollection methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 12:02:50'!
+stonOn: stonWriter
+	"Overwritten to get back the standard object behavior"
+
+	stonWriter writeObject: self! !
+
+!SortedCollection class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 12:01:41'!
+fromSton: stonReader
+	"Overwritten to get back the standard object behavior"
+
+	^ self new
+		fromSton: stonReader;
+		yourself! !
 
 !Bag methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 08:57:13'!
 stonOn: stonWriter
@@ -4104,6 +4169,29 @@ stonOn: stonWriter
 fromSton: stonReader
 	"Instances of STON mapClass will be read directly and won't arrive here.
 	Other (sub)classes will use this method."
+
+	| dictionary |
+	dictionary := self new.
+	stonReader parseMapDo: [ :key :value |
+		dictionary at: key put: value ].
+	^ dictionary! !
+
+!OrderedDictionary methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 13:08:23'!
+stonOn: stonWriter
+	"I store my instances as maps. When in JSON mode,
+	encode me directly, without a class tag, keeping the order."
+
+	stonWriter jsonMode
+		ifTrue: [
+			stonWriter encodeMap: self ]
+		ifFalse: [
+			stonWriter
+				writeObject: self
+				do: [ stonWriter encodeMap: self ] ]! !
+
+!OrderedDictionary class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 13:07:51'!
+fromSton: stonReader
+	"My instances are stored as maps."
 
 	| dictionary |
 	dictionary := self new.

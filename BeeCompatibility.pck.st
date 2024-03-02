@@ -1,6 +1,6 @@
-'From Cuis6.3 [latest update: #6247] on 2 March 2024 at 8:27:42 am'!
+'From Cuis6.3 [latest update: #6247] on 2 March 2024 at 1:03:49 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 56!
+!provides: 'BeeCompatibility' 1 57!
 !requires: 'Cuis-Base' 63 6245 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
@@ -640,6 +640,11 @@ asParameter
 	"Answer machine value for truth"
 	^ 1! !
 
+!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 3/2/2024 11:50:30'!
+asCharacter
+
+	^ Character codePoint: self! !
+
 !Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 14:06:27'!
 bitShiftRight: anInteger
 
@@ -1141,6 +1146,11 @@ classBinding
 source
 	"Answer source for method, including the signature"
 	^ self getSource ! !
+
+!OrderedCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 3/2/2024 11:57:41'!
+addIfNotPresent: anObject
+
+	self detect: [ :elt | elt = anObject ] ifNone: [ self addLast: anObject ].! !
 
 !OrderedCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:23:08'!
 removeDuplicates

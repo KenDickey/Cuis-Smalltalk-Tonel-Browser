@@ -77,6 +77,8 @@ browser reads it.
 Note that this is a fairly complete port of STON,
 but a "lite" port of Tonel from the Bee Smalltalk folks --
 NOT a port of the mountain of code from Pharo.  
+In particular, missing commas or any method not
+preceeded by a category will cause an error.
 
 Copyright not assigned is copyright "Cuis",
 all other packages carry original copyrights.

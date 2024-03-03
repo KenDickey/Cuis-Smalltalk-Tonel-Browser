@@ -1,6 +1,6 @@
-'From Cuis6.3 [latest update: #6247] on 2 March 2024 at 1:03:49 pm'!
+'From Cuis6.3 [latest update: #6247] on 3 March 2024 at 10:03:35 am'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 57!
+!provides: 'BeeCompatibility' 1 58!
 !requires: 'Cuis-Base' 63 6245 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
@@ -33,6 +33,16 @@ Dictionary subclass: #PoolDictionary
 	category: 'BeeCompatibility'!
 !classDefinition: 'PoolDictionary class' category: #BeeCompatibility!
 PoolDictionary class
+	instanceVariableNames: ''!
+
+!classDefinition: #NotFound category: #BeeCompatibility!
+Error subclass: #NotFound
+	instanceVariableNames: 'object'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'BeeCompatibility'!
+!classDefinition: 'NotFound class' category: #BeeCompatibility!
+NotFound class
 	instanceVariableNames: ''!
 
 !classDefinition: #NumberParser category: #BeeCompatibility!
@@ -209,6 +219,23 @@ initialize: anInteger
 !PoolDictionary class methodsFor: 'instance creation' stamp: 'KenD 1/30/2023 10:10:46'!
 newConstantPool
 	^self new beConstantPool
+! !
+
+!NotFound methodsFor: 'accessing' stamp: 'KenD 3/2/2024 14:37:02'!
+defaultDescription
+	| string |
+	string := [object printString] on: Error do: [:ex | ex description].
+	^'Key ' , string , ' is missing'
+! !
+
+!NotFound methodsFor: 'accessing' stamp: 'KenD 3/2/2024 14:36:35'!
+object: anObject
+	object := anObject
+! !
+
+!NotFound class methodsFor: 'signalling' stamp: 'KenD 3/2/2024 14:36:13'!
+signalFor: anObject
+	^self new object: anObject; signal
 ! !
 
 !NumberParser methodsFor: 'accessing' stamp: 'KenD 3/1/2024 11:54:08'!

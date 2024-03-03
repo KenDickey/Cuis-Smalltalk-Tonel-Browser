@@ -1,4 +1,4 @@
-'From Cuis6.3 [latest update: #6247] on 2 March 2024 at 1:24:19 pm'!
+'From Cuis6.3 [latest update: #6247] on 3 March 2024 at 11:54:45 am'!
 'Description STON implements serialization and materialization using the Smalltalk Object Notation format.
 
 Ported from:
@@ -7,7 +7,7 @@ Ported from:
 Copyright (C) 2012 Sven Van Caekenberghe.
 	See (MIT) license in LICENSES directory.
 '!
-!provides: 'ExchangeFormat-STON' 1 53!
+!provides: 'ExchangeFormat-STON' 1 55!
 !requires: 'Cuis-Base' 63 6245 nil!
 !requires: 'Identities-UUID' 1 10 nil!
 !requires: 'CSS3-NamedColors' 1 1 nil!
@@ -749,10 +749,10 @@ serialize: anObject
 			on: stream;
 			nextPut: anObject ]! !
 
-!STONWriteReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 08:27:58'!
+!STONWriteReadTest methodsFor: 'private' stamp: 'KenD 3/2/2024 15:19:23'!
 serializeAndMaterialize: object
 	| serialization materialization |
-	serialization := self serialize: object.
+	serialization := self class new serialize: object.
 	materialization := self materialize: serialization.
 	self assert: object equals: materialization! !
 
@@ -1124,7 +1124,7 @@ testSymbols
 	symbols := #( #'les-élèves-français' #'euro-€' #'ångström' ).
 	self serializeAndMaterialize: symbols.! !
 
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:28:58'!
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 3/3/2024 11:54:17'!
 testTextAndRunArray
 	| texts |
 	texts := { 
@@ -3176,7 +3176,7 @@ encodeCharacter: char
 				ifTrue: [ writeStream nextPut: char ]
 				ifFalse: [ self escapeUnicode: code ] ]! !
 
-!STONWriter methodsFor: 'private' stamp: 'KenD 4/21/2022 08:38:20'!
+!STONWriter methodsFor: 'private' stamp: 'KenD 3/3/2024 11:52:32'!
 encodeKey: key value: value
 	(jsonMode and: [ key isString not ])
 		ifTrue: [ self error: 'JSON key names in objects must be strings' ].
@@ -3310,7 +3310,15 @@ prettyPrintSpace
 
 	prettyPrint ifTrue: [ writeStream space ]! !
 
-!STONWriter methodsFor: 'private' stamp: 'KenD 4/3/2022 19:00:49'!
+!STONWriter methodsFor: 'private' stamp: 'KenD 3/3/2024 08:16:13'!
+serialize: anObject
+
+	^ String streamContents: [ :stream |
+		STON writer 
+			on: stream;
+			nextPut: anObject ]! !
+
+!STONWriter methodsFor: 'private' stamp: 'KenD 3/3/2024 11:52:03'!
 with: object do: block
 	| index |
 	referencePolicy = #ignore 
@@ -3321,9 +3329,14 @@ with: object do: block
 				ifTrue: [ ^ self error: 'shared reference detected' ].
 			self writeReference: index ]
 		ifFalse: [
-			index := objects size + 1.
-			objects at: object put: index.
-			block value ]! !
+			(object = #()) 
+			ifTrue: [ ^ block value ]
+			ifFalse: [
+				index := objects size + 1.
+				objects at: object put: index.
+				block value 
+			]
+		]! !
 
 !STONWriter methodsFor: 'writing' stamp: 'KenD 4/3/2022 19:04:15'!
 nextPut: anObject
@@ -3495,9 +3508,9 @@ writeRawString: string
 
 	writeStream nextPutAll: string! !
 
-!STONWriter methodsFor: 'writing' stamp: 'KenD 4/3/2022 18:56:12'!
+!STONWriter methodsFor: 'writing' stamp: 'KenD 3/3/2024 11:41:58'!
 writeReference: index
-
+(index = 6) ifTrue: [self halt].
 	writeStream
 		nextPut: $@;
 		print: index! !
@@ -4133,6 +4146,54 @@ fromSton: stonReader
 	^ self new
 		fromSton: stonReader;
 		yourself! !
+
+!RunArray methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 09:45:51'!
+myRuns
+
+	^runs! !
+
+!RunArray methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 09:46:00'!
+myValues
+
+	^values! !
+
+!RunArray methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 11:52:43'!
+stonOn: stonWriter
+
+	stonWriter prettyPrint: true.
+	stonWriter writeObject: self streamMap: [ :map |
+				#(myRuns myValues) do: [ :each | 
+					map at: each put: (self perform: each) ] ]! !
+
+!RunArray class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 11:53:00'!
+fromSton: stonReader
+	| representation |
+	representation := stonReader parseMapOrListRepresentation.
+	^ self runs: (representation at: #myRuns) values: (representation at: #myValues)! !
+
+!Text methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 09:56:42'!
+myRunArray
+
+	^runs! !
+
+!Text methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 09:56:54'!
+myString
+
+	^string! !
+
+!Text methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 09:58:14'!
+stonOn: stonWriter
+
+	stonWriter writeObject: self streamMap: [ :map |
+				#(myString myRunArray) do: [ :each | 
+					map at: each put: (self perform: each) ] ]! !
+
+!Text class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 09:57:12'!
+fromSton: stonReader
+	| representation |
+
+	representation := stonReader parseMapOrListRepresentation.
+	^ self string: (representation at: #myString) runs: (representation at: #myRunArray)! !
 
 !Bag methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 08:57:13'!
 stonOn: stonWriter

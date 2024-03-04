@@ -78,6 +78,15 @@ Note that this is a fairly complete port of STON,
 but a "lite" port of Tonel from the Bee Smalltalk folks --
 NOT a port of the mountain of code from Pharo.  
 
+In particular, missing commas or any method not
+preceeded by a category will cause an error.
+
+The TonelRepository object is mostly empty, but can be used to transliterate an
+entire directory, writing a Chunk format file for each Tonel format file.
+````smalltalk
+(TonelRepository fromPath: '/home/whomever/BeePowerLang/PowerLang/src') writeChunkFilesFromTonelFiles.
+````
+
 Copyright not assigned is copyright "Cuis",
 all other packages carry original copyrights.
 See LICENSES directory.

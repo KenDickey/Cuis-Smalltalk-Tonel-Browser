@@ -1,6 +1,6 @@
-'From Cuis6.3 [latest update: #6247] on 3 March 2024 at 10:03:35 am'!
+'From Cuis6.3 [latest update: #6247] on 4 March 2024 at 12:13:58 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 58!
+!provides: 'BeeCompatibility' 1 59!
 !requires: 'Cuis-Base' 63 6245 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
@@ -610,6 +610,11 @@ targetWordSizeInBits
 current
 
 	^self new initialize.! !
+
+!ProtoObject methodsFor: '*BeeCompatibility' stamp: 'KenD 3/4/2024 12:06:12'!
+!!= other
+	
+	^(self = other) not! !
 
 !Boolean methodsFor: '*BeeCompatibility' stamp: 'KenD 6/8/2021 07:04:59'!
 andNot: aBlock

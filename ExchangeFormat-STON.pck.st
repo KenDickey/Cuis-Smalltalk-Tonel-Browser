@@ -1,4 +1,4 @@
-'From Cuis6.3 [latest update: #6247] on 3 March 2024 at 11:54:45 am'!
+'From Cuis6.3 [latest update: #6253] on 5 March 2024 at 8:03:17 am'!
 'Description STON implements serialization and materialization using the Smalltalk Object Notation format.
 
 Ported from:
@@ -7,7 +7,7 @@ Ported from:
 Copyright (C) 2012 Sven Van Caekenberghe.
 	See (MIT) license in LICENSES directory.
 '!
-!provides: 'ExchangeFormat-STON' 1 55!
+!provides: 'ExchangeFormat-STON' 1 56!
 !requires: 'Cuis-Base' 63 6245 nil!
 !requires: 'Identities-UUID' 1 10 nil!
 !requires: 'CSS3-NamedColors' 1 1 nil!
@@ -3876,11 +3876,6 @@ stonOn: stonWriter
 environment
 
 	^ Smalltalk! !
-
-!ClassDescription methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/15/2022 11:56:44'!
-instanceSide
-
-	^ self theNonMetaClass ! !
 
 !ClassDescription methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:35:38'!
 stonContainSubObjects

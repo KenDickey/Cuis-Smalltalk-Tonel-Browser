@@ -1,6 +1,6 @@
-'From Cuis6.3 [latest update: #6247] on 4 March 2024 at 12:13:58 pm'!
+'From Cuis6.3 [latest update: #6253] on 5 March 2024 at 8:03:13 am'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 59!
+!provides: 'BeeCompatibility' 1 60!
 !requires: 'Cuis-Base' 63 6245 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
@@ -786,6 +786,22 @@ _instancesAreArrayed
 _instancesHavePointers
 
 	^ self isPointers ! !
+
+!ClassDescription methodsFor: '*BeeCompatibility' stamp: 'KenD 4/15/2022 11:56:44'!
+instanceSide
+
+	^ self theNonMetaClass ! !
+
+!Class methodsFor: '*BeeCompatibility' stamp: 'KenD 11/16/2023 10:45:50'!
+classSide
+
+	^ self class! !
+
+!Metaclass methodsFor: '*BeeCompatibility' stamp: 'KenD 11/16/2023 10:46:37'!
+classSide
+
+	^ self
+! !
 
 !Metaclass methodsFor: '*BeeCompatibility' stamp: 'KenD 4/22/2022 16:14:43'!
 isMetaclass

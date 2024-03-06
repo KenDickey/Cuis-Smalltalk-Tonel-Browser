@@ -1,19 +1,9 @@
-'From Cuis6.3 [latest update: #6253] on 5 March 2024 at 8:03:13 am'!
+'From Cuis6.3 [latest update: #6253] on 5 March 2024 at 4:14:15 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 60!
+!provides: 'BeeCompatibility' 1 61!
 !requires: 'Cuis-Base' 63 6245 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
-
-!classDefinition: #PSharedPool category: #BeeCompatibility!
-SharedPool subclass: #PSharedPool
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'BeeCompatibility'!
-!classDefinition: 'PSharedPool class' category: #BeeCompatibility!
-PSharedPool class
-	instanceVariableNames: ''!
 
 !classDefinition: #Namespace category: #BeeCompatibility!
 Dictionary subclass: #Namespace
@@ -97,46 +87,6 @@ For current system, note:
 	Smalltalk platformSubtype. " 'aarch64' "
 	Smalltalk osVersion ." 'linux-gnu' "
 	!
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-asArray
-	^self classPool asArray
-! !
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-at: aString
-	| var |
-	var :=  self classPool
-		associationAt: aString asSymbol
-		ifAbsent: [ self error: 'no such pool var' ].
-	^var value
-! !
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-at: aString ifAbsent: aBlock
-	| var |
-	var := self classPool associationAt: aString asSymbol ifAbsent: [^aBlock value].
-	^ var value
-! !
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-at: aString put: anObject
-	^self classPool
-		at: aString 
-		put: anObject
-! !
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-detect: aBlock ifNone: anotherBlock
-	^self classPool detect: aBlock  ifNone: [ ^ anotherBlock value ].
-	
-! !
-
-!PSharedPool class methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
-do: aBlock
-	^self classPool do: aBlock
-
-! !
 
 !Namespace methodsFor: 'lookup' stamp: 'KenD 2/29/2024 09:38:51'!
 _namespaceLookup: aSymbol

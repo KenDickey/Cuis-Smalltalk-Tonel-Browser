@@ -1,10 +1,10 @@
-'From Cuis6.3 [latest update: #6253] on 5 March 2024 at 8:03:21 am'!
+'From Cuis6.3 [latest update: #6253] on 10 March 2024 at 2:37:44 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 67!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 70!
 !requires: 'Cuis-Base' 63 6188 nil!
 !requires: 'BeeCompatibility' 1 49 nil!
 !requires: 'ExchangeFormat-STON' 1 48 nil!
@@ -125,6 +125,11 @@ I am not very bright, but perhaps you could fix that!!
 
 writer :=  TonelWriter on: 'TrivialExample.class.tonel.st' asFileEntry forceWriteStream.
 writer writeClass: TrivialExample category: #'ExchangeFormat-Tonel-Lite'.
+
+writer := TonelWriter on: '/tmp/dictionary.st' asFileEntry writeStream.
+writer writeClass: Dictionary category: Dictionary category.
+"Open FileList on '/tmp/dictionary.st' select `code` button and compare same but for spurious blanks"
+
 
 !
 
@@ -357,7 +362,22 @@ classInfo
 
 	^ classInfo! !
 
-!TonelReader methodsFor: 'accessing' stamp: 'KenD 5/6/2022 15:15:57'!
+!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/26/2022 16:04:17'!
+filePath
+
+	^ stream name! !
+
+!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/28/2022 10:52:26'!
+methodInfos
+
+	^ methodInfos! !
+
+!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/19/2022 08:05:10'!
+stream: aReadStream 
+
+	stream := aReadStream! !
+
+!TonelReader methodsFor: 'fileout' stamp: 'KenD 5/6/2022 15:15:57'!
 fileOut
 	"I represent a Class or a set of Extension methods to a Class.
 	 File me out in Cuis' Chunk Format."
@@ -372,7 +392,7 @@ fileOut
 	self inform: 'TonelReader: PROBLEM WITH FILEOUT DATA'.
 	! !
 
-!TonelReader methodsFor: 'accessing' stamp: 'KenD 5/6/2022 15:17:12'!
+!TonelReader methodsFor: 'fileout' stamp: 'KenD 5/6/2022 15:17:12'!
 fileOutToStream: aFileStream
 	"I represent a Class or a set of Extension methods to a Class.
 	 File me out in Cuis' Chunk Format."
@@ -389,21 +409,6 @@ fileOutToStream: aFileStream
 	
 	self inform: 'TonelReader: PROBLEM WITH FILEOUT DATA'.
 	! !
-
-!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/26/2022 16:04:17'!
-filePath
-
-	^ stream name! !
-
-!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/28/2022 10:52:26'!
-methodInfos
-
-	^ methodInfos! !
-
-!TonelReader methodsFor: 'accessing' stamp: 'KenD 4/19/2022 08:05:10'!
-stream: aReadStream 
-
-	stream := aReadStream! !
 
 !TonelReader methodsFor: 'initialization' stamp: 'KenD 4/28/2022 10:52:26'!
 initialize 
@@ -1227,14 +1232,14 @@ writeClass: aClass
 
 	self writeClass: aClass category: nil! !
 
-!TonelWriter methodsFor: 'writing' stamp: 'KenD 4/27/2022 10:37:22'!
-writeClass: aClass category: aString 
+!TonelWriter methodsFor: 'writing' stamp: 'KenD 3/10/2024 14:31:26'!
+writeClass: aClass category: aString
 
 	aClass ifNotNil: [ :cls |
 		self
 			class: aClass;
 			category: aString;
-			methods: nil;
+			methods: aClass methodDictionary values;
 			write
 	]! !
 

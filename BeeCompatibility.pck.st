@@ -1,6 +1,6 @@
-'From Cuis6.3 [latest update: #6253] on 5 March 2024 at 4:14:15 pm'!
+'From Cuis6.3 [latest update: #6373] on 17 May 2024 at 3:04:01 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 61!
+!provides: 'BeeCompatibility' 1 62!
 !requires: 'Cuis-Base' 63 6245 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
@@ -1061,10 +1061,11 @@ withFullExtension: newSuffix
 
 	^ self append: '.' ,  newSuffix! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 4/22/2022 15:27:34'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 5/17/2024 15:02:56'!
 withoutLineSeparators
+	"Convert separators into spaces"
 	
-	^self reject: [ :aCharacter | aCharacter isLineSeparator ]! !
+	^self withLineEndings: ' '! !
 
 !String methodsFor: '*BeeCompatibility' stamp: 'KenD 4/21/2022 12:34:22'!
 withoutSeparators
@@ -1114,10 +1115,11 @@ trimBlanks
 
 	^self withBlanksTrimmed! !
 
-!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 11/15/2022 08:05:55'!
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 5/17/2024 15:03:16'!
 withoutLineSeparators
+	"Convert separators into spaces"
 	
-	^self reject: [ :aCharacter | aCharacter isLineSeparator ]! !
+	^self withLineEndings: ' '! !
 
 !Array methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 14:44:01'!
 & otherArray

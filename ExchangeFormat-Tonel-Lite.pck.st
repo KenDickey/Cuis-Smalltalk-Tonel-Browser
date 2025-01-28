@@ -1,10 +1,10 @@
-'From Cuis7.3 [latest update: #6968] on 6 January 2025 at 1:38:41 pm'!
+'From Cuis7.3 [latest update: #7004] on 27 January 2025 at 5:26:15 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 71!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 72!
 !requires: 'Cuis-Base' 63 6188 nil!
 !requires: 'BeeCompatibility' 1 49 nil!
 !requires: 'ExchangeFormat-STON' 1 48 nil!
@@ -233,7 +233,7 @@ initialize
 	classInfo      := OrderedDictionary new.
 	methodInfos := OrderedCollection new! !
 
-!TonelReader methodsFor: 'reading' stamp: 'KenD 11/21/2023 14:10:39'!
+!TonelReader methodsFor: 'reading' stamp: 'KenD 1/27/2025 15:47:42'!
 nextBlock 
 	"(stream at: position) is $[, find matching unnested $]
 	 and answer the body "
@@ -244,10 +244,17 @@ nextBlock
 	self skipLine.
 	startPos := stream position.
 	charCount := 0.
-	[	(char = $[ andNot: [prev = $$]) ifTrue: [nested := nested + 1].
+	"Be careful of reading like '[prev = $$]' "
+	[	(char = $$ and: [prev = $$]) 
+			ifTrue: [
+				char := stream next. 		
+				prev := nil.
+				charCount := charCount + 1.
+			].
+		(char = $[ andNot: [prev = $$]) ifTrue: [nested := nested + 1].
 		(char = $] andNot: [prev = $$]) ifTrue: [nested := nested - 1].
-		(char = $' andNot: [prev = $$]) ifTrue: [prev := char. charCount := charCount +  self skipString].
-		(char = $" andNot: [prev = $$]) ifTrue: [prev := char. charCount := charCount +  self skipComment].
+		(char = $' andNot: [prev = $$]) ifTrue: [charCount := charCount +  self skipString].
+		(char = $" andNot: [prev = $$]) ifTrue: [charCount := charCount +  self skipComment].
 		prev := char. 
 		nested = 0
 	]  whileFalse: [
@@ -256,7 +263,7 @@ nextBlock
 	].
 	endPos := ​ stream position.
 	stream position: startPos.
-	result := stream next: charCount- 1. "Elide final $]"
+	result := stream next: charCount - 1. "Elide final $]"
 	stream position: endPos.
 	^ result
 ! !
@@ -310,10 +317,12 @@ readDefinition
 		on: stream skipSeparators;
 		parseMapDo: [:key :value | classInfo at: key put: value]! !
 
-!TonelReader methodsFor: 'reading' stamp: 'KenD 11/21/2023 13:40:16'!
+!TonelReader methodsFor: 'reading' stamp: 'KenD 1/27/2025 17:25:28'!
 readMethod 
 	| metadata classname signature selector method |
-	metadata := STON fromStream: stream.
+	metadata :=  (stream peek = ${) 
+		ifFalse: [ "no category" { #category->#unassigned } asDictionary ]
+		ifTrue: [STON fromStream: stream].
 	classname := (stream skipSeparators; upToAll: '>>') withBlanksTrimmed.
 	signature := stream upTo: $[.
 	selector := Parser selectorFrom: signature.

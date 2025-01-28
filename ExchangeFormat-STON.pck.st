@@ -1,4 +1,4 @@
-'From Cuis6.3 [latest update: #6253] on 5 March 2024 at 8:03:17 am'!
+'From Cuis7.3 [latest update: #7004] on 27 January 2025 at 5:26:12 pm'!
 'Description STON implements serialization and materialization using the Smalltalk Object Notation format.
 
 Ported from:
@@ -7,22 +7,12 @@ Ported from:
 Copyright (C) 2012 Sven Van Caekenberghe.
 	See (MIT) license in LICENSES directory.
 '!
-!provides: 'ExchangeFormat-STON' 1 56!
+!provides: 'ExchangeFormat-STON' 1 57!
 !requires: 'Cuis-Base' 63 6245 nil!
 !requires: 'Identities-UUID' 1 10 nil!
 !requires: 'CSS3-NamedColors' 1 1 nil!
 SystemOrganization addCategory: #'ExchangeFormat-STON'!
 
-
-!classDefinition: #STONTestAssociation category: #'ExchangeFormat-STON'!
-Association subclass: #STONTestAssociation
-	instanceVariableNames: 'timestamp'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONTestAssociation class' category: #'ExchangeFormat-STON'!
-STONTestAssociation class
-	instanceVariableNames: ''!
 
 !classDefinition: #STONReaderError category: #'ExchangeFormat-STON'!
 Error subclass: #STONReaderError
@@ -42,66 +32,6 @@ Error subclass: #STONWriterError
 	category: 'ExchangeFormat-STON'!
 !classDefinition: 'STONWriterError class' category: #'ExchangeFormat-STON'!
 STONWriterError class
-	instanceVariableNames: ''!
-
-!classDefinition: #STONFileReference category: #'ExchangeFormat-STON'!
-FileEntry subclass: #STONFileReference
-	instanceVariableNames: 'initialPath'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONFileReference class' category: #'ExchangeFormat-STON'!
-STONFileReference class
-	instanceVariableNames: ''!
-
-!classDefinition: #STONWriteReadTest category: #'ExchangeFormat-STON'!
-TestCase subclass: #STONWriteReadTest
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONWriteReadTest class' category: #'ExchangeFormat-STON'!
-STONWriteReadTest class
-	instanceVariableNames: ''!
-
-!classDefinition: #STONWriteAsciiOnlyReadTest category: #'ExchangeFormat-STON'!
-STONWriteReadTest subclass: #STONWriteAsciiOnlyReadTest
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONWriteAsciiOnlyReadTest class' category: #'ExchangeFormat-STON'!
-STONWriteAsciiOnlyReadTest class
-	instanceVariableNames: ''!
-
-!classDefinition: #STONWritePrettyPrinterReadTest category: #'ExchangeFormat-STON'!
-STONWriteReadTest subclass: #STONWritePrettyPrinterReadTest
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONWritePrettyPrinterReadTest class' category: #'ExchangeFormat-STON'!
-STONWritePrettyPrinterReadTest class
-	instanceVariableNames: ''!
-
-!classDefinition: #STONWriteReadCommentsTest category: #'ExchangeFormat-STON'!
-STONWriteReadTest subclass: #STONWriteReadCommentsTest
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONWriteReadCommentsTest class' category: #'ExchangeFormat-STON'!
-STONWriteReadCommentsTest class
-	instanceVariableNames: ''!
-
-!classDefinition: #STONWriterTest category: #'ExchangeFormat-STON'!
-TestCase subclass: #STONWriterTest
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ExchangeFormat-STON'!
-!classDefinition: 'STONWriterTest class' category: #'ExchangeFormat-STON'!
-STONWriterTest class
 	instanceVariableNames: ''!
 
 !classDefinition: #STON category: #'ExchangeFormat-STON'!
@@ -264,10 +194,76 @@ Object subclass: #STONWriter
 STONWriter class
 	instanceVariableNames: ''!
 
+!classDefinition: #STONTestAssociation category: #'ExchangeFormat-STON'!
+Association subclass: #STONTestAssociation
+	instanceVariableNames: 'timestamp'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONTestAssociation class' category: #'ExchangeFormat-STON'!
+STONTestAssociation class
+	instanceVariableNames: ''!
 
-!STONTestAssociation commentStamp: '<historical>' prior: 0!
-STONTestAssociation is used to support unit tests.
-!
+!classDefinition: #STONFileReference category: #'ExchangeFormat-STON'!
+FileEntry subclass: #STONFileReference
+	instanceVariableNames: 'initialPath'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONFileReference class' category: #'ExchangeFormat-STON'!
+STONFileReference class
+	instanceVariableNames: ''!
+
+!classDefinition: #STONWriteReadTest category: #'ExchangeFormat-STON'!
+TestCase subclass: #STONWriteReadTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONWriteReadTest class' category: #'ExchangeFormat-STON'!
+STONWriteReadTest class
+	instanceVariableNames: ''!
+
+!classDefinition: #STONWriteAsciiOnlyReadTest category: #'ExchangeFormat-STON'!
+STONWriteReadTest subclass: #STONWriteAsciiOnlyReadTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONWriteAsciiOnlyReadTest class' category: #'ExchangeFormat-STON'!
+STONWriteAsciiOnlyReadTest class
+	instanceVariableNames: ''!
+
+!classDefinition: #STONWritePrettyPrinterReadTest category: #'ExchangeFormat-STON'!
+STONWriteReadTest subclass: #STONWritePrettyPrinterReadTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONWritePrettyPrinterReadTest class' category: #'ExchangeFormat-STON'!
+STONWritePrettyPrinterReadTest class
+	instanceVariableNames: ''!
+
+!classDefinition: #STONWriteReadCommentsTest category: #'ExchangeFormat-STON'!
+STONWriteReadTest subclass: #STONWriteReadCommentsTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONWriteReadCommentsTest class' category: #'ExchangeFormat-STON'!
+STONWriteReadCommentsTest class
+	instanceVariableNames: ''!
+
+!classDefinition: #STONWriterTest category: #'ExchangeFormat-STON'!
+TestCase subclass: #STONWriterTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ExchangeFormat-STON'!
+!classDefinition: 'STONWriterTest class' category: #'ExchangeFormat-STON'!
+STONWriterTest class
+	instanceVariableNames: ''!
+
 
 !STONReaderError commentStamp: '<historical>' prior: 0!
 STONReaderError is the error/exception signalled by STONReader when illegal/incorrect input is seen. 
@@ -275,20 +271,6 @@ STONReaderError is the error/exception signalled by STONReader when illegal/inco
 
 !STONWriterError commentStamp: '<historical>' prior: 0!
 STONWriterError is the error/exception signalled by STONWriter when illegal/incorrect input is seen. !
-
-!STONFileReference commentStamp: '<historical>' prior: 0!
-I am STONFileReference, I am an implementation artifact to help reading objects with class tag equal to my #stonName.
-
-I am a FileEntry.!
-
-!STONWriteReadTest commentStamp: '<historical>' prior: 0!
-STONWriteReadTests test serialization followed by materialization, these tests first write then read STON.!
-
-!STONWritePrettyPrinterReadTest commentStamp: '<historical>' prior: 0!
-STONWritePrettyPrinterReadTests tests pretty printed serialization followed by materialization.!
-
-!STONWriterTest commentStamp: '<historical>' prior: 0!
-STONWriterTests test serialization.!
 
 !STON commentStamp: '<historical>' prior: 0!
 STON implements serialization and materialization using the Smalltalk Object Notation format.
@@ -641,25 +623,23 @@ Customization options are:
 Note that in default STON mode I only use the following named character escapes: \b \t \n \f \' and \\ while in JSON mode \' is replaced by \"
 !
 
-!STONTestAssociation methodsFor: 'accessing' stamp: 'KenD 4/15/2022 14:55:26'!
-key: aKey value: anObject 
+!STONTestAssociation commentStamp: '<historical>' prior: 0!
+STONTestAssociation is used to support unit tests.
+!
 
-	super key: aKey value: anObject.
-	timestamp := self now! !
+!STONFileReference commentStamp: '<historical>' prior: 0!
+I am STONFileReference, I am an implementation artifact to help reading objects with class tag equal to my #stonName.
 
-!STONTestAssociation methodsFor: 'accessing' stamp: 'KenD 4/15/2022 14:54:40'!
-now
-	^ DateAndTime now! !
+I am a FileEntry.!
 
-!STONTestAssociation methodsFor: 'accessing' stamp: 'KenD 4/15/2022 14:55:10'!
-timestamp
-	^ timestamp! !
+!STONWriteReadTest commentStamp: '<historical>' prior: 0!
+STONWriteReadTests test serialization followed by materialization, these tests first write then read STON.!
 
-!STONTestAssociation methodsFor: 'accessing' stamp: 'KenD 4/15/2022 14:55:39'!
-value: anObject
+!STONWritePrettyPrinterReadTest commentStamp: '<historical>' prior: 0!
+STONWritePrettyPrinterReadTests tests pretty printed serialization followed by materialization.!
 
-	super value: anObject.
-	timestamp := self now! !
+!STONWriterTest commentStamp: '<historical>' prior: 0!
+STONWriterTests test serialization.!
 
 !STONReaderError methodsFor: 'accessing' stamp: 'KenD 4/15/2022 12:04:52'!
 messageText
@@ -689,967 +669,6 @@ signal: aString streamPosition: streamPosition
 		streamPosition: streamPosition;
 		signal: aString;
 		yourself! !
-
-!STONFileReference methodsFor: 'accessing' stamp: 'KenD 3/2/2024 09:41:43'!
-initialPath
-
-	^initialPath ! !
-
-!STONFileReference methodsFor: 'accessing' stamp: 'KenD 3/2/2024 09:41:30'!
-initialPath: aString
-
-	initialPath := aString! !
-
-!STONFileReference methodsFor: 'accessing' stamp: 'KenD 3/2/2024 10:39:24'!
-stonOn: stoneWriter
-
-	stoneWriter writeRawString:  'FILE[''', self stoneName, ''']'! !
-
-!STONFileReference methodsFor: 'accessing' stamp: 'KenD 3/2/2024 10:57:55'!
-stoneName
-	"If no prefix answer initialPath prefixed by './' and elide trailing $/"
-	| pathName |
-	pathName := (initialPath withoutSuffix: (FileIOAccessor default) slash asString)
-		ifNil: [initialPath] ifNotNil: [:trimmed|trimmed ].
-	^self hasPrefix ifTrue: [pathName] ifFalse: [ './',  pathName ]! !
-
-!STONFileReference methodsFor: 'testing' stamp: 'KenD 3/2/2024 10:17:08'!
-hasPrefix
-	"Answer if file name without prefix"
-	
-	^ (self name = self initialPath) not! !
-
-!STONFileReference class methodsFor: 'accessing' stamp: 'KenD 4/3/2022 16:50:28'!
-stonName
-
-	^ #FILE! !
-
-!STONFileReference class methodsFor: 'instance creation' stamp: 'KenD 4/18/2022 08:04:51'!
-fromSton: stonReader
-
-	^ stonReader parseListSingleton asFileSystemEntry! !
-
-!STONWriteReadTest methodsFor: 'options' stamp: 'KenD 4/5/2022 08:27:45'!
-reader: string
-
-	^ STON reader on: string readStream! !
-
-!STONWriteReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 08:27:07'!
-materialize: string
-
-	^ STON reader 
-		on: string readStream;
-		next! !
-
-!STONWriteReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 08:26:55'!
-serialize: anObject
-
-	^ String streamContents: [ :stream |
-		STON writer 
-			on: stream;
-			nextPut: anObject ]! !
-
-!STONWriteReadTest methodsFor: 'private' stamp: 'KenD 3/2/2024 15:19:23'!
-serializeAndMaterialize: object
-	| serialization materialization |
-	serialization := self class new serialize: object.
-	materialization := self materialize: serialization.
-	self assert: object equals: materialization! !
-
-!STONWriteReadTest methodsFor: 'private' stamp: 'KenD 4/18/2022 13:21:54'!
-serializeAndMaterializeClose: object
-	| serialization materialization |
-	serialization := self serialize: object.
-	materialization := self materialize: serialization.
-	self assert: (object closeTo: materialization)! !
-
-!STONWriteReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 08:28:05'!
-serializeAndMaterializeJsonMode: object
-	| serialization materialization |
-	serialization := self serializeJson: object.
-	materialization := self materialize: serialization.
-	self assert: object equals: materialization! !
-
-!STONWriteReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 08:28:16'!
-serializeJson: anObject
-
-	^ String streamContents: [ :stream |
-		STON jsonWriter 
-			on: stream;
-			nextPut: anObject ]! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:37:55'!
-testAlternativeRepresentation
-	| testObject resultObject |
-	testObject := STONAlternativeRepresentationTestObject example.
-	"See the class comment of STONAlternativeRepresentationTestObject
-	for a description of how the internal and external representation differ.
-	See also STONAlternativeRepresentationTestObject>>#stonOn:
-	and STONAlternativeRepresentationTestObject>>#fromSton:"
-	resultObject := self materialize: (self serialize: testObject).
-	self assert: resultObject id equals: testObject id.
-	self assert: resultObject time equals: testObject time.
-	self assert: (resultObject gridReference x closeTo: testObject gridReference x).
-	self assert: (resultObject gridReference y closeTo: testObject gridReference y).! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:37:45'!
-testAssociations
-	| associations |
-	associations := OrderedCollection new.
-	1 to: 10 do: [ :each |
-		associations add: each -> each printString ].
-	self serializeAndMaterialize: associations! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:37:38'!
-testCharacters
-	| characters |
-	characters := STON listClass withAll: ($a to: $z), ($A to: $Z).
-	self serializeAndMaterialize: characters! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:37:26'!
-testClasses
-	| classes |
-	classes := STON listClass withAll: { Point. Integer. Object }.
-	self serializeAndMaterialize: classes.
-	classes := STON listClass withAll: { Point class. Integer class. Object class }.
-	self serializeAndMaterialize: classes.
-	classes := STON listClass withAll: { Class. Metaclass. Class class. Point class class }.
-	self serializeAndMaterialize: classes.! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/15/2022 13:31:01'!
-testCollections
-	| collections |
-	collections := STON listClass withAll: {
-		#(1 2 3).
-		OrderedCollection withAll: #(1 2 3).
-		Set withAll: #(1 2 3).
-		Bag withAll: #(1 2 2 3).
-		Dictionary new at: 1 put: 1; at: 2 put: 2; yourself.
-		#[1 2 3].
-		#(1 2 3) asIntegerArray.
-		Float64Array newFrom: #(1 2 3) "asFloatArray" }.
-	self serializeAndMaterialize: collections! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:37:03'!
-testCollectionsStructured
-	| collections one two |
-	one := 1@2.
-	two := 2@3.
-	collections := STON listClass withAll: {
-	 	Bag withAll: { one. two. one. two. one }.
-	 	Set withAll: { one. two. one. two. one }.
-	 	OrderedCollection withAll: { one. two. one. two. one }.
-	}.
-	self serializeAndMaterialize: collections! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/18/2022 13:29:27'!
-testColors
-	| colors |
-	colors := STON listClass withAll: { 
-		Color red.
-		Color red copy setAlpha: 0.4.
-		Color red lighter lighter }.
-	self serializeAndMaterializeClose: colors! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:36:45'!
-testCustomAssociations
-	| associations |
-	associations := OrderedCollection new.
-	associations add: #foo->100.
-	associations add: (STONTestAssociation key: #foo value:100).
-	self serializeAndMaterialize: associations! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:36:39'!
-testDatesAndTimes
-	| datesAndTimes |
-	datesAndTimes := STON listClass withAll: { 
-		Time now. 
-		Date today. 
-		DateAndTime now }.
-	self serializeAndMaterialize: datesAndTimes! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/18/2022 13:24:26'!
-testDiskFiles
-	| diskFiles |
-	self flag: #NeedsFileEntry.
-	diskFiles := STON listClass withAll: { 
-		DirectoryEntry smalltalkImageDirectory.
-		DirectoryEntry currentDirectory.
-		'foo/bar/readme.txt' asFileEntry .
-		'./readme.txt' asFileEntry. }.
-	self serializeAndMaterializeClose: diskFiles! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:35:53'!
-testDomainObject
-	| object objects |
-	object := STONTestDomainObject dummy.
-	self serializeAndMaterialize: object.
-	objects := STON listClass streamContents: [ :stream |
-		10 timesRepeat: [ stream nextPut: STONTestDomainObject dummy ] ].
-	self serializeAndMaterialize: objects.
-	objects := STON mapClass new.
-	10 timesRepeat: [ | newObject |
-		newObject := STONTestDomainObject dummy.
-		objects at: newObject integer put: newObject ].
-	self serializeAndMaterialize: objects.! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:34:12'!
-testEmpty
-	| empty |
-	empty := STON listClass new.
-	self serializeAndMaterialize: empty.
-	empty := STON mapClass new.
-	self serializeAndMaterialize: empty.! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/18/2022 08:03:38'!
-testFileSystemSupport
-	self flag: #Unsupported.
-"	| fileReferences fileLocators |
-	self flag: #NeedsFileEntry.
-	fileReferences := STON listClass withAll: { 
-		FileLocator image asFileReference.
-		FileLocator workingDirectory asFileReference.
-		(FileLocator home / 'foo.txt') asFileReference }.
-	self serializeAndMaterialize: fileReferences.
-	fileLocators := STON listClass withAll: { 
-		FileLocator image.
-		FileLocator workingDirectory.
-		FileLocator home / 'foo.txt' }.
-	self serializeAndMaterialize: fileLocators."! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/16/2022 12:52:11'!
-testFloats
-	| floats serialization materialization |
-	floats := STON listClass withAll: ((-10 to: 10) collect: [ :each | each * Float pi ]).
-	serialization := self serialize: floats.
-	materialization := self materialize: serialization.
-	self assert: floats size equals: materialization size.
-	floats with: materialization do: [ :float :materializedFloat |
-		"Use #closeTo: instead of #= to increase portability"
-		self assert: (float closeTo: materializedFloat) ]! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:32:48'!
-testFractions
-	| fractions |
-	fractions := STON listClass withAll: (-2/3 to: 2/3 by: 1/3).
-	self serializeAndMaterialize: fractions! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:32:40'!
-testIdentityCollections
-	| collections |
-	collections := STON listClass withAll: {
-		IdentitySet withAll: #(1 2 3).
-		IdentityDictionary new at: 1 put: 1; at: 2 put: 2; yourself.
-		IdentityBag withAll: { #A. #B. #A. #B. #A } }.
-	self serializeAndMaterialize: collections! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:32:34'!
-testIntervals
-	| intervals |
-	intervals := STON listClass withAll: { 
-		1 to: 10.
-		1 to: 10 by: 2.
-		100 to: 50 by: -5 }.
-	self serializeAndMaterialize: intervals! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:32:26'!
-testJsonMode
-	| object |
-	object := STON listClass withAll: {
-		Float pi.
-		'Hello World'.
-		true.
-		nil.
-		STON listClass withAll: #( 1 2 3) asByteArray.
-		STON mapClass new 
-			at: 'x' put: 1; 
-			at: 'y' put: 2; 
-			yourself 
-	}.
-	self serializeAndMaterializeJsonMode: object! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/16/2022 15:02:37'!
-testKnownObjects
-	| knownObject ston object |
-	knownObject := STONTestKnownObject new.
-	"make sure the system of remembering instances works"
-	self assert: (STONTestKnownObject fromId: knownObject id asString) equals: knownObject.
-	self assert: ((STONTestKnownObject fromId: knownObject id asString) == knownObject).
-	"only the id string is serialized"
-	ston := self serialize: knownObject.
-	"upon serialization, objects with known id strings come from the remembered instances"
-	object := self materialize: ston.
-	self assert: object equals: knownObject.
-	self assert: (object == knownObject).
-	"not just the id is equal, but the rest of the object too"
-	self assert: object description equals: knownObject description.
-
-	STONTestKnownObject resetKnownObjects! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/18/2022 08:04:18'!
-testMemoryFileReferences
-	self flag: #Unsupported.
-"	| root dir1 file1 references ston result |
-	self flag: #NeedsFileEntry.
-	root := FileSystem memory root.
-	dir1 := (root / 'dir1') ensureCreateDirectory.
-	file1 := (dir1 / 'file1') ensureCreateFile.
-	file1 writeStreamDo: [ :out | out nextPutAll: 'ABC' ].
-	references := STON listClass withAll: { dir1 . file1 }.
-	ston := self serialize: references.
-	result := self materialize: ston.
-	self assert: result first exists.
-	self assert: result second exists.
-	self assert: result first fileSystem equals: result second fileSystem. 
-	self assert: result first fileSystem identicalTo: result second fileSystem. 
-	self assert: result first fileSystem isMemoryFileSystem.
-	self assert: result second contents equals: 'ABC'"! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 11:45:38'!
-testMimeTypes
-	self flag: #Unsupported
-	"| mimeTypes |
-	mimeTypes := STON listClass withAll: { 
-		ZnMimeType applicationJson.
-		ZnMimeType textPlain }.
-	self serializeAndMaterialize: mimeTypes"! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:30:29'!
-testOrderedDictionary
-	"OrderedDictionary is special because it does not inherit from Dictionary.
-	It might also not exist in some dialects, where this test could be skipped."
-	
-	| dictionaries orderedDictionaryClass orderedIdentityDictionaryClass |
-	orderedDictionaryClass := self environment at: #OrderedDictionary ifAbsent: [ Dictionary ].
-	orderedIdentityDictionaryClass := self environment at: #OrderedIdentityDictionary ifAbsent: [ IdentityDictionary ].
-	dictionaries := STON listClass withAll: {
-		orderedDictionaryClass new at: 1 put: 1; at: 2 put: 2; yourself.
-		orderedDictionaryClass new at: #a put: 1; at: #b put: -2; at: #c put: 0; yourself.
-		orderedDictionaryClass new.
-		orderedIdentityDictionaryClass new at: 1 put: 1; at: 2 put: 2; yourself.
-		orderedIdentityDictionaryClass new at: #a put: 1; at: #b put: -2; at: #c put: 0; yourself.
-		orderedIdentityDictionaryClass new }.
-	self serializeAndMaterialize: dictionaries! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:30:21'!
-testPrimitives
-	| primitives |
-	primitives := STON listClass withAll: { true. false. nil }.
-	self serializeAndMaterialize: primitives! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:30:14'!
-testSharedColors
-	| color1 color2 colors |
-	color1 := Color r: 0.25 g: 0.5 b: 0.75 alpha: 0.4.
-	color2 := Color red.
-	colors := STON listClass withAll: { color1. color2. color2 }.
-	self serializeAndMaterialize: colors! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:29:59'!
-testSmallIntegers
-	| integers |
-	integers := STON listClass withAll: (-10 to: 10).
-	self serializeAndMaterialize: integers! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 11:58:14'!
-testSortedCollections
-	| collections |
-	collections := STON listClass withAll: {
-		SortedCollection new.
-		SortedCollection new.
-		#(5 3 7 2 1 4 10 9 8 6) asSortedCollection.
-		"self flag: #Unsupported.   No SortFunctions"
-"		#(5 3 7 2 1 4 10 9 8 6) asSortedCollection: #yourself ascending.
-		#(5 3 7 2 1 4 10 9 8 6) asSortedCollection: #yourself descending.
-		#('****' '*' '*****' '**' '***') asSortedCollection: #size ascending.
-		#('****' '*' '*****' '**' '***') asSortedCollection: #size descending.
-		#(5 3 7 2 1 4 10 nil 9 8 6) asSortedCollection: #yourself ascending undefinedFirst.
-		#(5 3 7 2 1 4 10 nil 9 8 6) asSortedCollection: #yourself ascending reversed undefinedLast.
-		#(5 3 7 2 1 4 10 nil 9 8 6) asSortedCollection: #yourself ascending undefinedFirst.
-		#(5 3 7 2 1 4 10 nil 9 8 6) asSortedCollection: #yourself ascending reversed undefinedLast" }.
-	self serializeAndMaterialize: collections! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 11:48:08'!
-testSpecialCharacters
-	| primitives |
-	primitives := STON listClass withAll: { 
-		String withAll: { Character tab. Character lf. Character cr }.
-		UnicodeString withAll: { $'. $". $\. $/ }.
-		'élèves français'.
-		'Düsseldorf Königsallee'.
-		(#(1 10 20 30 127 140 150 160 200 255) collect: #asCharacter) as: UnicodeString }.
-	self serializeAndMaterialize: primitives! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 11:49:03'!
-testSpecialClassNames
-	self flag: #Unsupported. "AnonymousSubclass"
-"	| specialClass key specialInstance ston reader object |
-	specialClass := LookupKey newAnonymousSubclass.
-	specialClass setName: #'STONTest_Lärm'.
-	key := 999 atRandom asString asSymbol.
-	specialInstance := specialClass key: key.
-	ston := self serialize: specialInstance.
-	reader := self reader: ston.
-	(reader instVarNamed: #classes) 
-		at: specialClass name 
-		put: specialClass.
-	object := reader next.
-	self assert: object equals: specialInstance.
-	self assert: object class equals: specialClass.
-	self assert: object key equals: key"! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 11:47:01'!
-testStrings
-	| strings |
-	strings := Collection allSubclasses 
-		collect: [ :each | each name asString ].
-	self serializeAndMaterialize: strings.
-	strings := { 
-		'foo'. 'Foo BAR'. ''. '	\\'''. 
-		'élève en Français'. 
-		UnicodeString with: (Character codePoint: 16r20AC) " $€ " }.
-	self serializeAndMaterialize: strings.! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:29:05'!
-testSymbols
-	| symbols |
-	symbols := #( #bytes #'' #Bytes123 ).
-	self serializeAndMaterialize: symbols.
-	symbols := Collection allSubclasses collect: [ :each | each name ].
-	self serializeAndMaterialize: symbols.
-	"simple symbols"
-	symbols := #( #foo123 #'123foo' #'punctuation-_./' #'_Foo' #'/root' #'---' #'.st' ).
-	self serializeAndMaterialize: symbols.
-	"non-simple symbols"
-	symbols := #( #'les-élèves-français' #'euro-€' #'ångström' ).
-	self serializeAndMaterialize: symbols.! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 3/3/2024 11:54:17'!
-testTextAndRunArray
-	| texts |
-	texts := { 
-		'Text!!' asText. 
-		(Text string: 'I am bold' attribute: TextEmphasis bold), ' and I am normal text'.
-		Text new }.
-	self serializeAndMaterialize: texts! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 11:53:42'!
-testURLs
-	self flag: #Unsupported.
-"	| urls |
-	urls := STON listClass withAll: { 
-		'https://pharo.org/files/pharo.png' asUrl. 
-		'mailto:sven@stfx.eu' asUrl. 
-		'file:///var/log/system.log' asUrl.
-		'scheme://user:password@host:123/var/log/system.log?foo=1&bar#frag' asUrl }.
-	self serializeAndMaterialize: urls"! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:26:17'!
-testUUIDs
-	| uuids |
-	uuids := STON listClass withAll: { 
-		UUID new.
-		UUID new.
-		UUID nilUUID }.
-	self serializeAndMaterialize: uuids! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:28:42'!
-testUser
-	| user users |
-	user := STONTestUser dummy.
-	self serializeAndMaterialize: user.
-	users := STON listClass streamContents: [ :stream |
-		10 timesRepeat: [ stream nextPut: STONTestUser dummy ] ].
-	self serializeAndMaterialize: users.
-	users := STON mapClass new.
-	10 timesRepeat: [ | newUser |
-		newUser := STONTestUser dummy.
-		users at: newUser username put: newUser ].
-	self serializeAndMaterialize: users.! !
-
-!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:28:34'!
-testUser2
-	| user users |
-	user := STONTestUser2 dummy.
-	self serializeAndMaterialize: user.
-	users := STON listClass streamContents: [ :stream |
-		10 timesRepeat: [ stream nextPut: STONTestUser2 dummy ] ].
-	self serializeAndMaterialize: users.
-	users := STON mapClass new.
-	10 timesRepeat: [ | newUser |
-		newUser := STONTestUser2 dummy.
-		users at: newUser username put: newUser ].
-	self serializeAndMaterialize: users.! !
-
-!STONWriteAsciiOnlyReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 12:22:20'!
-serialize: anObject
-
-	^ String streamContents: [ :stream |
-		STON writer 
-			on: stream; 
-			asciiOnly: true;
-			nextPut: anObject ]! !
-
-!STONWriteAsciiOnlyReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 12:22:08'!
-serializeJson: anObject
-
-	^ String streamContents: [ :stream |
-		STON jsonWriter 
-			on: stream; 
-			asciiOnly: true;
-			nextPut: anObject ]! !
-
-!STONWritePrettyPrinterReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 12:21:27'!
-serialize: anObject
-
-	^ String streamContents: [ :stream |
-		STON writer 
-			on: stream; 
-			prettyPrint: true;
-			nextPut: anObject ]! !
-
-!STONWritePrettyPrinterReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 12:21:17'!
-serializeJson: anObject
-
-	^ String streamContents: [ :stream |
-		STON jsonWriter 
-			on: stream; 
-			prettyPrint: true;
-			nextPut: anObject ]! !
-
-!STONWriteReadCommentsTest methodsFor: 'options' stamp: 'KenD 4/5/2022 08:39:36'!
-reader: string
-
-	^ STON reader
-		on: (STONCStyleCommentsSkipStream on: string readStream);
-		yourself! !
-
-!STONWriteReadCommentsTest methodsFor: 'private' stamp: 'KenD 4/5/2022 08:39:26'!
-materialize: string
-
-	^ STON reader
-		on: (STONCStyleCommentsSkipStream on: string readStream);
-		optimizeForLargeStructures;
-		next! !
-
-!STONWriteReadCommentsTest methodsFor: 'private' stamp: 'KenD 4/5/2022 08:39:45'!
-serialize: anObject
-
-	^ String streamContents: [ :stream |
-		stream << '/* initial comment */'.
-		STON writer 
-			on: stream;
-			nextPut: anObject.
-		stream << '/* final comment */' ]! !
-
-!STONWriterTest methodsFor: 'private' stamp: 'KenD 4/4/2022 15:01:52'!
-serialize: anObject
-
-	^ String streamContents: [ :stream |
-		STON writer 
-			on: stream;
-			nextPut: anObject ]! !
-
-!STONWriterTest methodsFor: 'private' stamp: 'KenD 4/4/2022 15:01:43'!
-serializeAsciiOnly: anObject
-
-	^ String streamContents: [ :stream |
-		STON writer 
-			on: stream;
-			asciiOnly: true;
-			nextPut: anObject ]! !
-
-!STONWriterTest methodsFor: 'private' stamp: 'KenD 4/4/2022 15:01:33'!
-serializeJson: anObject
-
-	^ String streamContents: [ :stream |
-		STON jsonWriter 
-			on: stream; 
-			nextPut: anObject ]! !
-
-!STONWriterTest methodsFor: 'private' stamp: 'KenD 4/4/2022 15:01:22'!
-serializePretty: anObject
-
-	^ String streamContents: [ :stream |
-		STON writer 
-			on: stream; 
-			prettyPrint: true;
-			nextPut: anObject ]! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 15:00:58'!
-testAssociation
-
-	self assert: (self serialize: 'foo' -> 1) equals: '''foo'':1'.
-	self assert: (self serialize: #bar -> 2) equals: '#bar:2'.
-	self assert: (self serialize: 'foo bar' -> #ok) equals: '''foo bar'':#ok'.
-	self assert: (self serialize: 123 -> 456) equals: '123:456'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 15:00:46'!
-testBag
-
-	self 
-		assert: (self serialize: (Bag withAll: #(a a)))
-		equals: 'Bag{#a:2}'.
-	self 
-		assert: (self serialize: Bag new)
-		equals: 'Bag{}'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 15:00:33'!
-testBoolean
-
-	self assert: (self serialize: true) equals: 'true'.
-	self assert: (self serialize: false) equals: 'false'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 13:23:51'!
-testByteArray
-
-	self assert: (self serialize: #(1 2 3) asByteArray) equals: 'ByteArray[''010203'']' ! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 15:00:11'!
-testClass
-
-	self assert: (self serialize: Point) equals: 'Class[#Point]'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/11/2022 16:45:54'!
-testColor
-	self 
-		assert: (self serialize: Color red) 
-		equals: 'Color[#red]'.
-	self 
-		assert: (self serialize: (Color red copy setAlpha: 0.4)) 
-		equals: 'TranslucentColor{#red:0.898,#green:0.0,#blue:0.0,#alpha:0.4}'.
-	self 
-		assert: (self serialize: Color red lighter lighter) 
-		equals: 'Color{#red:1.0,#green:0.06,#blue:0.06,#alpha:1.0}'.! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 11/14/2022 14:17:55'!
-testCustomNewline
-	| output |
-	output := String streamContents: [ :out |
-		(STON writer on: out)
-			newLine: String lf;
-			prettyPrint: true;
-			nextPut: #( 1 ) ].
-	self 
-		assert: output 
-		equals: ('[\	1\]' withCRs withLineEndings: String lf)! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 13:16:19'!
-testDateAndTime
-	| dateAndTime |
-	dateAndTime := DateAndTime
-		year: 2012
-		month: 1
-		day: 1
-		hour: 6
-		minute: 30
-		second: 15
-		offset: (Duration hours: 1).
-	self assert: (self serialize: dateAndTime) equals: 'DateAndTime[''2012-01-01T06:30:15+01:00'']'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/12/2022 07:47:29'!
-testDictionary
-	| collection |
-	collection := STON mapClass new
-		at: 1 put: 1;
-		at: 2 put: 2;
-		yourself.
-	self assert: (self serialize: collection) equals: '{2:2,1:1}'.
-	self assert: (self serialize: STON mapClass new) equals: '{}'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:56:16'!
-testDictionaryWithComplexKeys
-	| collection |
-	collection := STON mapClass new at: true put: 1; at: #(foo) put: 2; yourself.
-	self assert: (#('{true:1,[#foo]:2}' '{[#foo]:2,true:1}') includes: (self serialize: collection))! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 09:48:24'!
-testDiskFile
-	self assert: (self serialize: 'foo.txt' asFileReference) equals: 'FILE[''./foo.txt'']'.
-	self assert: (self serialize: '/tmp/foo.txt' asFileReference) equals: 'FILE[''/tmp/foo.txt'']'.
-	self assert: (self serialize: 'tmp/foo.txt' asFileReference) equals: 'FILE[''tmp/foo.txt'']'.
-	self assert: (self serialize: '/tmp' asFileReference) equals: 'FILE[''/tmp'']'.
-	self assert: (self serialize: '/tmp/' asFileReference) equals: 'FILE[''/tmp'']'.! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:54:11'!
-testDoubleQuotedString
-	| string |
-	self assert: (self serializeJson: 'foo') equals: '"foo"'.
-	self assert: (self serializeJson: 'FOO') equals: '"FOO"'.
-	self assert: (self serializeJson: 'élève en Français') equals: '"élève en Français"'.
-	string := String withAll: {$" . $' . $\ . $/ . Character tab . Character cr . Character lf . Character newPage . Character backspace}.
-	"Note that in JSON mode, double quotes get escaped, and single quotes not"
-	self assert: (self serializeJson: string) equals: '"\"''\\/\t\r\n\f\b"'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:54:02'!
-testEmptyArrayPretty
-	self assert: (self serializePretty: STON listClass new) equals: '[ ]'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:53:50'!
-testEmptyDictionaryPretty
-	self assert: (self serializePretty: STON mapClass new) equals: '{ }'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:53:38'!
-testFloat
-	self assert: (self serialize: 1.5) equals: '1.5'.
-	self assert: (self serialize: 0.0) equals: '0.0'.
-	self assert: (self serialize: -1.5) equals: '-1.5'.
-	self assert: ((self serialize: Float pi) beginsWith: '3.14159').
-	self assert: ((self serialize: (1 / 3) asFloat) beginsWith: '0.333').
-	self assert: (self serialize: (10 raisedTo: 100) asFloat) equals: '1.0e100'.
-	self assert: (self serialize: (10 raisedTo: -50) asFloat) equals: '1.0e-50'.
-	self assert: (self serialize: (10 raisedTo: -50) asFloat negated) equals: '-1.0e-50'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:53:28'!
-testFraction
-	self assert: (self serialize: 1/3) equals: '1/3'.
-	self assert: (self serialize: -1/3) equals: '-1/3'.
-	self assert: (self serialize: 10/100) equals: '1/10'.
-	self assert: (self serialize: 100/10) equals: '10'.
-	self assert: (self serialize: 123/123) equals: '1'.
-	self assert: (self serialize: 100/11) equals: '100/11'.! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:53:20'!
-testIdentityDictionary
-	| collection |
-	collection := IdentityDictionary new
-		at: 1 put: 1;
-		at: 2 put: 2;
-		yourself.
-	self assert: (self serialize: collection) equals: 'IdentityDictionary{1:1,2:2}'.
-	self assert: (self serialize: IdentityDictionary new) equals: 'IdentityDictionary{}'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:53:13'!
-testInteger
-	self assert: (self serialize: 1) equals: '1'.
-	self assert: (self serialize: 0) equals: '0'.
-	self assert: (self serialize: -1) equals: '-1'.
-	self assert: (self serialize: 1234567890) equals: '1234567890'.
-	self assert: (self serialize: -1234567890) equals: '-1234567890'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:53:04'!
-testIsSimpleSymbol
-	self assert: (STON writer isSimpleSymbol: #foo).
-	self assert: (STON writer isSimpleSymbol: #az).
-	self assert: (STON writer isSimpleSymbol: #AZ).
-	self assert: (STON writer isSimpleSymbol: #N0123456789).
-	self assert: (STON writer isSimpleSymbol: #foo123).
-	self assert: (STON writer isSimpleSymbol: #'Foo/Bar').
-	self assert: (STON writer isSimpleSymbol: #'Foo.Bar').
-	self assert: (STON writer isSimpleSymbol: #'Foo-Bar').
-	self assert: (STON writer isSimpleSymbol: #'Foo_Bar').
-	self assert: (STON writer isSimpleSymbol: #foo).
-	self deny: (STON writer isSimpleSymbol: #'#^&$%')! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:52:31'!
-testKeepingNewLines
-	| input result output |
-	input := 'line ending with CR', String cr, 
-		'line ending with LF', String lf, 
-		'line ending with CRLF', String crlfString.
-	output := '''line ending with CR', String crlfString, 
-		'line ending with LF', String crlfString, 
-		'line ending with CRLF', String crlfString, ''''.
-	result := String streamContents: [ :out |
-		(STON writer on: out) newLine: String crlfString; keepNewLines: true; nextPut: input ].
-	self assert: result equals: output.
-	output := '''line ending with CR', String cr, 
-		'line ending with LF', String cr, 
-		'line ending with CRLF', String cr, ''''.
-	result := String streamContents: [ :out |
-		(STON writer on: out) newLine: String cr; keepNewLines: true; nextPut: input ].
-	self assert: result equals: output! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:52:21'!
-testList
-	self assert: (self serialize: (STON listClass withAll: #(1 2 3))) equals: '[1,2,3]'.
-	self assert: (self serialize: STON listClass new) equals: '[]'.
-	self assert: (self serialize: (STON listClass withAll: {1 . -1 . 0 . #foo . 'a b c' . true . false . nil})) equals: '[1,-1,0,#foo,''a b c'',true,false,nil]'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:52:11'!
-testMap
-	| map |
-	(map := STON mapClass new)
-		at: #foo put: 1;
-		at: #bar put: 2.
-	self assert: (self serialize: map) equals: '{#foo:1,#bar:2}'.
-	self assert: (self serialize: STON mapClass new) equals: '{}'.
-	map removeAll.
-	map at: 'foo bar' put: #ok.
-	self assert: (self serialize: map) equals: '{''foo bar'':#ok}'.
-	map removeAll.
-	map at: 123 put: 456.
-	self assert: (self serialize: map) equals: '{123:456}'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:52:00'!
-testMetaclass
-
-	self assert: (self serialize: Point class) equals: 'Metaclass[#Point]'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:51:33'!
-testNil
-
-	self assert: (self serialize: nil) equals: 'nil'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 13:19:59'!
-testNonBMPCharacterEncoding
-	"Characters not in the Basic Multilingual Plane are encoded as a UTF-16 surrogate pair"
-	self flag: #Unsupported.
-	"| string json |
-	string := String with: 16r1D11E asCharacter. ""MUSICAL SYMBOL G CLEF""
-	json := String streamContents: [ :out |
-		(STON writer on: out) asciiOnly: true; nextPut: string ].
-	self assert: json equals: '''\uD834\uDD1E'''"! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:51:08'!
-testNull
-	self assert: (self serializeJson: nil) equals: 'null'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:50:59'!
-testOrderedCollection
-	| collection |
-	collection := OrderedCollection with: 1 with: 2 with: 3.
-	self assert: (self serialize: collection) equals: 'OrderedCollection[1,2,3]'.
-	self assert: (self serialize: OrderedCollection new) equals: 'OrderedCollection[]'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:50:51'!
-testPoint
-	self assert: (self serialize: 1 @ 2) equals: 'Point[1,2]'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:50:36'!
-testReferenceCycle
-	| array |
-	array := STON listClass with: 1 with: nil.
-	array at: 2 put: array.
-	self assert: (self serialize: array) equals: '[1,@1]'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:50:27'!
-testReferenceSharing
-	| array one |
-	one := {#one}.
-	array := STON listClass with: one with: one with: one.
-	self assert: (self serialize: array) equals: '[[#one],@2,@2]'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:50:14'!
-testReferenceSharingError
-	| serializer array one |
-	serializer := [ :object | 
-		String streamContents: [ :stream |
-			STON writer 
-				on: stream;
-				referencePolicy: #error; 
-				nextPut: object ] ].
-	one := { #one }.
-	array := STON listClass with: one with: one with: one.
-	self 
-		should: [ (serializer value: array) = '[[#one],[#one],[#one]]' ] 
-		raise: STONWriterError! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:50:01'!
-testReferenceSharingIgnore
-	| serializer array one |
-	serializer := [ :object | 
-	String
-		streamContents: [ :stream | 
-			STON writer
-				on: stream;
-				referencePolicy: #ignore;
-				nextPut: object ] ].
-	one := {#one}.
-	array := STON listClass with: one with: one with: one.
-	self assert: (serializer value: array) equals: '[[#one],[#one],[#one]]'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:49:39'!
-testRestrictedClassesInJsonMode
-
-	self should: [ self serializeJson: 1@2 ] raise: STONWriterError.
-	self should: [ self serializeJson: #foo->100 ] raise: STONWriterError.
-	self should: [ self serializeJson: STONTestUser dummy ] raise: STONWriterError.! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/12/2022 12:44:41'!
-testString
-	| string |
-	self assert: (self serialize: 'foo') equals: '''foo'''.
-	self assert: (self serialize: 'FOO') equals: '''FOO'''.
-	"self assert: (self serializeAsciiOnly: 'élève en Français') equals: '''\u00E9l\u00E8ve en Fran\u00E7ais'''."
-	self assert: (self serialize: 'élève en Français') equals: '''élève en Français'''.
-	string := String withAll: {$" . $' . $\ . $/ . Character tab . Character cr . Character lf . Character newPage . Character backspace}.
-	self assert: (self serialize: string) equals: '''"\''\\/\t\r\n\f\b'''! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:49:08'!
-testSymbol
-	self assert: (self serialize: #foo) equals: '#foo'.
-	self assert: (self serialize: #FOO) equals: '#FOO'.
-	self assert: (self serialize: #bytes) equals: '#bytes'.
-	self assert: (self serialize: #'foo.bar') equals: '#foo.bar'.
-	self assert: (self serialize: #'foo-bar') equals: '#foo-bar'.
-	self assert: (self serialize: #foo_bar) equals: '#foo_bar'.
-	self assert: (self serialize: #'foo/bar') equals: '#foo/bar'.
-	self assert: (self serialize: #'foo bar') equals: '#''foo bar'''.
-	self assert: (self serialize: #foo123) equals: '#foo123'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:48:55'!
-testSymbolAsString
-	self assert: (self serializeJson: #foo) equals: '"foo"'.
-	self assert: (self serializeJson: #FOO) equals: '"FOO"'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/12/2022 13:01:41'!
-testTime
-	| time |
-	time := Time hour: 6 minute: 30 second: 15.
-	self assert: (self serialize: time) equals: 'Time[''06:30:15'']'.
-	time := Time hour: 6 minute: 30 second: 15 nanoSecond: 123.
-	self assert: (self serialize: time) equals: 'Time[''06:30:15.000000123'']'.! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 11:54:27'!
-testURL
-	self flag: #Unsupported.
-"	self
-		assert: (self serialize: 'https://pharo.org/files/pharo.png' asUrl)
-		equals: 'URL[''https://pharo.org/files/pharo.png'']'.
-	self
-		assert: (self serialize: 'mailto:sven@stfx.eu' asUrl)
-		equals: 'URL[''mailto:sven@stfx.eu'']'.
-	self
-		assert: (self serialize: 'file:///var/log/system.log' asUrl)
-		equals: 'URL[''file:///var/log/system.log'']'.
-	self
-		assert: (self serialize: 'scheme://user:password@host:123/var/log/system.log?foo=1&bar#frag' asUrl)
-		equals: 'URL[''scheme://user:password@host:123/var/log/system.log?foo=1&bar#frag'']'."! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/12/2022 12:55:06'!
-testUser
-	| user |
-	(user := STONTestUser new)
-		username: 'john@foo.com';
-		password: 'secret1'.
-	self 
-		assert: (self serialize: user)
-		equals: 'TestUser{#first:true,#username:''john@foo.com'',#password:''secret1'',#enabled:true}'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:48:00'!
-testUser2
-	| user |
-	(user := STONTestUser2 new)
-		username: 'john@foo.com';
-		password: 'secret1'.
-	self 
-		assert: (self serialize: user)
-		equals: 'TestUser2{#username:''john@foo.com'',#password:''secret1'',#enabled:true}'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:47:50'!
-testUser3Nil
-	| user |
-	user := STONTestUser3 new.
-	self 
-		assert: (self serialize: user) 
-		equals: 'TestUser3{#username:nil,#password:nil,#enabled:true}'! !
-
-!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/12/2022 12:56:22'!
-testUserNil
-	| user |
-	user := STONTestUser new.
-	self assert: (self serialize: user) equals: 'TestUser{#first:true,#enabled:true}'! !
 
 !STON class methodsFor: 'accessing' stamp: 'KenD 4/3/2022 16:13:28'!
 associationClass
@@ -2210,13 +1229,14 @@ parseMap
 		map at: key put: value ].
 	^ map! !
 
-!STONReader methodsFor: 'parsing' stamp: 'KenD 4/4/2022 10:34:16'!
+!STONReader methodsFor: 'parsing' stamp: 'KenD 1/26/2025 15:26:16'!
 parseMapDo: block
 
 	self expectChar: ${.
 	(self matchChar: $}) ifTrue: [ ^ self ]. "short cut for empty maps"
 	[ readStream atEnd ] whileFalse: [ | name value |
 		name := self parseSimpleValue.
+		readStream skipSeparators.
 		self expectChar: $:.
 		value := self parseValue.
 		block value: name value: value.
@@ -3247,12 +2267,6 @@ encodeStringKeepingNewLines: string
 							writeStream nextPutAll: newLine ]
 						ifFalse: [ self encodeCharacter: char ] ] ]! !
 
-!STONWriter methodsFor: 'private' stamp: 'KenD 4/3/2022 19:08:30'!
-escapeUnicode4: codePoint
-
-	writeStream nextPutAll: '\u'.
-	codePoint printOn: writeStream base: 16 nDigits: 4! !
-
 !STONWriter methodsFor: 'private' stamp: 'KenD 4/3/2022 19:08:57'!
 escapeUnicode: codePoint
 
@@ -3270,6 +2284,12 @@ escapeUnicode: codePoint
 					self escapeUnicode4: leadSurrogate.
 					self escapeUnicode4: trailSurrogate ]
 				ifFalse: [ self error: 'Character Unicode code point outside encoder range' ] ]! !
+
+!STONWriter methodsFor: 'private' stamp: 'KenD 4/3/2022 19:08:30'!
+escapeUnicode4: codePoint
+
+	writeStream nextPutAll: '\u'.
+	codePoint printOn: writeStream base: 16 nDigits: 4! !
 
 !STONWriter methodsFor: 'private' stamp: 'KenD 4/3/2022 19:08:15'!
 indentedDo: block
@@ -3594,6 +2614,987 @@ isSimpleSymbolChar: char
 	"NB: this should be same definition as in STONReader"
 	^char isLetter or: ['0123456789-_./' includes: char]! !
 
+!STONTestAssociation methodsFor: 'accessing' stamp: 'KenD 4/15/2022 14:55:26'!
+key: aKey value: anObject 
+
+	super key: aKey value: anObject.
+	timestamp := self now! !
+
+!STONTestAssociation methodsFor: 'accessing' stamp: 'KenD 4/15/2022 14:54:40'!
+now
+	^ DateAndTime now! !
+
+!STONTestAssociation methodsFor: 'accessing' stamp: 'KenD 4/15/2022 14:55:10'!
+timestamp
+	^ timestamp! !
+
+!STONTestAssociation methodsFor: 'accessing' stamp: 'KenD 4/15/2022 14:55:39'!
+value: anObject
+
+	super value: anObject.
+	timestamp := self now! !
+
+!STONFileReference methodsFor: 'accessing' stamp: 'KenD 3/2/2024 09:41:43'!
+initialPath
+
+	^initialPath ! !
+
+!STONFileReference methodsFor: 'accessing' stamp: 'KenD 3/2/2024 09:41:30'!
+initialPath: aString
+
+	initialPath := aString! !
+
+!STONFileReference methodsFor: 'accessing' stamp: 'KenD 3/2/2024 10:39:24'!
+stonOn: stoneWriter
+
+	stoneWriter writeRawString:  'FILE[''', self stoneName, ''']'! !
+
+!STONFileReference methodsFor: 'accessing' stamp: 'KenD 3/2/2024 10:57:55'!
+stoneName
+	"If no prefix answer initialPath prefixed by './' and elide trailing $/"
+	| pathName |
+	pathName := (initialPath withoutSuffix: (FileIOAccessor default) slash asString)
+		ifNil: [initialPath] ifNotNil: [:trimmed|trimmed ].
+	^self hasPrefix ifTrue: [pathName] ifFalse: [ './',  pathName ]! !
+
+!STONFileReference methodsFor: 'testing' stamp: 'KenD 3/2/2024 10:17:08'!
+hasPrefix
+	"Answer if file name without prefix"
+	
+	^ (self name = self initialPath) not! !
+
+!STONFileReference class methodsFor: 'accessing' stamp: 'KenD 4/3/2022 16:50:28'!
+stonName
+
+	^ #FILE! !
+
+!STONFileReference class methodsFor: 'instance creation' stamp: 'KenD 4/18/2022 08:04:51'!
+fromSton: stonReader
+
+	^ stonReader parseListSingleton asFileSystemEntry! !
+
+!STONWriteReadTest methodsFor: 'options' stamp: 'KenD 4/5/2022 08:27:45'!
+reader: string
+
+	^ STON reader on: string readStream! !
+
+!STONWriteReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 08:27:07'!
+materialize: string
+
+	^ STON reader 
+		on: string readStream;
+		next! !
+
+!STONWriteReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 08:26:55'!
+serialize: anObject
+
+	^ String streamContents: [ :stream |
+		STON writer 
+			on: stream;
+			nextPut: anObject ]! !
+
+!STONWriteReadTest methodsFor: 'private' stamp: 'KenD 3/2/2024 15:19:23'!
+serializeAndMaterialize: object
+	| serialization materialization |
+	serialization := self class new serialize: object.
+	materialization := self materialize: serialization.
+	self assert: object equals: materialization! !
+
+!STONWriteReadTest methodsFor: 'private' stamp: 'KenD 4/18/2022 13:21:54'!
+serializeAndMaterializeClose: object
+	| serialization materialization |
+	serialization := self serialize: object.
+	materialization := self materialize: serialization.
+	self assert: (object closeTo: materialization)! !
+
+!STONWriteReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 08:28:05'!
+serializeAndMaterializeJsonMode: object
+	| serialization materialization |
+	serialization := self serializeJson: object.
+	materialization := self materialize: serialization.
+	self assert: object equals: materialization! !
+
+!STONWriteReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 08:28:16'!
+serializeJson: anObject
+
+	^ String streamContents: [ :stream |
+		STON jsonWriter 
+			on: stream;
+			nextPut: anObject ]! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:37:55'!
+testAlternativeRepresentation
+	| testObject resultObject |
+	testObject := STONAlternativeRepresentationTestObject example.
+	"See the class comment of STONAlternativeRepresentationTestObject
+	for a description of how the internal and external representation differ.
+	See also STONAlternativeRepresentationTestObject>>#stonOn:
+	and STONAlternativeRepresentationTestObject>>#fromSton:"
+	resultObject := self materialize: (self serialize: testObject).
+	self assert: resultObject id equals: testObject id.
+	self assert: resultObject time equals: testObject time.
+	self assert: (resultObject gridReference x closeTo: testObject gridReference x).
+	self assert: (resultObject gridReference y closeTo: testObject gridReference y).! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:37:45'!
+testAssociations
+	| associations |
+	associations := OrderedCollection new.
+	1 to: 10 do: [ :each |
+		associations add: each -> each printString ].
+	self serializeAndMaterialize: associations! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:37:38'!
+testCharacters
+	| characters |
+	characters := STON listClass withAll: ($a to: $z), ($A to: $Z).
+	self serializeAndMaterialize: characters! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:37:26'!
+testClasses
+	| classes |
+	classes := STON listClass withAll: { Point. Integer. Object }.
+	self serializeAndMaterialize: classes.
+	classes := STON listClass withAll: { Point class. Integer class. Object class }.
+	self serializeAndMaterialize: classes.
+	classes := STON listClass withAll: { Class. Metaclass. Class class. Point class class }.
+	self serializeAndMaterialize: classes.! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/15/2022 13:31:01'!
+testCollections
+	| collections |
+	collections := STON listClass withAll: {
+		#(1 2 3).
+		OrderedCollection withAll: #(1 2 3).
+		Set withAll: #(1 2 3).
+		Bag withAll: #(1 2 2 3).
+		Dictionary new at: 1 put: 1; at: 2 put: 2; yourself.
+		#[1 2 3].
+		#(1 2 3) asIntegerArray.
+		Float64Array newFrom: #(1 2 3) "asFloatArray" }.
+	self serializeAndMaterialize: collections! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:37:03'!
+testCollectionsStructured
+	| collections one two |
+	one := 1@2.
+	two := 2@3.
+	collections := STON listClass withAll: {
+	 	Bag withAll: { one. two. one. two. one }.
+	 	Set withAll: { one. two. one. two. one }.
+	 	OrderedCollection withAll: { one. two. one. two. one }.
+	}.
+	self serializeAndMaterialize: collections! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/18/2022 13:29:27'!
+testColors
+	| colors |
+	colors := STON listClass withAll: { 
+		Color red.
+		Color red copy setAlpha: 0.4.
+		Color red lighter lighter }.
+	self serializeAndMaterializeClose: colors! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:36:45'!
+testCustomAssociations
+	| associations |
+	associations := OrderedCollection new.
+	associations add: #foo->100.
+	associations add: (STONTestAssociation key: #foo value:100).
+	self serializeAndMaterialize: associations! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:36:39'!
+testDatesAndTimes
+	| datesAndTimes |
+	datesAndTimes := STON listClass withAll: { 
+		Time now. 
+		Date today. 
+		DateAndTime now }.
+	self serializeAndMaterialize: datesAndTimes! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/18/2022 13:24:26'!
+testDiskFiles
+	| diskFiles |
+	self flag: #NeedsFileEntry.
+	diskFiles := STON listClass withAll: { 
+		DirectoryEntry smalltalkImageDirectory.
+		DirectoryEntry currentDirectory.
+		'foo/bar/readme.txt' asFileEntry .
+		'./readme.txt' asFileEntry. }.
+	self serializeAndMaterializeClose: diskFiles! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:35:53'!
+testDomainObject
+	| object objects |
+	object := STONTestDomainObject dummy.
+	self serializeAndMaterialize: object.
+	objects := STON listClass streamContents: [ :stream |
+		10 timesRepeat: [ stream nextPut: STONTestDomainObject dummy ] ].
+	self serializeAndMaterialize: objects.
+	objects := STON mapClass new.
+	10 timesRepeat: [ | newObject |
+		newObject := STONTestDomainObject dummy.
+		objects at: newObject integer put: newObject ].
+	self serializeAndMaterialize: objects.! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:34:12'!
+testEmpty
+	| empty |
+	empty := STON listClass new.
+	self serializeAndMaterialize: empty.
+	empty := STON mapClass new.
+	self serializeAndMaterialize: empty.! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/18/2022 08:03:38'!
+testFileSystemSupport
+	self flag: #Unsupported.
+"	| fileReferences fileLocators |
+	self flag: #NeedsFileEntry.
+	fileReferences := STON listClass withAll: { 
+		FileLocator image asFileReference.
+		FileLocator workingDirectory asFileReference.
+		(FileLocator home / 'foo.txt') asFileReference }.
+	self serializeAndMaterialize: fileReferences.
+	fileLocators := STON listClass withAll: { 
+		FileLocator image.
+		FileLocator workingDirectory.
+		FileLocator home / 'foo.txt' }.
+	self serializeAndMaterialize: fileLocators."! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/16/2022 12:52:11'!
+testFloats
+	| floats serialization materialization |
+	floats := STON listClass withAll: ((-10 to: 10) collect: [ :each | each * Float pi ]).
+	serialization := self serialize: floats.
+	materialization := self materialize: serialization.
+	self assert: floats size equals: materialization size.
+	floats with: materialization do: [ :float :materializedFloat |
+		"Use #closeTo: instead of #= to increase portability"
+		self assert: (float closeTo: materializedFloat) ]! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:32:48'!
+testFractions
+	| fractions |
+	fractions := STON listClass withAll: (-2/3 to: 2/3 by: 1/3).
+	self serializeAndMaterialize: fractions! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:32:40'!
+testIdentityCollections
+	| collections |
+	collections := STON listClass withAll: {
+		IdentitySet withAll: #(1 2 3).
+		IdentityDictionary new at: 1 put: 1; at: 2 put: 2; yourself.
+		IdentityBag withAll: { #A. #B. #A. #B. #A } }.
+	self serializeAndMaterialize: collections! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:32:34'!
+testIntervals
+	| intervals |
+	intervals := STON listClass withAll: { 
+		1 to: 10.
+		1 to: 10 by: 2.
+		100 to: 50 by: -5 }.
+	self serializeAndMaterialize: intervals! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:32:26'!
+testJsonMode
+	| object |
+	object := STON listClass withAll: {
+		Float pi.
+		'Hello World'.
+		true.
+		nil.
+		STON listClass withAll: #( 1 2 3) asByteArray.
+		STON mapClass new 
+			at: 'x' put: 1; 
+			at: 'y' put: 2; 
+			yourself 
+	}.
+	self serializeAndMaterializeJsonMode: object! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/16/2022 15:02:37'!
+testKnownObjects
+	| knownObject ston object |
+	knownObject := STONTestKnownObject new.
+	"make sure the system of remembering instances works"
+	self assert: (STONTestKnownObject fromId: knownObject id asString) equals: knownObject.
+	self assert: ((STONTestKnownObject fromId: knownObject id asString) == knownObject).
+	"only the id string is serialized"
+	ston := self serialize: knownObject.
+	"upon serialization, objects with known id strings come from the remembered instances"
+	object := self materialize: ston.
+	self assert: object equals: knownObject.
+	self assert: (object == knownObject).
+	"not just the id is equal, but the rest of the object too"
+	self assert: object description equals: knownObject description.
+
+	STONTestKnownObject resetKnownObjects! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/18/2022 08:04:18'!
+testMemoryFileReferences
+	self flag: #Unsupported.
+"	| root dir1 file1 references ston result |
+	self flag: #NeedsFileEntry.
+	root := FileSystem memory root.
+	dir1 := (root / 'dir1') ensureCreateDirectory.
+	file1 := (dir1 / 'file1') ensureCreateFile.
+	file1 writeStreamDo: [ :out | out nextPutAll: 'ABC' ].
+	references := STON listClass withAll: { dir1 . file1 }.
+	ston := self serialize: references.
+	result := self materialize: ston.
+	self assert: result first exists.
+	self assert: result second exists.
+	self assert: result first fileSystem equals: result second fileSystem. 
+	self assert: result first fileSystem identicalTo: result second fileSystem. 
+	self assert: result first fileSystem isMemoryFileSystem.
+	self assert: result second contents equals: 'ABC'"! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 11:45:38'!
+testMimeTypes
+	self flag: #Unsupported
+	"| mimeTypes |
+	mimeTypes := STON listClass withAll: { 
+		ZnMimeType applicationJson.
+		ZnMimeType textPlain }.
+	self serializeAndMaterialize: mimeTypes"! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:30:29'!
+testOrderedDictionary
+	"OrderedDictionary is special because it does not inherit from Dictionary.
+	It might also not exist in some dialects, where this test could be skipped."
+	
+	| dictionaries orderedDictionaryClass orderedIdentityDictionaryClass |
+	orderedDictionaryClass := self environment at: #OrderedDictionary ifAbsent: [ Dictionary ].
+	orderedIdentityDictionaryClass := self environment at: #OrderedIdentityDictionary ifAbsent: [ IdentityDictionary ].
+	dictionaries := STON listClass withAll: {
+		orderedDictionaryClass new at: 1 put: 1; at: 2 put: 2; yourself.
+		orderedDictionaryClass new at: #a put: 1; at: #b put: -2; at: #c put: 0; yourself.
+		orderedDictionaryClass new.
+		orderedIdentityDictionaryClass new at: 1 put: 1; at: 2 put: 2; yourself.
+		orderedIdentityDictionaryClass new at: #a put: 1; at: #b put: -2; at: #c put: 0; yourself.
+		orderedIdentityDictionaryClass new }.
+	self serializeAndMaterialize: dictionaries! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:30:21'!
+testPrimitives
+	| primitives |
+	primitives := STON listClass withAll: { true. false. nil }.
+	self serializeAndMaterialize: primitives! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:30:14'!
+testSharedColors
+	| color1 color2 colors |
+	color1 := Color r: 0.25 g: 0.5 b: 0.75 alpha: 0.4.
+	color2 := Color red.
+	colors := STON listClass withAll: { color1. color2. color2 }.
+	self serializeAndMaterialize: colors! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:29:59'!
+testSmallIntegers
+	| integers |
+	integers := STON listClass withAll: (-10 to: 10).
+	self serializeAndMaterialize: integers! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 11:58:14'!
+testSortedCollections
+	| collections |
+	collections := STON listClass withAll: {
+		SortedCollection new.
+		SortedCollection new.
+		#(5 3 7 2 1 4 10 9 8 6) asSortedCollection.
+		"self flag: #Unsupported.   No SortFunctions"
+"		#(5 3 7 2 1 4 10 9 8 6) asSortedCollection: #yourself ascending.
+		#(5 3 7 2 1 4 10 9 8 6) asSortedCollection: #yourself descending.
+		#('****' '*' '*****' '**' '***') asSortedCollection: #size ascending.
+		#('****' '*' '*****' '**' '***') asSortedCollection: #size descending.
+		#(5 3 7 2 1 4 10 nil 9 8 6) asSortedCollection: #yourself ascending undefinedFirst.
+		#(5 3 7 2 1 4 10 nil 9 8 6) asSortedCollection: #yourself ascending reversed undefinedLast.
+		#(5 3 7 2 1 4 10 nil 9 8 6) asSortedCollection: #yourself ascending undefinedFirst.
+		#(5 3 7 2 1 4 10 nil 9 8 6) asSortedCollection: #yourself ascending reversed undefinedLast" }.
+	self serializeAndMaterialize: collections! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 11:48:08'!
+testSpecialCharacters
+	| primitives |
+	primitives := STON listClass withAll: { 
+		String withAll: { Character tab. Character lf. Character cr }.
+		UnicodeString withAll: { $'. $". $\. $/ }.
+		'élèves français'.
+		'Düsseldorf Königsallee'.
+		(#(1 10 20 30 127 140 150 160 200 255) collect: #asCharacter) as: UnicodeString }.
+	self serializeAndMaterialize: primitives! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 11:49:03'!
+testSpecialClassNames
+	self flag: #Unsupported. "AnonymousSubclass"
+"	| specialClass key specialInstance ston reader object |
+	specialClass := LookupKey newAnonymousSubclass.
+	specialClass setName: #'STONTest_Lärm'.
+	key := 999 atRandom asString asSymbol.
+	specialInstance := specialClass key: key.
+	ston := self serialize: specialInstance.
+	reader := self reader: ston.
+	(reader instVarNamed: #classes) 
+		at: specialClass name 
+		put: specialClass.
+	object := reader next.
+	self assert: object equals: specialInstance.
+	self assert: object class equals: specialClass.
+	self assert: object key equals: key"! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 11:47:01'!
+testStrings
+	| strings |
+	strings := Collection allSubclasses 
+		collect: [ :each | each name asString ].
+	self serializeAndMaterialize: strings.
+	strings := { 
+		'foo'. 'Foo BAR'. ''. '	\\'''. 
+		'élève en Français'. 
+		UnicodeString with: (Character codePoint: 16r20AC) " $€ " }.
+	self serializeAndMaterialize: strings.! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:29:05'!
+testSymbols
+	| symbols |
+	symbols := #( #bytes #'' #Bytes123 ).
+	self serializeAndMaterialize: symbols.
+	symbols := Collection allSubclasses collect: [ :each | each name ].
+	self serializeAndMaterialize: symbols.
+	"simple symbols"
+	symbols := #( #foo123 #'123foo' #'punctuation-_./' #'_Foo' #'/root' #'---' #'.st' ).
+	self serializeAndMaterialize: symbols.
+	"non-simple symbols"
+	symbols := #( #'les-élèves-français' #'euro-€' #'ångström' ).
+	self serializeAndMaterialize: symbols.! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 3/3/2024 11:54:17'!
+testTextAndRunArray
+	| texts |
+	texts := { 
+		'Text!!' asText. 
+		(Text string: 'I am bold' attribute: TextEmphasis bold), ' and I am normal text'.
+		Text new }.
+	self serializeAndMaterialize: texts! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 11:53:42'!
+testURLs
+	self flag: #Unsupported.
+"	| urls |
+	urls := STON listClass withAll: { 
+		'https://pharo.org/files/pharo.png' asUrl. 
+		'mailto:sven@stfx.eu' asUrl. 
+		'file:///var/log/system.log' asUrl.
+		'scheme://user:password@host:123/var/log/system.log?foo=1&bar#frag' asUrl }.
+	self serializeAndMaterialize: urls"! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:26:17'!
+testUUIDs
+	| uuids |
+	uuids := STON listClass withAll: { 
+		UUID new.
+		UUID new.
+		UUID nilUUID }.
+	self serializeAndMaterialize: uuids! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:28:42'!
+testUser
+	| user users |
+	user := STONTestUser dummy.
+	self serializeAndMaterialize: user.
+	users := STON listClass streamContents: [ :stream |
+		10 timesRepeat: [ stream nextPut: STONTestUser dummy ] ].
+	self serializeAndMaterialize: users.
+	users := STON mapClass new.
+	10 timesRepeat: [ | newUser |
+		newUser := STONTestUser dummy.
+		users at: newUser username put: newUser ].
+	self serializeAndMaterialize: users.! !
+
+!STONWriteReadTest methodsFor: 'testing' stamp: 'KenD 4/5/2022 08:28:34'!
+testUser2
+	| user users |
+	user := STONTestUser2 dummy.
+	self serializeAndMaterialize: user.
+	users := STON listClass streamContents: [ :stream |
+		10 timesRepeat: [ stream nextPut: STONTestUser2 dummy ] ].
+	self serializeAndMaterialize: users.
+	users := STON mapClass new.
+	10 timesRepeat: [ | newUser |
+		newUser := STONTestUser2 dummy.
+		users at: newUser username put: newUser ].
+	self serializeAndMaterialize: users.! !
+
+!STONWriteAsciiOnlyReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 12:22:20'!
+serialize: anObject
+
+	^ String streamContents: [ :stream |
+		STON writer 
+			on: stream; 
+			asciiOnly: true;
+			nextPut: anObject ]! !
+
+!STONWriteAsciiOnlyReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 12:22:08'!
+serializeJson: anObject
+
+	^ String streamContents: [ :stream |
+		STON jsonWriter 
+			on: stream; 
+			asciiOnly: true;
+			nextPut: anObject ]! !
+
+!STONWritePrettyPrinterReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 12:21:27'!
+serialize: anObject
+
+	^ String streamContents: [ :stream |
+		STON writer 
+			on: stream; 
+			prettyPrint: true;
+			nextPut: anObject ]! !
+
+!STONWritePrettyPrinterReadTest methodsFor: 'private' stamp: 'KenD 4/5/2022 12:21:17'!
+serializeJson: anObject
+
+	^ String streamContents: [ :stream |
+		STON jsonWriter 
+			on: stream; 
+			prettyPrint: true;
+			nextPut: anObject ]! !
+
+!STONWriteReadCommentsTest methodsFor: 'options' stamp: 'KenD 4/5/2022 08:39:36'!
+reader: string
+
+	^ STON reader
+		on: (STONCStyleCommentsSkipStream on: string readStream);
+		yourself! !
+
+!STONWriteReadCommentsTest methodsFor: 'private' stamp: 'KenD 4/5/2022 08:39:26'!
+materialize: string
+
+	^ STON reader
+		on: (STONCStyleCommentsSkipStream on: string readStream);
+		optimizeForLargeStructures;
+		next! !
+
+!STONWriteReadCommentsTest methodsFor: 'private' stamp: 'KenD 4/5/2022 08:39:45'!
+serialize: anObject
+
+	^ String streamContents: [ :stream |
+		stream << '/* initial comment */'.
+		STON writer 
+			on: stream;
+			nextPut: anObject.
+		stream << '/* final comment */' ]! !
+
+!STONWriterTest methodsFor: 'private' stamp: 'KenD 4/4/2022 15:01:52'!
+serialize: anObject
+
+	^ String streamContents: [ :stream |
+		STON writer 
+			on: stream;
+			nextPut: anObject ]! !
+
+!STONWriterTest methodsFor: 'private' stamp: 'KenD 4/4/2022 15:01:43'!
+serializeAsciiOnly: anObject
+
+	^ String streamContents: [ :stream |
+		STON writer 
+			on: stream;
+			asciiOnly: true;
+			nextPut: anObject ]! !
+
+!STONWriterTest methodsFor: 'private' stamp: 'KenD 4/4/2022 15:01:33'!
+serializeJson: anObject
+
+	^ String streamContents: [ :stream |
+		STON jsonWriter 
+			on: stream; 
+			nextPut: anObject ]! !
+
+!STONWriterTest methodsFor: 'private' stamp: 'KenD 4/4/2022 15:01:22'!
+serializePretty: anObject
+
+	^ String streamContents: [ :stream |
+		STON writer 
+			on: stream; 
+			prettyPrint: true;
+			nextPut: anObject ]! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 15:00:58'!
+testAssociation
+
+	self assert: (self serialize: 'foo' -> 1) equals: '''foo'':1'.
+	self assert: (self serialize: #bar -> 2) equals: '#bar:2'.
+	self assert: (self serialize: 'foo bar' -> #ok) equals: '''foo bar'':#ok'.
+	self assert: (self serialize: 123 -> 456) equals: '123:456'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 15:00:46'!
+testBag
+
+	self 
+		assert: (self serialize: (Bag withAll: #(a a)))
+		equals: 'Bag{#a:2}'.
+	self 
+		assert: (self serialize: Bag new)
+		equals: 'Bag{}'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 15:00:33'!
+testBoolean
+
+	self assert: (self serialize: true) equals: 'true'.
+	self assert: (self serialize: false) equals: 'false'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 13:23:51'!
+testByteArray
+
+	self assert: (self serialize: #(1 2 3) asByteArray) equals: 'ByteArray[''010203'']' ! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 15:00:11'!
+testClass
+
+	self assert: (self serialize: Point) equals: 'Class[#Point]'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/11/2022 16:45:54'!
+testColor
+	self 
+		assert: (self serialize: Color red) 
+		equals: 'Color[#red]'.
+	self 
+		assert: (self serialize: (Color red copy setAlpha: 0.4)) 
+		equals: 'TranslucentColor{#red:0.898,#green:0.0,#blue:0.0,#alpha:0.4}'.
+	self 
+		assert: (self serialize: Color red lighter lighter) 
+		equals: 'Color{#red:1.0,#green:0.06,#blue:0.06,#alpha:1.0}'.! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 11/14/2022 14:17:55'!
+testCustomNewline
+	| output |
+	output := String streamContents: [ :out |
+		(STON writer on: out)
+			newLine: String lf;
+			prettyPrint: true;
+			nextPut: #( 1 ) ].
+	self 
+		assert: output 
+		equals: ('[\	1\]' withCRs withLineEndings: String lf)! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 13:16:19'!
+testDateAndTime
+	| dateAndTime |
+	dateAndTime := DateAndTime
+		year: 2012
+		month: 1
+		day: 1
+		hour: 6
+		minute: 30
+		second: 15
+		offset: (Duration hours: 1).
+	self assert: (self serialize: dateAndTime) equals: 'DateAndTime[''2012-01-01T06:30:15+01:00'']'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/12/2022 07:47:29'!
+testDictionary
+	| collection |
+	collection := STON mapClass new
+		at: 1 put: 1;
+		at: 2 put: 2;
+		yourself.
+	self assert: (self serialize: collection) equals: '{2:2,1:1}'.
+	self assert: (self serialize: STON mapClass new) equals: '{}'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:56:16'!
+testDictionaryWithComplexKeys
+	| collection |
+	collection := STON mapClass new at: true put: 1; at: #(foo) put: 2; yourself.
+	self assert: (#('{true:1,[#foo]:2}' '{[#foo]:2,true:1}') includes: (self serialize: collection))! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 3/2/2024 09:48:24'!
+testDiskFile
+	self assert: (self serialize: 'foo.txt' asFileReference) equals: 'FILE[''./foo.txt'']'.
+	self assert: (self serialize: '/tmp/foo.txt' asFileReference) equals: 'FILE[''/tmp/foo.txt'']'.
+	self assert: (self serialize: 'tmp/foo.txt' asFileReference) equals: 'FILE[''tmp/foo.txt'']'.
+	self assert: (self serialize: '/tmp' asFileReference) equals: 'FILE[''/tmp'']'.
+	self assert: (self serialize: '/tmp/' asFileReference) equals: 'FILE[''/tmp'']'.! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:54:11'!
+testDoubleQuotedString
+	| string |
+	self assert: (self serializeJson: 'foo') equals: '"foo"'.
+	self assert: (self serializeJson: 'FOO') equals: '"FOO"'.
+	self assert: (self serializeJson: 'élève en Français') equals: '"élève en Français"'.
+	string := String withAll: {$" . $' . $\ . $/ . Character tab . Character cr . Character lf . Character newPage . Character backspace}.
+	"Note that in JSON mode, double quotes get escaped, and single quotes not"
+	self assert: (self serializeJson: string) equals: '"\"''\\/\t\r\n\f\b"'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:54:02'!
+testEmptyArrayPretty
+	self assert: (self serializePretty: STON listClass new) equals: '[ ]'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:53:50'!
+testEmptyDictionaryPretty
+	self assert: (self serializePretty: STON mapClass new) equals: '{ }'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:53:38'!
+testFloat
+	self assert: (self serialize: 1.5) equals: '1.5'.
+	self assert: (self serialize: 0.0) equals: '0.0'.
+	self assert: (self serialize: -1.5) equals: '-1.5'.
+	self assert: ((self serialize: Float pi) beginsWith: '3.14159').
+	self assert: ((self serialize: (1 / 3) asFloat) beginsWith: '0.333').
+	self assert: (self serialize: (10 raisedTo: 100) asFloat) equals: '1.0e100'.
+	self assert: (self serialize: (10 raisedTo: -50) asFloat) equals: '1.0e-50'.
+	self assert: (self serialize: (10 raisedTo: -50) asFloat negated) equals: '-1.0e-50'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:53:28'!
+testFraction
+	self assert: (self serialize: 1/3) equals: '1/3'.
+	self assert: (self serialize: -1/3) equals: '-1/3'.
+	self assert: (self serialize: 10/100) equals: '1/10'.
+	self assert: (self serialize: 100/10) equals: '10'.
+	self assert: (self serialize: 123/123) equals: '1'.
+	self assert: (self serialize: 100/11) equals: '100/11'.! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:53:20'!
+testIdentityDictionary
+	| collection |
+	collection := IdentityDictionary new
+		at: 1 put: 1;
+		at: 2 put: 2;
+		yourself.
+	self assert: (self serialize: collection) equals: 'IdentityDictionary{1:1,2:2}'.
+	self assert: (self serialize: IdentityDictionary new) equals: 'IdentityDictionary{}'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:53:13'!
+testInteger
+	self assert: (self serialize: 1) equals: '1'.
+	self assert: (self serialize: 0) equals: '0'.
+	self assert: (self serialize: -1) equals: '-1'.
+	self assert: (self serialize: 1234567890) equals: '1234567890'.
+	self assert: (self serialize: -1234567890) equals: '-1234567890'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:53:04'!
+testIsSimpleSymbol
+	self assert: (STON writer isSimpleSymbol: #foo).
+	self assert: (STON writer isSimpleSymbol: #az).
+	self assert: (STON writer isSimpleSymbol: #AZ).
+	self assert: (STON writer isSimpleSymbol: #N0123456789).
+	self assert: (STON writer isSimpleSymbol: #foo123).
+	self assert: (STON writer isSimpleSymbol: #'Foo/Bar').
+	self assert: (STON writer isSimpleSymbol: #'Foo.Bar').
+	self assert: (STON writer isSimpleSymbol: #'Foo-Bar').
+	self assert: (STON writer isSimpleSymbol: #'Foo_Bar').
+	self assert: (STON writer isSimpleSymbol: #foo).
+	self deny: (STON writer isSimpleSymbol: #'#^&$%')! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:52:31'!
+testKeepingNewLines
+	| input result output |
+	input := 'line ending with CR', String cr, 
+		'line ending with LF', String lf, 
+		'line ending with CRLF', String crlfString.
+	output := '''line ending with CR', String crlfString, 
+		'line ending with LF', String crlfString, 
+		'line ending with CRLF', String crlfString, ''''.
+	result := String streamContents: [ :out |
+		(STON writer on: out) newLine: String crlfString; keepNewLines: true; nextPut: input ].
+	self assert: result equals: output.
+	output := '''line ending with CR', String cr, 
+		'line ending with LF', String cr, 
+		'line ending with CRLF', String cr, ''''.
+	result := String streamContents: [ :out |
+		(STON writer on: out) newLine: String cr; keepNewLines: true; nextPut: input ].
+	self assert: result equals: output! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:52:21'!
+testList
+	self assert: (self serialize: (STON listClass withAll: #(1 2 3))) equals: '[1,2,3]'.
+	self assert: (self serialize: STON listClass new) equals: '[]'.
+	self assert: (self serialize: (STON listClass withAll: {1 . -1 . 0 . #foo . 'a b c' . true . false . nil})) equals: '[1,-1,0,#foo,''a b c'',true,false,nil]'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:52:11'!
+testMap
+	| map |
+	(map := STON mapClass new)
+		at: #foo put: 1;
+		at: #bar put: 2.
+	self assert: (self serialize: map) equals: '{#foo:1,#bar:2}'.
+	self assert: (self serialize: STON mapClass new) equals: '{}'.
+	map removeAll.
+	map at: 'foo bar' put: #ok.
+	self assert: (self serialize: map) equals: '{''foo bar'':#ok}'.
+	map removeAll.
+	map at: 123 put: 456.
+	self assert: (self serialize: map) equals: '{123:456}'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:52:00'!
+testMetaclass
+
+	self assert: (self serialize: Point class) equals: 'Metaclass[#Point]'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:51:33'!
+testNil
+
+	self assert: (self serialize: nil) equals: 'nil'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 13:19:59'!
+testNonBMPCharacterEncoding
+	"Characters not in the Basic Multilingual Plane are encoded as a UTF-16 surrogate pair"
+	self flag: #Unsupported.
+	"| string json |
+	string := String with: 16r1D11E asCharacter. ""MUSICAL SYMBOL G CLEF""
+	json := String streamContents: [ :out |
+		(STON writer on: out) asciiOnly: true; nextPut: string ].
+	self assert: json equals: '''\uD834\uDD1E'''"! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:51:08'!
+testNull
+	self assert: (self serializeJson: nil) equals: 'null'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:50:59'!
+testOrderedCollection
+	| collection |
+	collection := OrderedCollection with: 1 with: 2 with: 3.
+	self assert: (self serialize: collection) equals: 'OrderedCollection[1,2,3]'.
+	self assert: (self serialize: OrderedCollection new) equals: 'OrderedCollection[]'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:50:51'!
+testPoint
+	self assert: (self serialize: 1 @ 2) equals: 'Point[1,2]'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:50:36'!
+testReferenceCycle
+	| array |
+	array := STON listClass with: 1 with: nil.
+	array at: 2 put: array.
+	self assert: (self serialize: array) equals: '[1,@1]'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:50:27'!
+testReferenceSharing
+	| array one |
+	one := {#one}.
+	array := STON listClass with: one with: one with: one.
+	self assert: (self serialize: array) equals: '[[#one],@2,@2]'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:50:14'!
+testReferenceSharingError
+	| serializer array one |
+	serializer := [ :object | 
+		String streamContents: [ :stream |
+			STON writer 
+				on: stream;
+				referencePolicy: #error; 
+				nextPut: object ] ].
+	one := { #one }.
+	array := STON listClass with: one with: one with: one.
+	self 
+		should: [ (serializer value: array) = '[[#one],[#one],[#one]]' ] 
+		raise: STONWriterError! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:50:01'!
+testReferenceSharingIgnore
+	| serializer array one |
+	serializer := [ :object | 
+	String
+		streamContents: [ :stream | 
+			STON writer
+				on: stream;
+				referencePolicy: #ignore;
+				nextPut: object ] ].
+	one := {#one}.
+	array := STON listClass with: one with: one with: one.
+	self assert: (serializer value: array) equals: '[[#one],[#one],[#one]]'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:49:39'!
+testRestrictedClassesInJsonMode
+
+	self should: [ self serializeJson: 1@2 ] raise: STONWriterError.
+	self should: [ self serializeJson: #foo->100 ] raise: STONWriterError.
+	self should: [ self serializeJson: STONTestUser dummy ] raise: STONWriterError.! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/12/2022 12:44:41'!
+testString
+	| string |
+	self assert: (self serialize: 'foo') equals: '''foo'''.
+	self assert: (self serialize: 'FOO') equals: '''FOO'''.
+	"self assert: (self serializeAsciiOnly: 'élève en Français') equals: '''\u00E9l\u00E8ve en Fran\u00E7ais'''."
+	self assert: (self serialize: 'élève en Français') equals: '''élève en Français'''.
+	string := String withAll: {$" . $' . $\ . $/ . Character tab . Character cr . Character lf . Character newPage . Character backspace}.
+	self assert: (self serialize: string) equals: '''"\''\\/\t\r\n\f\b'''! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:49:08'!
+testSymbol
+	self assert: (self serialize: #foo) equals: '#foo'.
+	self assert: (self serialize: #FOO) equals: '#FOO'.
+	self assert: (self serialize: #bytes) equals: '#bytes'.
+	self assert: (self serialize: #'foo.bar') equals: '#foo.bar'.
+	self assert: (self serialize: #'foo-bar') equals: '#foo-bar'.
+	self assert: (self serialize: #foo_bar) equals: '#foo_bar'.
+	self assert: (self serialize: #'foo/bar') equals: '#foo/bar'.
+	self assert: (self serialize: #'foo bar') equals: '#''foo bar'''.
+	self assert: (self serialize: #foo123) equals: '#foo123'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:48:55'!
+testSymbolAsString
+	self assert: (self serializeJson: #foo) equals: '"foo"'.
+	self assert: (self serializeJson: #FOO) equals: '"FOO"'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/12/2022 13:01:41'!
+testTime
+	| time |
+	time := Time hour: 6 minute: 30 second: 15.
+	self assert: (self serialize: time) equals: 'Time[''06:30:15'']'.
+	time := Time hour: 6 minute: 30 second: 15 nanoSecond: 123.
+	self assert: (self serialize: time) equals: 'Time[''06:30:15.000000123'']'.! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/17/2022 11:54:27'!
+testURL
+	self flag: #Unsupported.
+"	self
+		assert: (self serialize: 'https://pharo.org/files/pharo.png' asUrl)
+		equals: 'URL[''https://pharo.org/files/pharo.png'']'.
+	self
+		assert: (self serialize: 'mailto:sven@stfx.eu' asUrl)
+		equals: 'URL[''mailto:sven@stfx.eu'']'.
+	self
+		assert: (self serialize: 'file:///var/log/system.log' asUrl)
+		equals: 'URL[''file:///var/log/system.log'']'.
+	self
+		assert: (self serialize: 'scheme://user:password@host:123/var/log/system.log?foo=1&bar#frag' asUrl)
+		equals: 'URL[''scheme://user:password@host:123/var/log/system.log?foo=1&bar#frag'']'."! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/12/2022 12:55:06'!
+testUser
+	| user |
+	(user := STONTestUser new)
+		username: 'john@foo.com';
+		password: 'secret1'.
+	self 
+		assert: (self serialize: user)
+		equals: 'TestUser{#first:true,#username:''john@foo.com'',#password:''secret1'',#enabled:true}'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:48:00'!
+testUser2
+	| user |
+	(user := STONTestUser2 new)
+		username: 'john@foo.com';
+		password: 'secret1'.
+	self 
+		assert: (self serialize: user)
+		equals: 'TestUser2{#username:''john@foo.com'',#password:''secret1'',#enabled:true}'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/4/2022 14:47:50'!
+testUser3Nil
+	| user |
+	user := STONTestUser3 new.
+	self 
+		assert: (self serialize: user) 
+		equals: 'TestUser3{#username:nil,#password:nil,#enabled:true}'! !
+
+!STONWriterTest methodsFor: 'testing' stamp: 'KenD 4/12/2022 12:56:22'!
+testUserNil
+	| user |
+	user := STONTestUser new.
+	self assert: (self serialize: user) equals: 'TestUser{#first:true,#enabled:true}'! !
+
 !ProtoObject methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/16/2022 15:04:47'!
 environment
 	"Necessary to support disjoint class hierarchies."
@@ -3704,274 +3705,6 @@ stonName
 	
 	^ self name! !
 
-!Boolean methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:29:20'!
-stonContainSubObjects 
-
-	^ false! !
-
-!Boolean methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:29:07'!
-stonOn: stonWriter
-
-	stonWriter writeBoolean: self! !
-
-!Magnitude methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/17/2022 12:02:22'!
-putOn: aStream
-
-	(aStream isBinary ifTrue: [ self asByteArray ] ifFalse: [ self asString]) putOn: aStream! !
-
-!Number methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:57:19'!
-closeTo: num
-	"are these two numbers close?"
-
-	num isFloat ifTrue: [^ num closeTo: self asFloat].
-	^[self = num] ifError: [false]! !
-
-!Number methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:20:46'!
-stonContainSubObjects 
-
-	^ false! !
-
-!Number methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:20:37'!
-stonOn: stonWriter
-
-	stonWriter writeFloat: self asFloat! !
-
-!Float methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:56:59'!
-closeTo: num
- 	"are these two numbers close?"
-	num isNumber ifFalse: [^[self = num] ifError: [false]].
-	self = 0.0 ifTrue: [^num abs < 0.0001].
-	num = 0 ifTrue: [^self abs < 0.0001].
-	^self = num asFloat or: [
-		| abs |
-		(abs := self abs) < 0.0001 ifTrue: [^num abs < 0.0001].
-		(self - num) abs / (abs max: num abs) < 0.0001]! !
-
-!Fraction methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 13:27:28'!
-stonOn: stonWriter
-
-	stonWriter writeFraction: self! !
-
-!Integer methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:14:27'!
-stonOn: stonWriter
-
-	stonWriter writeInteger: self! !
-
-!DateAndTime methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:52:01'!
-offset: delta
-
-	offset := delta! !
-
-!DateAndTime methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:45:34'!
-stonContainSubObjects 
-
-	^ false! !
-
-!DateAndTime methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:50:30'!
-stonOn: stonWriter
-	"Use an ISO representation with all details YYYY-MM-DDTHH:MM:SS.N+TZ (with optional nanoseconds and timezone offset)"
-	
-	stonWriter writeObject: self listSingleton: 
-		(String streamContents: [ :stream |
-			self printOn: stream "withLeadingSpace: false" ])! !
-
-!DateAndTime class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:45:03'!
-fromSton: stonReader
-
-	^ self readFrom: stonReader parseListSingleton readStream! !
-
-!Time methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:30:59'!
-stonContainSubObjects 
-
-	^ false! !
-
-!Time methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 13:00:35'!
-stonOn: stonWriter
-	"Use an ISO style HH:MM:SS.N representation (with optional nanoseconds)"
-	 
-	stonWriter writeObject: self listSingleton: 
-		(String streamContents: [ :stream |
-			self print24: true showSeconds: true showSecondsFraction: true on: stream ])! !
-
-!Time class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:30:29'!
-fromSton: stonReader
-
-	^ self readFrom: stonReader parseListSingleton readStream! !
-
-!Association methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:27:29'!
-stonOn: stonWriter
-
-	self class == STON associationClass
-		ifTrue: [ stonWriter writeAssociation: self ]
-		ifFalse: [ super stonOn: stonWriter ]! !
-
-!Color methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/16/2022 12:55:35'!
-closeTo: another 
-	self == another ifTrue: [ ^ true ].
-	self class == another class ifFalse: [ ^ false ].
-	^ (self rgbDistance: another) < 0.0001! !
-
-!Color methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/11/2022 16:24:26'!
-setAlpha: alphaValue
-
-    ^ self alpha: alphaValue! !
-
-!Color methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:41:00'!
-stonContainSubObjects
-
-	^ false! !
-
-!Color methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/11/2022 16:40:49'!
-stonOn: stonWriter
-	| name |
-	"isTranslucent -> isOpaque not"
-	((self isOpaque not) or: [ (name := self colorName) = nil ])
-		ifTrue: [ 
-			stonWriter writeObject: self streamMap: [ :map |
-				#(red green blue alpha) do: [ :each | 
-					map at: each put: ((self perform: each) roundTo: 0.001) ] ] ]
-		ifFalse: [ 
-			stonWriter writeObject: self listSingleton: name ]! !
-
-!Color class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 5/18/2022 14:17:07'!
-fromSton: stonReader
-	| representation |
-	representation := stonReader parseMapOrListRepresentation.
-	^ representation isArray
-		ifTrue: [ 
-			self named: representation first ]
-		ifFalse: [ 
-			(representation includesKey: #rgb)
-				ifTrue: [ 
-					self flag: #PossiblyBogus.
-					"self basicNew setRGB: (representation at: #rgb); setAlpha: 1.0"
-					self colorFromPixelValue: (representation at: #rgb) depth: 32
-				]
-				ifFalse: [ 
-					self 
-						r: (representation at: #red) 
-						g: (representation at: #green) 
-						b: (representation at: #blue) 
-						alpha: (representation at: #alpha) ] ]! !
-
-!Color class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/15/2022 15:02:40'!
-named: colorName
-	"Answer a Color for colorName or nil"
-	self classPool 
-		at: #ColorNamesDict
-		ifPresent: [ :dict | ^dict at: colorName ifAbsent: [nil]].
-	^nil! !
-
-!UndefinedObject methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:31:43'!
-stonContainSubObjects 
-
-	^ false! !
-
-!UndefinedObject methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:31:30'!
-stonOn: stonWriter
-
-	stonWriter writeNull! !
-
-!Behavior class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:19:55'!
-environment
-
-	^ Smalltalk! !
-
-!ClassDescription methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:35:38'!
-stonContainSubObjects
-
-	^ false! !
-
-!Class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:35:07'!
-stonOn: stonWriter
-
-	stonWriter 
-		writeObject: self 
-		listSingleton: self name asSymbol! !
-
-!Class class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:33:04'!
-fromSton: stonReader
-	| theClassName theClass |
-	theClassName := stonReader parseListSingleton.
-	theClass := self environment at: theClassName.
-	^ theClass! !
-
-!Metaclass methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:18:48'!
-stonName
-
-	^ #Class! !
-
-!Metaclass methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:18:08'!
-stonOn: stonWriter
-
-	stonWriter
-		writeObject: self 
-		listSingleton: self instanceSide name asSymbol! !
-
-!Metaclass class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:17:41'!
-fromSton: stonReader
-	| theClassName theClass theMetaclass |
-	theClassName := stonReader parseListSingleton.
-	theClass := self environment at: theClassName.
-	theMetaclass := theClass class.
-	^ theMetaclass! !
-
-!Character methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:32:19'!
-stonOn: stonWriter
-
-	stonWriter writeObject: self listSingleton: self asString! !
-
-!Character class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:31:23'!
-fromSton: stonReader
-
-	^ stonReader parseListSingleton first! !
-
-!Date methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:44:33'!
-stonContainSubObjects 
-
-	^ false! !
-
-!Date methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/16/2022 12:50:29'!
-stonOn: stonWriter
-	"Use an ISO style YYYY-MM-DD representation.
-	Since my current implementation is time zone offset sensitive, the offset has to be included."
-
-	| representation |
-"	representation := self offset isZero
-		ifTrue: [ 
-			String new: 11 streamContents: [ :out | 
-				self printOn: out format: #(3 2 1 $- 1 1 2).
-				out nextPut: $Z ] ]
-		ifFalse: [ 
-			String new: 32 streamContents: [ :out | 
-				self printOn: out format: #(3 2 1 $- 1 1 2).
-				out nextPut: (self offset positive ifTrue: [ $+ ] ifFalse: [ $- ]).
-				self offset hours abs printOn: out base: 10 length: 2 padded: true.
-				out nextPut: $:.
-				self offset minutes abs printOn: out base: 10 length: 2 padded: true.
-				self offset seconds = 0 
-					ifFalse:[ 
-						out nextPut: $:; print: self offset seconds abs truncated ] ] ]."
-	representation := self yyyymmdd.
-	stonWriter writeObject: self listSingleton: representation! !
-
-!Date class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 5/18/2022 14:48:24'!
-fromSton: stonReader
-	"Read a ISO YYYY-MM-DD format.
-	Since my current implementation is time zone offset sensitive, the offset has to be taken into account.
-	A missing offset results in the local timezone offset to be used"
-	
-	| readStream date |
-	readStream := stonReader parseListSingleton readStream.
-	date := self readFrom: readStream.
-	"Cuis 'DateAndTime readFrom: aStream' reads the offset already..
-	 readStream atEnd
-		ifFalse: [ | offset |
-			offset := DateAndTime readTimezoneOffsetFrom: readStream.
-			offset = date offset 
-				ifFalse: [ date start: (date start translateTo: offset) ] ]."
-	^ date! !
-
 !Collection methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:36:52'!
 stonOn: stonWriter
 	"For collections we chose to write a list of elements as delivered by #do:
@@ -4032,6 +3765,86 @@ fromSton: stonReader
 			stream nextPut: each ] 
 	  ]! !
 
+!ByteArray methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 13:12:36'!
+stonContainSubObjects
+	^ false! !
+
+!ByteArray methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 13:12:57'!
+stonOn: stonWriter
+	"Use a hex representation"
+
+	stonWriter writeObject: self listSingleton: self hex! !
+
+!ByteArray class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 13:12:03'!
+fromSton: stonReader
+	"Use a hex representation"
+
+	^ self readHexFrom: stonReader parseListSingleton! !
+
+!RunArray methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 09:45:51'!
+myRuns
+
+	^runs! !
+
+!RunArray methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 09:46:00'!
+myValues
+
+	^values! !
+
+!RunArray methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 11:52:43'!
+stonOn: stonWriter
+
+	stonWriter prettyPrint: true.
+	stonWriter writeObject: self streamMap: [ :map |
+				#(myRuns myValues) do: [ :each | 
+					map at: each put: (self perform: each) ] ]! !
+
+!RunArray class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 11:53:00'!
+fromSton: stonReader
+	| representation |
+	representation := stonReader parseMapOrListRepresentation.
+	^ self runs: (representation at: #myRuns) values: (representation at: #myValues)! !
+
+!Interval methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 11:44:46'!
+fromSton: stonReader
+	"Overwritten to get back the standard object behavior"
+
+	stonReader parseNamedInstVarsFor: self! !
+
+!Interval methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 11:45:11'!
+stonOn: stonWriter
+	"Overwritten to get back the standard object behavior"
+
+	stonWriter writeObject: self! !
+
+!Interval class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 11:44:00'!
+fromSton: stonReader
+	"Overwritten to get back the standard object behavior"
+
+	^ self new
+		fromSton: stonReader;
+		yourself! !
+
+!SortedCollection methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 12:02:23'!
+fromSton: stonReader
+	"Overwritten to get back the standard object behavior"
+
+	stonReader parseNamedInstVarsFor: self! !
+
+!SortedCollection methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 12:02:50'!
+stonOn: stonWriter
+	"Overwritten to get back the standard object behavior"
+
+	stonWriter writeObject: self! !
+
+!SortedCollection class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 12:01:41'!
+fromSton: stonReader
+	"Overwritten to get back the standard object behavior"
+
+	^ self new
+		fromSton: stonReader;
+		yourself! !
+
 !CharacterSequence methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 09:47:45'!
 asFileReference
 
@@ -4085,86 +3898,6 @@ stonOn: stonWriter
 stonOn: stonWriter
 
 	stonWriter writeSymbol: self! !
-
-!ByteArray methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 13:12:36'!
-stonContainSubObjects
-	^ false! !
-
-!ByteArray methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 13:12:57'!
-stonOn: stonWriter
-	"Use a hex representation"
-
-	stonWriter writeObject: self listSingleton: self hex! !
-
-!ByteArray class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 13:12:03'!
-fromSton: stonReader
-	"Use a hex representation"
-
-	^ self readHexFrom: stonReader parseListSingleton! !
-
-!Interval methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 11:44:46'!
-fromSton: stonReader
-	"Overwritten to get back the standard object behavior"
-
-	stonReader parseNamedInstVarsFor: self! !
-
-!Interval methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 11:45:11'!
-stonOn: stonWriter
-	"Overwritten to get back the standard object behavior"
-
-	stonWriter writeObject: self! !
-
-!Interval class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 11:44:00'!
-fromSton: stonReader
-	"Overwritten to get back the standard object behavior"
-
-	^ self new
-		fromSton: stonReader;
-		yourself! !
-
-!SortedCollection methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 12:02:23'!
-fromSton: stonReader
-	"Overwritten to get back the standard object behavior"
-
-	stonReader parseNamedInstVarsFor: self! !
-
-!SortedCollection methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 12:02:50'!
-stonOn: stonWriter
-	"Overwritten to get back the standard object behavior"
-
-	stonWriter writeObject: self! !
-
-!SortedCollection class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 12:01:41'!
-fromSton: stonReader
-	"Overwritten to get back the standard object behavior"
-
-	^ self new
-		fromSton: stonReader;
-		yourself! !
-
-!RunArray methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 09:45:51'!
-myRuns
-
-	^runs! !
-
-!RunArray methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 09:46:00'!
-myValues
-
-	^values! !
-
-!RunArray methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 11:52:43'!
-stonOn: stonWriter
-
-	stonWriter prettyPrint: true.
-	stonWriter writeObject: self streamMap: [ :map |
-				#(myRuns myValues) do: [ :each | 
-					map at: each put: (self perform: each) ] ]! !
-
-!RunArray class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 11:53:00'!
-fromSton: stonReader
-	| representation |
-	representation := stonReader parseMapOrListRepresentation.
-	^ self runs: (representation at: #myRuns) values: (representation at: #myValues)! !
 
 !Text methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/3/2024 09:56:42'!
 myRunArray
@@ -4255,11 +3988,6 @@ fromSton: stonReader
 		dictionary at: key put: value ].
 	^ dictionary! !
 
-!FileSystemEntry methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 09:11:40'!
-pathString
-
-	^(String streamContents: [ :strm | self printPathOn: strm ]) ! !
-
 !Point methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 08:59:00'!
 fromSton: stonReader
 	stonReader parseListDo: [ :each :index |
@@ -4270,4 +3998,277 @@ fromSton: stonReader
 stonOn: stonWriter
 	stonWriter writeObject: self streamShortList: [ :array |
 		array add: x; add: y ]! !
+
+!Date methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:44:33'!
+stonContainSubObjects 
+
+	^ false! !
+
+!Date methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/16/2022 12:50:29'!
+stonOn: stonWriter
+	"Use an ISO style YYYY-MM-DD representation.
+	Since my current implementation is time zone offset sensitive, the offset has to be included."
+
+	| representation |
+"	representation := self offset isZero
+		ifTrue: [ 
+			String new: 11 streamContents: [ :out | 
+				self printOn: out format: #(3 2 1 $- 1 1 2).
+				out nextPut: $Z ] ]
+		ifFalse: [ 
+			String new: 32 streamContents: [ :out | 
+				self printOn: out format: #(3 2 1 $- 1 1 2).
+				out nextPut: (self offset positive ifTrue: [ $+ ] ifFalse: [ $- ]).
+				self offset hours abs printOn: out base: 10 length: 2 padded: true.
+				out nextPut: $:.
+				self offset minutes abs printOn: out base: 10 length: 2 padded: true.
+				self offset seconds = 0 
+					ifFalse:[ 
+						out nextPut: $:; print: self offset seconds abs truncated ] ] ]."
+	representation := self yyyymmdd.
+	stonWriter writeObject: self listSingleton: representation! !
+
+!Date class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 5/18/2022 14:48:24'!
+fromSton: stonReader
+	"Read a ISO YYYY-MM-DD format.
+	Since my current implementation is time zone offset sensitive, the offset has to be taken into account.
+	A missing offset results in the local timezone offset to be used"
+	
+	| readStream date |
+	readStream := stonReader parseListSingleton readStream.
+	date := self readFrom: readStream.
+	"Cuis 'DateAndTime readFrom: aStream' reads the offset already..
+	 readStream atEnd
+		ifFalse: [ | offset |
+			offset := DateAndTime readTimezoneOffsetFrom: readStream.
+			offset = date offset 
+				ifFalse: [ date start: (date start translateTo: offset) ] ]."
+	^ date! !
+
+!Behavior class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:19:55'!
+environment
+
+	^ Smalltalk! !
+
+!ClassDescription methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:35:38'!
+stonContainSubObjects
+
+	^ false! !
+
+!Class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:35:07'!
+stonOn: stonWriter
+
+	stonWriter 
+		writeObject: self 
+		listSingleton: self name asSymbol! !
+
+!Class class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:33:04'!
+fromSton: stonReader
+	| theClassName theClass |
+	theClassName := stonReader parseListSingleton.
+	theClass := self environment at: theClassName.
+	^ theClass! !
+
+!Metaclass methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:18:48'!
+stonName
+
+	^ #Class! !
+
+!Metaclass methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:18:08'!
+stonOn: stonWriter
+
+	stonWriter
+		writeObject: self 
+		listSingleton: self instanceSide name asSymbol! !
+
+!Metaclass class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:17:41'!
+fromSton: stonReader
+	| theClassName theClass theMetaclass |
+	theClassName := stonReader parseListSingleton.
+	theClass := self environment at: theClassName.
+	theMetaclass := theClass class.
+	^ theMetaclass! !
+
+!Boolean methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:29:20'!
+stonContainSubObjects 
+
+	^ false! !
+
+!Boolean methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:29:07'!
+stonOn: stonWriter
+
+	stonWriter writeBoolean: self! !
+
+!Magnitude methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/17/2022 12:02:22'!
+putOn: aStream
+
+	(aStream isBinary ifTrue: [ self asByteArray ] ifFalse: [ self asString]) putOn: aStream! !
+
+!Association methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:27:29'!
+stonOn: stonWriter
+
+	self class == STON associationClass
+		ifTrue: [ stonWriter writeAssociation: self ]
+		ifFalse: [ super stonOn: stonWriter ]! !
+
+!DateAndTime methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:52:01'!
+offset: delta
+
+	offset := delta! !
+
+!DateAndTime methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:45:34'!
+stonContainSubObjects 
+
+	^ false! !
+
+!DateAndTime methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:50:30'!
+stonOn: stonWriter
+	"Use an ISO representation with all details YYYY-MM-DDTHH:MM:SS.N+TZ (with optional nanoseconds and timezone offset)"
+	
+	stonWriter writeObject: self listSingleton: 
+		(String streamContents: [ :stream |
+			self printOn: stream "withLeadingSpace: false" ])! !
+
+!DateAndTime class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:45:03'!
+fromSton: stonReader
+
+	^ self readFrom: stonReader parseListSingleton readStream! !
+
+!Time methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:30:59'!
+stonContainSubObjects 
+
+	^ false! !
+
+!Time methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 13:00:35'!
+stonOn: stonWriter
+	"Use an ISO style HH:MM:SS.N representation (with optional nanoseconds)"
+	 
+	stonWriter writeObject: self listSingleton: 
+		(String streamContents: [ :stream |
+			self print24: true showSeconds: true showSecondsFraction: true on: stream ])! !
+
+!Time class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:30:29'!
+fromSton: stonReader
+
+	^ self readFrom: stonReader parseListSingleton readStream! !
+
+!Number methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:57:19'!
+closeTo: num
+	"are these two numbers close?"
+
+	num isFloat ifTrue: [^ num closeTo: self asFloat].
+	^[self = num] ifError: [false]! !
+
+!Number methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:20:46'!
+stonContainSubObjects 
+
+	^ false! !
+
+!Number methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:20:37'!
+stonOn: stonWriter
+
+	stonWriter writeFloat: self asFloat! !
+
+!Float methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/12/2022 14:56:59'!
+closeTo: num
+ 	"are these two numbers close?"
+	num isNumber ifFalse: [^[self = num] ifError: [false]].
+	self = 0.0 ifTrue: [^num abs < 0.0001].
+	num = 0 ifTrue: [^self abs < 0.0001].
+	^self = num asFloat or: [
+		| abs |
+		(abs := self abs) < 0.0001 ifTrue: [^num abs < 0.0001].
+		(self - num) abs / (abs max: num abs) < 0.0001]! !
+
+!Fraction methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 13:27:28'!
+stonOn: stonWriter
+
+	stonWriter writeFraction: self! !
+
+!Integer methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:14:27'!
+stonOn: stonWriter
+
+	stonWriter writeInteger: self! !
+
+!Color methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/16/2022 12:55:35'!
+closeTo: another 
+	self == another ifTrue: [ ^ true ].
+	self class == another class ifFalse: [ ^ false ].
+	^ (self rgbDistance: another) < 0.0001! !
+
+!Color methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/11/2022 16:24:26'!
+setAlpha: alphaValue
+
+    ^ self alpha: alphaValue! !
+
+!Color methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:41:00'!
+stonContainSubObjects
+
+	^ false! !
+
+!Color methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/11/2022 16:40:49'!
+stonOn: stonWriter
+	| name |
+	"isTranslucent -> isOpaque not"
+	((self isOpaque not) or: [ (name := self colorName) = nil ])
+		ifTrue: [ 
+			stonWriter writeObject: self streamMap: [ :map |
+				#(red green blue alpha) do: [ :each | 
+					map at: each put: ((self perform: each) roundTo: 0.001) ] ] ]
+		ifFalse: [ 
+			stonWriter writeObject: self listSingleton: name ]! !
+
+!Color class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 5/18/2022 14:17:07'!
+fromSton: stonReader
+	| representation |
+	representation := stonReader parseMapOrListRepresentation.
+	^ representation isArray
+		ifTrue: [ 
+			self named: representation first ]
+		ifFalse: [ 
+			(representation includesKey: #rgb)
+				ifTrue: [ 
+					self flag: #PossiblyBogus.
+					"self basicNew setRGB: (representation at: #rgb); setAlpha: 1.0"
+					self colorFromPixelValue: (representation at: #rgb) depth: 32
+				]
+				ifFalse: [ 
+					self 
+						r: (representation at: #red) 
+						g: (representation at: #green) 
+						b: (representation at: #blue) 
+						alpha: (representation at: #alpha) ] ]! !
+
+!Color class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/15/2022 15:02:40'!
+named: colorName
+	"Answer a Color for colorName or nil"
+	self classPool 
+		at: #ColorNamesDict
+		ifPresent: [ :dict | ^dict at: colorName ifAbsent: [nil]].
+	^nil! !
+
+!UndefinedObject methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:31:43'!
+stonContainSubObjects 
+
+	^ false! !
+
+!UndefinedObject methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 14:31:30'!
+stonOn: stonWriter
+
+	stonWriter writeNull! !
+
+!Character methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:32:19'!
+stonOn: stonWriter
+
+	stonWriter writeObject: self listSingleton: self asString! !
+
+!Character class methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 4/4/2022 12:31:23'!
+fromSton: stonReader
+
+	^ stonReader parseListSingleton first! !
+
+!FileSystemEntry methodsFor: '*ExchangeFormat-STON' stamp: 'KenD 3/2/2024 09:11:40'!
+pathString
+
+	^(String streamContents: [ :strm | self printPathOn: strm ]) ! !
 STONWriter initialize!

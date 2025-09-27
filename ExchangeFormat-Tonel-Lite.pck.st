@@ -1,10 +1,10 @@
-'From Cuis7.3 [latest update: #7004] on 27 January 2025 at 5:26:15 pm'!
+'From Cuis7.5 [latest update: #7610] on 27 September 2025 at 7:34:16 pm'!
 'Description Just enough here to read/write basic Tonel file format.
 
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 72!
+!provides: 'ExchangeFormat-Tonel-Lite' 1 73!
 !requires: 'Cuis-Base' 63 6188 nil!
 !requires: 'BeeCompatibility' 1 49 nil!
 !requires: 'ExchangeFormat-STON' 1 48 nil!
@@ -188,6 +188,11 @@ filePath
 methodInfos
 
 	^ methodInfos! !
+
+!TonelReader methodsFor: 'accessing' stamp: 'hjh 9/27/2025 19:13:03'!
+stream
+
+	^stream ! !
 
 !TonelReader methodsFor: 'accessing' stamp: 'KenD 4/19/2022 08:05:10'!
 stream: aReadStream 
@@ -422,7 +427,7 @@ fileOutClassCommentTo: aFileStream
 			
 	! !
 
-!TonelReader methodsFor: 'private fileOut' stamp: 'KenD 5/2/2022 15:39:24'!
+!TonelReader methodsFor: 'private fileOut' stamp: 'hjh 9/27/2025 19:25:17'!
 fileOutClassInfoTo: aFileStream
 
 	aFileStream 
@@ -434,7 +439,7 @@ fileOutClassInfoTo: aFileStream
 		
 	aFileStream 
 		nextPutAll: (classInfo at: #superclass) asString;
-		nextPutAll: ' subclass: ', (classInfo at: #name) printString;
+		nextPutAll: ' subclass: #', (classInfo at: #name);
 		newLine.
 		
 	aFileStream tab;
@@ -710,7 +715,7 @@ chunkFromTonel: aFileEntry
 
 	^ answer! !
 
-!TonelReader class methodsFor: 'translteration' stamp: 'KenD 1/27/2023 15:52:51'!
+!TonelReader class methodsFor: 'translteration' stamp: 'hjh 9/27/2025 19:15:36'!
 forceChunkFromTonel: aFileEntry
 	"FileEntry is assumed to be a Tonel file.
 	 Read it in an write a Chunk file to correspond.
@@ -720,7 +725,7 @@ forceChunkFromTonel: aFileEntry
 	answer := nil.
 	parentDirName := aFileEntry parent pathName.
 	reader := self on: aFileEntry readStream.
-	[ reader read.
+	[ reader read. reader stream close.
 	  outFile := reader forceWriteStreamForFileOut: parentDirName.
 	  outFile ifNotNil: [
 		newName := outFile name.

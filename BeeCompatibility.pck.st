@@ -1,6 +1,6 @@
-'From Cuis7.3 [latest update: #7043] on 31 January 2025 at 3:47:22 pm'!
+'From Cuis7.9 [latest update: #7998] on 28 June 2026 at 1:19:03 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 63!
+!provides: 'BeeCompatibility' 1 64!
 !requires: 'Cuis-Base' 63 6245 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
@@ -93,7 +93,7 @@ Copyright (c) 2022 Javier Pimás.
     See (MIT) license in root directory.
 !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 checkNumberEnd: position
 	| char |
 	stream atEnd ifTrue: [^self].
@@ -106,14 +106,14 @@ checkNumberEnd: position
 	stream skip: -1
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 completeFloat: anInteger
 	| tenth |
 	tenth := 10 raisedToInteger: self nextExponent.
 	^(anInteger * tenth) asFloat
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 completeNumber: anInteger after: aCharacter
 	aCharacter = $. ifTrue: [
 		^(stream peekFor: $s)
@@ -129,7 +129,7 @@ completeNumber: anInteger after: aCharacter
 	^anInteger
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 completeNumber: anInteger at: start
 	| number |
 	stream atEnd ifTrue: [^anInteger].
@@ -139,7 +139,7 @@ completeNumber: anInteger at: start
 	^number
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 digitFromChar: char base: radix
 	| c |
 	char isDigit ifTrue: [^char digitValue].
@@ -153,18 +153,18 @@ digitFromChar: char base: radix
 	^c digitValue
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 endToken
 	self error: 'end of stream' at: stream position
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 error: aString at: position
 	error := aString -> position.
 	return value: nil
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 negativeNumber
 	| position |
 	stream atEnd ifTrue: [^nil].
@@ -173,7 +173,7 @@ negativeNumber
 	^self next key negated -> position
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 next
 	| char |
 	return isNil ifTrue: [return := [:value | ^value]].
@@ -185,12 +185,12 @@ next
 	^nil
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 nextChar
 	^stream skipWhitespace atEnd ifFalse: [stream next]
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 nextDigit: radix
 	| char digit |
 	stream atEnd ifTrue: [^nil].
@@ -204,7 +204,7 @@ nextDigit: radix
 	^digit
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 nextExponent
 	| negated exp |
 	negated := false.
@@ -214,7 +214,7 @@ nextExponent
 	^exp
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 nextFloat: aNumber
 	| base digit e exp |
 	digit := self nextDigit: 10.
@@ -236,7 +236,7 @@ nextFloat: aNumber
 	^(base * (10 raisedToInteger: e negated)) asFloat
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 nextIntegerRadix: radix
 	| value valid digit |
 	value := 0.
@@ -251,7 +251,7 @@ nextIntegerRadix: radix
 	^value
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 nextNumber: aCharacter
 	| start number digit |
 	start := stream position.
@@ -264,7 +264,7 @@ nextNumber: aCharacter
 	^number -> (start thru: stream position)
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 nextScaledFrom: aNumber fractionDigits: digits
 	| scale denominator sd |
 	scale := (stream atEnd not and: [stream peek isDigit])
@@ -277,7 +277,7 @@ nextScaledFrom: aNumber fractionDigits: digits
 	^sd reduced
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 positiveNumber
 	| position |
 	stream peek isDigit ifFalse: [^nil].
@@ -285,138 +285,138 @@ positiveNumber
 	^self next key -> position
 ! !
 
-!NumberParser methodsFor: 'private' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
 reset
 	stream reset.
 	return := nil
 ! !
 
-!NumberParser methodsFor: 'accessing' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'accessing' stamp: 'KenD 1/Mar/2024 11:54:08'!
 error
 	^error
 ! !
 
-!NumberParser methodsFor: 'accessing' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'accessing' stamp: 'KenD 1/Mar/2024 11:54:08'!
 on: aString
 	stream := aString readStream.
 	return := nil
 ! !
 
-!NumberParser methodsFor: 'services' stamp: 'KenD 3/1/2024 11:54:08'!
+!NumberParser methodsFor: 'services' stamp: 'KenD 1/Mar/2024 11:54:08'!
 nextValue
 	^self next ifNil: [0] ifNotNil: [:assoc | assoc key]
 ! !
 
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:36:10'!
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:36:10'!
 + delta 
 
 	delta isInteger ifTrue: [^start + delta thru: end + delta].
 	delta isPoint ifTrue: [^start + delta x thru: end + delta y].
 	^start + delta start thru: end + delta end! !
 
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:36:25'!
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:36:25'!
 - delta 
 
 	^self + delta negated! !
 
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:36:38'!
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:36:38'!
 // anInteger 
 	^start // anInteger thru: end // anInteger! !
 
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:37:14'!
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:37:14'!
 center 
 
 	^start + end // 2! !
 
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:37:28'!
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:37:28'!
 down: anInteger 
 
 	^start thru: end + anInteger! !
 
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:39:53'!
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:39:53'!
 length 
 
 	^end - start + 1! !
 
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 1/30/2023 10:10:45'!
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 30/Jan/2023 10:10:45'!
 mask
 	^(2 raisedTo: end) - (2 raisedTo: start - 1)
 ! !
 
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:40:04'!
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:40:04'!
 max 
 
 	^start max: end! !
 
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:40:13'!
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:40:13'!
 min 
 
 	^start min: end! !
 
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 2/21/2021 13:40:25'!
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:40:25'!
 negated 
 
 	^start negated thru: end negated! !
 
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 1/30/2023 10:10:45'!
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 30/Jan/2023 10:10:45'!
 shift
 	^(start - 1) negated
 ! !
 
-!Stretch methodsFor: 'comparing' stamp: 'KenD 2/21/2021 13:37:03'!
+!Stretch methodsFor: 'comparing' stamp: 'KenD 21/Feb/2021 13:37:03'!
 = aStretch 
 
 	self class == aStretch class ifFalse: [^false].
 	^start = aStretch start and: [end = aStretch end]! !
 
-!Stretch methodsFor: 'comparing' stamp: 'KenD 2/21/2021 13:38:19'!
+!Stretch methodsFor: 'comparing' stamp: 'KenD 21/Feb/2021 13:38:19'!
 hash 
 
 	^start hashWith: end! !
 
-!Stretch methodsFor: 'accessing' stamp: 'KenD 2/21/2021 13:37:58'!
+!Stretch methodsFor: 'accessing' stamp: 'KenD 21/Feb/2021 13:37:58'!
 end 
 
 	^end! !
 
-!Stretch methodsFor: 'accessing' stamp: 'KenD 2/21/2021 13:38:07'!
+!Stretch methodsFor: 'accessing' stamp: 'KenD 21/Feb/2021 13:38:07'!
 end: anInteger 
 
 	end := anInteger! !
 
-!Stretch methodsFor: 'accessing' stamp: 'KenD 2/21/2021 13:41:30'!
+!Stretch methodsFor: 'accessing' stamp: 'KenD 21/Feb/2021 13:41:30'!
 start 
 
 	^start! !
 
-!Stretch methodsFor: 'accessing' stamp: 'KenD 2/21/2021 13:41:38'!
+!Stretch methodsFor: 'accessing' stamp: 'KenD 21/Feb/2021 13:41:38'!
 start: anInteger 
 
 	start := anInteger! !
 
-!Stretch methodsFor: 'testing' stamp: 'KenD 2/21/2021 13:39:03'!
+!Stretch methodsFor: 'testing' stamp: 'KenD 21/Feb/2021 13:39:03'!
 includes: anInteger 
 
 	^anInteger between: start and: end! !
 
-!Stretch methodsFor: 'testing' stamp: 'KenD 2/21/2021 13:39:26'!
+!Stretch methodsFor: 'testing' stamp: 'KenD 21/Feb/2021 13:39:26'!
 intersects: aStretch 
 
 	self isEmpty ifTrue: [^false].
 	(aStretch includes: start) ifTrue: [^true].
 	^aStretch includes: end! !
 
-!Stretch methodsFor: 'testing' stamp: 'KenD 2/21/2021 13:39:38'!
+!Stretch methodsFor: 'testing' stamp: 'KenD 21/Feb/2021 13:39:38'!
 isEmpty 
 
 	^end < start! !
 
-!Stretch methodsFor: 'testing' stamp: 'KenD 2/21/2021 13:40:40'!
+!Stretch methodsFor: 'testing' stamp: 'KenD 21/Feb/2021 13:40:40'!
 notEmpty 
 
 	^start <= end! !
 
-!Stretch methodsFor: 'printing' stamp: 'KenD 2/21/2021 13:41:14'!
+!Stretch methodsFor: 'printing' stamp: 'KenD 21/Feb/2021 13:41:14'!
 printOn: aStream 
 
 	aStream
@@ -424,49 +424,49 @@ printOn: aStream
 		nextPutAll: ' thru: ';
 		nextPutAll: end asString! !
 
-!Stretch class methodsFor: 'instance creation' stamp: 'KenD 2/21/2021 13:35:42'!
+!Stretch class methodsFor: 'instance creation' stamp: 'KenD 21/Feb/2021 13:35:42'!
 from: start thru: end 
 
 	^self new start: start; end: end! !
 
-!TargetOSPlatform methodsFor: 'testing' stamp: 'KenD 2/24/2021 14:36:38'!
+!TargetOSPlatform methodsFor: 'testing' stamp: 'KenD 24/Feb/2021 14:36:38'!
 isUnix64
 
 	^true! !
 
-!TargetOSPlatform methodsFor: 'testing' stamp: 'KenD 2/24/2021 14:36:26'!
+!TargetOSPlatform methodsFor: 'testing' stamp: 'KenD 24/Feb/2021 14:36:26'!
 isWin64
 
 	^false! !
 
-!TargetOSPlatform class methodsFor: 'class initialization' stamp: 'KenD 2/24/2021 14:24:04'!
+!TargetOSPlatform class methodsFor: 'class initialization' stamp: 'KenD 24/Feb/2021 14:24:04'!
 initialize
 	"Nota Bene: x86:64"
 	CPU := #Intel.
 	OS := #Linux.
 	WordSizeInBits := 64.! !
 
-!TargetOSPlatform class methodsFor: 'accessing' stamp: 'KenD 2/24/2021 14:27:13'!
+!TargetOSPlatform class methodsFor: 'accessing' stamp: 'KenD 24/Feb/2021 14:27:13'!
 targetCPU
 
 	^CPU! !
 
-!TargetOSPlatform class methodsFor: 'accessing' stamp: 'KenD 2/24/2021 14:27:45'!
+!TargetOSPlatform class methodsFor: 'accessing' stamp: 'KenD 24/Feb/2021 14:27:45'!
 targetOS
 
 	^OS ! !
 
-!TargetOSPlatform class methodsFor: 'accessing' stamp: 'KenD 2/24/2021 14:32:24'!
+!TargetOSPlatform class methodsFor: 'accessing' stamp: 'KenD 24/Feb/2021 14:32:24'!
 targetWordSizeInBits
 
 	^WordSizeInBits ! !
 
-!TargetOSPlatform class methodsFor: 'instance creation' stamp: 'KenD 6/18/2021 12:28:07'!
+!TargetOSPlatform class methodsFor: 'instance creation' stamp: 'KenD 18/Jun/2021 12:28:07'!
 current
 
 	^self new initialize.! !
 
-!Namespace methodsFor: 'lookup' stamp: 'KenD 2/29/2024 09:38:51'!
+!Namespace methodsFor: 'lookup' stamp: 'KenD 29/Feb/2024 09:38:51'!
 _namespaceLookup: aSymbol
 	| table |
 	table := namespace _basicAt: 2.
@@ -480,98 +480,150 @@ _namespaceLookup: aSymbol
 	^nil
 ! !
 
-!Namespace class methodsFor: 'instance creation' stamp: 'KenD 2/29/2024 09:38:51'!
+!Namespace class methodsFor: 'instance creation' stamp: 'KenD 29/Feb/2024 09:38:51'!
 new
 	^super new
 ! !
 
-!PoolDictionary methodsFor: 'testing' stamp: 'KenD 1/30/2023 10:10:46'!
+!PoolDictionary methodsFor: 'testing' stamp: 'KenD 30/Jan/2023 10:10:46'!
 isConstant
 	^constant
 ! !
 
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 30/Jan/2023 10:10:46'!
 at: key
 	^super at: key asString reduced
 ! !
 
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 30/Jan/2023 10:10:46'!
 at: key ifAbsent: aBlock
 	^super at: key asString reduced ifAbsent: aBlock
 ! !
 
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 30/Jan/2023 10:10:46'!
 at: key ifPresent: aBlock
 	^super at: key asString reduced ifPresent: aBlock
 ! !
 
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 30/Jan/2023 10:10:46'!
 at: key put: value
 	^super at: key asString put: value
 ! !
 
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 30/Jan/2023 10:10:46'!
 beConstant: aBoolean
 	constant := aBoolean
 ! !
 
-!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 1/30/2023 10:10:46'!
+!PoolDictionary methodsFor: 'accessing' stamp: 'KenD 30/Jan/2023 10:10:46'!
 beConstantPool
 	constant := true
 ! !
 
-!PoolDictionary methodsFor: 'removing' stamp: 'KenD 1/30/2023 10:10:46'!
+!PoolDictionary methodsFor: 'removing' stamp: 'KenD 30/Jan/2023 10:10:46'!
 removeKey: key ifAbsent: aBlock
 	super removeKey: key asString reduced ifAbsent: aBlock.
 	^key
 ! !
 
-!PoolDictionary methodsFor: 'adding' stamp: 'KenD 1/30/2023 10:10:46'!
+!PoolDictionary methodsFor: 'adding' stamp: 'KenD 30/Jan/2023 10:10:46'!
 add: anAssociation
 	anAssociation key isString
 		ifFalse: [self error: 'Pools are keyed with Strings'].
 	^super add: anAssociation
 ! !
 
-!PoolDictionary methodsFor: 'inquiries' stamp: 'KenD 1/30/2023 10:10:46'!
+!PoolDictionary methodsFor: 'inquiries' stamp: 'KenD 30/Jan/2023 10:10:46'!
 includesKey: key
 	^super includesKey: key asString reduced
 ! !
 
-!PoolDictionary methodsFor: 'initialization' stamp: 'KenD 1/30/2023 10:10:46'!
+!PoolDictionary methodsFor: 'initialization' stamp: 'KenD 30/Jan/2023 10:10:46'!
 initialize: anInteger
 	super initialize: anInteger.
 	constant := false
 ! !
 
-!PoolDictionary class methodsFor: 'instance creation' stamp: 'KenD 1/30/2023 10:10:46'!
+!PoolDictionary class methodsFor: 'instance creation' stamp: 'KenD 30/Jan/2023 10:10:46'!
 newConstantPool
 	^self new beConstantPool
 ! !
 
-!NotFound methodsFor: 'accessing' stamp: 'KenD 3/2/2024 14:37:02'!
+!NotFound methodsFor: 'accessing' stamp: 'KenD 2/Mar/2024 14:37:02'!
 defaultDescription
 	| string |
 	string := [object printString] on: Error do: [:ex | ex description].
 	^'Key ' , string , ' is missing'
 ! !
 
-!NotFound methodsFor: 'accessing' stamp: 'KenD 3/2/2024 14:36:35'!
+!NotFound methodsFor: 'accessing' stamp: 'KenD 2/Mar/2024 14:36:35'!
 object: anObject
 	object := anObject
 ! !
 
-!NotFound class methodsFor: 'signalling' stamp: 'KenD 3/2/2024 14:36:13'!
+!NotFound class methodsFor: 'signalling' stamp: 'KenD 2/Mar/2024 14:36:13'!
 signalFor: anObject
 	^self new object: anObject; signal
 ! !
 
-!ProtoObject methodsFor: '*BeeCompatibility' stamp: 'KenD 3/4/2024 12:06:12'!
+!ProtoObject methodsFor: '*BeeCompatibility' stamp: 'KenD 4/Mar/2024 12:06:12'!
 !!= other
 	
 	^(self = other) not! !
 
-!Collection methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 13:35:07'!
+!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 19/Apr/2022 14:24:21'!
+_instancesAreArrayed
+
+	^ self isVariable ! !
+
+!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 19/Apr/2022 14:23:46'!
+_instancesHavePointers
+
+	^ self isPointers ! !
+
+!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 18/May/2022 14:58:51'!
+instanceBehavior
+	self flag: #PossiblyBogus. "Probably bogus"
+	^ self methodDict ! !
+
+!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 31/Jan/2023 09:48:16'!
+methodNamed: selector 
+	"Answer the compiled method associated with the argument, selector (a 
+	Symbol), a message selector in the receiver's method dictionary. If the 
+	selector is not in the dictionary, create an error notification."
+
+	^self compiledMethodAt: selector 
+! !
+
+!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 31/Jan/2023 09:50:45'!
+removeLocalMethod: selector 
+	"Assuming that the argument, selector (a Symbol), is a message selector 
+	in my method dictionary, remove it and its method."
+
+	self basicRemoveSelector: selector ! !
+
+!ClassDescription methodsFor: '*BeeCompatibility' stamp: 'KenD 15/Apr/2022 11:56:44'!
+instanceSide
+
+	^ self theNonMetaClass ! !
+
+!Class methodsFor: '*BeeCompatibility' stamp: 'KenD 16/Nov/2023 10:45:50'!
+classSide
+
+	^ self class! !
+
+!Metaclass methodsFor: '*BeeCompatibility' stamp: 'KenD 16/Nov/2023 10:46:37'!
+classSide
+
+	^ self
+! !
+
+!Metaclass methodsFor: '*BeeCompatibility' stamp: 'KenD 22/Apr/2022 16:14:43'!
+isMetaclass
+
+	^ self isMeta ! !
+
+!Collection methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 13:35:07'!
 conform: evaluable
 	self
 		detect: [:x | | fx |
@@ -580,13 +632,13 @@ conform: evaluable
 		ifNone: [^true].
 	^false! !
 
-!Collection methodsFor: '*BeeCompatibility' stamp: 'KenD 11/19/2023 13:19:05'!
+!Collection methodsFor: '*BeeCompatibility' stamp: 'KenD 19/Nov/2023 13:19:05'!
 reject: rejectBlock thenDo: doBlock 	
 "Utility method to improve readability.	Do not create the intermediate collection."	
 
 	self do: [ :each |		(rejectBlock value: each)			ifFalse: [ doBlock value: each ] ].! !
 
-!SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 14:00:52'!
+!SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 18/May/2022 14:00:52'!
 ifAbsentAdd: anObject 
 	"Ensure anObject is part of the receiver. 
 	 Answer whether its membership was newly acquired."
@@ -595,7 +647,7 @@ ifAbsentAdd: anObject
 	isCurrentMember 	ifFalse: [ self add: anObject ].
 	^ isCurrentMember! !
 
-!SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 11/18/2023 14:38:31'!
+!SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 18/Nov/2023 14:38:31'!
 reject: rejectBlock thenDo: aBlock	
 "Refer to the comment in Collection>>#reject:thenDo:"		
 "(Array streamContents: [:stream | #(1 2 3 4) 
@@ -606,7 +658,7 @@ reject: rejectBlock thenDo: aBlock
 	1 to: self size do: [ :index |		
 		(rejectBlock value: (each := self at: index))			ifFalse: [ aBlock value: each ]].! !
 
-!SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 5/5/2022 11:51:37'!
+!SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 5/May/2022 11:51:37'!
 sortBy: blockOrCriteria
 	"My elements to be ordered 
 	 by criteria (a Selector Symbol) 
@@ -621,45 +673,19 @@ sortBy: blockOrCriteria
 	sorted := self asSortedCollection: sortBlock.
 	^ self species withAll: sorted! !
 
-!SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 14:30:24'!
+!SequenceableCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 14:30:24'!
 withoutDuplicates
 	"Answer a copy of the receiver that preserves order but eliminates any duplicates."
 	| seen |
 	seen := Set new.
 	^self select: [:each| seen ifAbsentAdd: each] ! !
 
-!Array methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 14:44:01'!
-& otherArray
-	| combinedArray offset |
-	combinedArray := Array new: (self size + otherArray size).
-	1 to: self size do: [ :index | combinedArray at: index put: (self at: index) ].
-	offset := self size.
-	1 to: otherArray size do: [ :index | combinedArray at: index + offset put: (otherArray at: index) ].
-	^ combinedArray! !
-
-!Array methodsFor: '*BeeCompatibility' stamp: 'KenD 4/22/2022 16:12:51'!
-collect: aBlock in: aCollection
-
-	1 to: self size do:
-		[:index | aCollection add: (aBlock value: (self at: index))].
-	^ aCollection! !
-
-!CompiledMethod methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 15:02:12'!
-classBinding
-
-	^ self methodClass! !
-
-!CompiledMethod methodsFor: '*BeeCompatibility' stamp: 'KenD 4/22/2022 14:44:37'!
-source
-	"Answer source for method, including the signature"
-	^ self getSource ! !
-
-!OrderedCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 3/2/2024 11:57:41'!
+!OrderedCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Mar/2024 11:57:41'!
 addIfNotPresent: anObject
 
 	self detect: [ :elt | elt = anObject ] ifNone: [ self addLast: anObject ].! !
 
-!OrderedCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:23:08'!
+!OrderedCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 30/Sep/2022 15:23:08'!
 removeDuplicates
 
 	"Remove duplicates; retain order"
@@ -675,7 +701,7 @@ removeDuplicates
 			index := index + 1.
 		]! !
 
-!OrderedCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:12:27'!
+!OrderedCollection methodsFor: '*BeeCompatibility' stamp: 'KenD 30/Sep/2022 15:12:27'!
 withIndexDo: aBlock 
 	| i |
 	i := 1.
@@ -683,33 +709,59 @@ withIndexDo: aBlock
 		aBlock value: each value: i.
 		i := i + 1]! !
 
-!CharacterSequence methodsFor: '*BeeCompatibility' stamp: 'KenD 11/22/2023 13:14:33'!
+!Array methodsFor: '*BeeCompatibility' stamp: 'KenD 19/Apr/2022 14:44:01'!
+& otherArray
+	| combinedArray offset |
+	combinedArray := Array new: (self size + otherArray size).
+	1 to: self size do: [ :index | combinedArray at: index put: (self at: index) ].
+	offset := self size.
+	1 to: otherArray size do: [ :index | combinedArray at: index + offset put: (otherArray at: index) ].
+	^ combinedArray! !
+
+!Array methodsFor: '*BeeCompatibility' stamp: 'KenD 22/Apr/2022 16:12:51'!
+collect: aBlock in: aCollection
+
+	1 to: self size do:
+		[:index | aCollection add: (aBlock value: (self at: index))].
+	^ aCollection! !
+
+!CompiledMethod methodsFor: '*BeeCompatibility' stamp: 'KenD 19/Apr/2022 15:02:12'!
+classBinding
+
+	^ self methodClass! !
+
+!CompiledMethod methodsFor: '*BeeCompatibility' stamp: 'KenD 22/Apr/2022 14:44:37'!
+source
+	"Answer source for method, including the signature"
+	^ self getSource ! !
+
+!CharacterSequence methodsFor: '*BeeCompatibility' stamp: 'KenD 22/Nov/2023 13:14:33'!
 includesSubstring: subString
 
 	^ self is: subString substringAt: 0! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 11/14/2023 13:51:13'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 14/Nov/2023 13:51:13'!
 !!= aString
 	
 	^(self = aString) not! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 16:53:01'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Jun/2021 16:53:01'!
 arity 
 
 	^self numArgs! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 08:05:47'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/May/2022 08:05:47'!
 asFile
 
 	^ self asFileEntry ! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 2/28/2024 16:26:59'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Feb/2024 16:26:59'!
 asInteger 
 	"From Squeak 5.3" 	
 	^self asIntegerSigned: true
 ! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 2/28/2024 16:27:15'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Feb/2024 16:27:15'!
 asIntegerSigned: signed
 	"From Squeak 5.3 "
 	"Return the first decimal integer I can find or nil."
@@ -735,17 +787,17 @@ asIntegerSigned: signed
 	negative ifTrue: [ ^result negated ].
 	^result! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 16:53:12'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Jun/2021 16:53:12'!
 existingSymbol 
 
 	^Symbol findInterned: self! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'Install-PowerLang 4/25/2021 07:43:45'!
+!String methodsFor: '*BeeCompatibility' stamp: 'Install-PowerLang 25/Apr/2021 07:43:45'!
 includesString: subString
 
 	^(self findString: subString) ~= 0! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 16:53:45'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Jun/2021 16:53:45'!
 indexOfString: aString from: start to: stop 
 	| n limit base i |
 	n := aString size.
@@ -761,7 +813,7 @@ indexOfString: aString from: start to: stop
 				1]].
 	^i > 1 ifTrue: [base + 1] ifFalse: [0]! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 16:54:02'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Jun/2021 16:54:02'!
 indexOfSubcollection: aCollection startingAt: anInteger 
 	| m n i first |
 	m := aCollection size.
@@ -778,13 +830,13 @@ indexOfSubcollection: aCollection startingAt: anInteger
 		i := i + 1].
 	^0! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 12:07:32'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 12:07:32'!
 reduced
 
 	self flag: #UnknownSemantics.
 	^self! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'Install-PowerLang 9/15/2022 13:34:08'!
+!String methodsFor: '*BeeCompatibility' stamp: 'Install-PowerLang 15/Sep/2022 13:34:08'!
 replaceAllSubstrings: aString with: anotherString
 "
   'This-and-that-and-the-Other' replaceAllSubstrings: '-a' with: '_A'.
@@ -810,93 +862,93 @@ replaceAllSubstrings: aString with: anotherString
 		index := next].
 	^strm contents! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'Install-PowerLang 5/30/2021 14:25:33'!
+!String methodsFor: '*BeeCompatibility' stamp: 'Install-PowerLang 30/May/2021 14:25:33'!
 trimBlanks
 
 	^self withBlanksTrimmed! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 07:41:44'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/May/2022 07:41:44'!
 trimTail: suffixString
 
 	^ self withoutSuffix: suffixString ! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 2/28/2024 16:27:30'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Feb/2024 16:27:30'!
 withCRs
 	"Return a copy of the receiver in which backslash (\) characters have been replaced with carriage returns."
 
 	^ self collect: [ :c | c = $\ ifTrue: [ Character cr ] ifFalse: [ c ]].! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 08:03:40'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/May/2022 08:03:40'!
 withExtension: newSuffix
 
 	^ self append: '.' , newSuffix! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 08:03:50'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 6/May/2022 08:03:50'!
 withFullExtension: newSuffix
 
 	^ self append: '.' ,  newSuffix! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 5/17/2024 15:02:56'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 17/May/2024 15:02:56'!
 withoutLineSeparators
 	"Convert separators into spaces"
 	
 	^self withLineEndings: ' '! !
 
-!String methodsFor: '*BeeCompatibility' stamp: 'KenD 4/21/2022 12:34:22'!
+!String methodsFor: '*BeeCompatibility' stamp: 'KenD 21/Apr/2022 12:34:22'!
 withoutSeparators
 	
 	^self reject: [ :aCharacter | aCharacter isSeparator ]! !
 
-!String class methodsFor: '*BeeCompatibility' stamp: 'KenD 2/28/2024 16:28:10'!
+!String class methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Feb/2024 16:28:10'!
 cr
 	^self crString! !
 
-!String class methodsFor: '*BeeCompatibility' stamp: 'KenD 2/28/2024 16:28:18'!
+!String class methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Feb/2024 16:28:18'!
 crlf
 	^self crlfString! !
 
-!String class methodsFor: '*BeeCompatibility' stamp: 'KenD 2/28/2024 16:28:24'!
+!String class methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Feb/2024 16:28:24'!
 lf
 	^self lfString! !
 
-!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 11/14/2023 13:51:30'!
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 14/Nov/2023 13:51:30'!
 !!= aString
 	
 	^(self = aString) not! !
 
-!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 11/10/2022 12:29:03'!
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 10/Nov/2022 12:29:03'!
 arity 
 
 	^self numArgs! !
 
-!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 11/15/2022 10:38:39'!
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 15/Nov/2022 10:38:39'!
 existingSymbol 
 
 	^Symbol findInterned: self! !
 
-!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 2/21/2023 22:31:20'!
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 21/Feb/2023 22:31:20'!
 includesString: subString
 	self flag: #FixMe.
 	^(self asByteString findString: subString asByteString) ~= 0! !
 
-!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 12:07:13'!
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 12:07:13'!
 reduced
 	
 	self flag: #UnknownSemantics.
 	^ self! !
 
-!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 11/15/2022 08:06:33'!
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 15/Nov/2022 08:06:33'!
 trimBlanks
 
 	^self withBlanksTrimmed! !
 
-!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 5/17/2024 15:03:16'!
+!UnicodeString methodsFor: '*BeeCompatibility' stamp: 'KenD 17/May/2024 15:03:16'!
 withoutLineSeparators
 	"Convert separators into spaces"
 	
 	^self withLineEndings: ' '! !
 
-!Set methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 13:53:27'!
+!Set methodsFor: '*BeeCompatibility' stamp: 'KenD 18/May/2022 13:53:27'!
 ifAbsentAdd: anObject 
 	"Ensure anObject is part of the receiver.  Answer whether its membership was newly acquired."
 	| isCurrentMember |
@@ -904,14 +956,14 @@ ifAbsentAdd: anObject
 	isCurrentMember 	ifFalse: [ self add: anObject ].
 	^ isCurrentMember! !
 
-!Dictionary methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 13:47:13'!
+!Dictionary methodsFor: '*BeeCompatibility' stamp: 'KenD 18/May/2022 13:47:13'!
 at: key put: newValue ifPresent: transducerBlock
 	"If key->value is present, use transducerBlock to take the value and mutate it,
 	 otherwise just add key->newValue."
 	self at: key ifPresent: transducerBlock ifAbsent: [ self at: key put: newValue ]
 ! !
 
-!Dictionary methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 15:06:58'!
+!Dictionary methodsFor: '*BeeCompatibility' stamp: 'KenD 18/May/2022 15:06:58'!
 select: aBlock in: aCollection 
 	"Evaluate aBlock with each of my values as the argument.  
 	 Collect into  aCollection, only those associations 
@@ -922,7 +974,7 @@ select: aBlock in: aCollection
 		(aBlock value: each value) ifTrue: [ aCollection add: each ]].
 	^aCollection! !
 
-!OrderedDictionary methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:13:20'!
+!OrderedDictionary methodsFor: '*BeeCompatibility' stamp: 'KenD 30/Sep/2022 15:13:20'!
 withIndexDo: aBlock 
 	| i |
 	i := 1.
@@ -930,7 +982,7 @@ withIndexDo: aBlock
 		aBlock value: each value: i.
 		i := i + 1]! !
 
-!PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 4/29/2022 17:12:08'!
+!PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 29/Apr/2022 17:12:08'!
 copyFrom: start to: stop
 	"Answer a string"
 	| savedPos collected |
@@ -946,7 +998,7 @@ copyFrom: start to: stop
 	^ collected contents
 	! !
 
-!PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 4/20/2022 14:23:38'!
+!PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 20/Apr/2022 14:23:38'!
 nextWordOrNumber
 	"Take next non-separators as a 'word' and return it"
 	| word |
@@ -961,29 +1013,29 @@ nextWordOrNumber
 		].
 	^ word! !
 
-!PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:32:45'!
+!PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:32:45'!
 sizeToEnd
 
 	^  readLimit - position! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:14:52'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:14:52'!
 alignTo: boundary
 	| n |
 	n := boundary - (self position \\ boundary) \\ boundary.
 	self skip: n
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:14:57'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:14:57'!
 atBeginning
 	^self position = 0
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:15:03'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:15:03'!
 back
 	self skip: -1
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:15:08'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:15:08'!
 backToAny: aCollection
 	"
 	'Smalltalk' readStream position: 'Smallta' size; backToAny: 'ml'
@@ -993,7 +1045,7 @@ backToAny: aCollection
 		(aCollection includes: token) ifTrue: [^self]]
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:15:12'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:15:12'!
 backToOpen: open
 	"
 	'--|things||some|-}blah' readStream next: '--|things||some' size; backToOpen: $|; yourself
@@ -1007,7 +1059,7 @@ backToOpen: open
 	self position: start
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:15:18'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:15:18'!
 backToOpen: close with: open
 	"
 	'-{things{some}-}blah' readStream position: '-{things{some}-}' size - 1; backToOpen: ${ with: $}
@@ -1025,7 +1077,7 @@ backToOpen: close with: open
 	count = 0 ifFalse: [self position: start]
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:15:23'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:15:23'!
 basicNextChunk
 	| token bulk |
 	token := self isBinary ifTrue: [$!! asInteger] ifFalse: [$!!].
@@ -1036,7 +1088,7 @@ basicNextChunk
 	^bulk
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:16:15'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:16:15'!
 copyFrom: start to: stop
 	| pos result |
 	pos := self position.
@@ -1046,7 +1098,7 @@ copyFrom: start to: stop
 	^result
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:16:22'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:16:22'!
 countBlanks
 	| count tab space |
 	count := 0.
@@ -1061,34 +1113,34 @@ countBlanks
 	^count
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:16:31'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:16:31'!
 getBytesFor: aByteArray
 	self readInto: aByteArray from: 1 to: aByteArray sizeInBytes
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:16:37'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:16:37'!
 getInteger
 	| byte |
 	byte := self nextByte.
 	^128 <= byte ifTrue: [self getInteger * 128 + byte - 128] ifFalse: [byte]
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:16:44'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:16:44'!
 isBinary
 	^false
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:16:49'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:16:49'!
 isEmpty
 	^self size = 0
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:17:09'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:17:09'!
 nextByte
 	^self next asInteger
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:17:23'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:17:23'!
 nextFloat
 	| float |
 	float := Float new.
@@ -1096,12 +1148,12 @@ nextFloat
 	^float
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:17:30'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:17:30'!
 nextInteger
 	^Integer readFrom: self
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:17:56'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:17:56'!
 nextLong
 	| bytes |
 	bytes := ByteArray new: 4.
@@ -1109,21 +1161,21 @@ nextLong
 	^bytes longAtOffset: 0
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:18:02'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:18:02'!
 nextNoFail: anInteger
 	| n |
 	n := anInteger min: self size - self position.
 	^self next: n
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:18:08'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:18:08'!
 nextString
 	| size |
 	size := self nextULong.
 	^(self next: size) asString
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:18:14'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:18:14'!
 nextSubstring
 	| start |
 	[
@@ -1135,7 +1187,7 @@ nextSubstring
 	^self copyFrom: start to: self position
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:18:20'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:18:20'!
 nextSubstringOrNumber
 	| c numeric token writer |
 	[
@@ -1155,7 +1207,7 @@ nextSubstringOrNumber
 	^token first isDigit ifTrue: [token asInteger] ifFalse: [token]
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:18:33'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:18:33'!
 nextULong
 	| a0 a1 a2 a3 |
 	a0 := self nextByte.
@@ -1165,7 +1217,7 @@ nextULong
 	^a3 + a2 + a1 + a0
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:18:38'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:18:38'!
 nextUShort
 	| a0 a1 |
 	a0 := self nextByte.
@@ -1173,7 +1225,7 @@ nextUShort
 	^a1 + a0
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:19:01'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:19:01'!
 nextWhile: aBlock
 	| write |
 	write := self newCollector writeStream.
@@ -1182,12 +1234,12 @@ nextWhile: aBlock
 	^write contents
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:19:06'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:19:06'!
 notEmpty
 	^self isEmpty not
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:14:02'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:14:02'!
 peek: n
 	| pos safe data |
 	pos := self position.
@@ -1196,12 +1248,12 @@ peek: n
 	self position: pos.
 	^data! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:14:10'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:14:10'!
 peekFor: token
 	^self peek = token ifTrue: [self skip]; yourself
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:14:15'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:14:15'!
 peekForAll: aCollection
 	| n |
 	n := aCollection size.
@@ -1210,26 +1262,26 @@ peekForAll: aCollection
 		yourself
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 2/29/2024 09:38:50'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 29/Feb/2024 09:38:50'!
 prev
 	^self position > 0
 		ifTrue: [self position: self position - 1; peek]
 		ifFalse: [self error: 'read beyond start of stream']
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:14:27'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:14:27'!
 readInto: aByteArray from: start to: stop
 	| data |
 	data := self next: stop - start + 1.
 	aByteArray replaceBytesFrom: start to: stop with: data startingAt: 1
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 2/29/2024 09:38:50'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 29/Feb/2024 09:38:50'!
 skipWhitespace
 	[self atEnd orNot: [self peek isBlank]] whileFalse: [self next]
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:29:26'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:29:26'!
 upToToken: token
 	| write c |
 	write := WriteStream new.
@@ -1241,7 +1293,7 @@ upToToken: token
 	^write contents
 ! !
 
-!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 15:20:23'!
+!ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:20:23'!
 utf8Trailing: byte
 	(byte bitAnd: 2r11100000) = 2r11000000 ifTrue: [^1].
 	(byte bitAnd: 2r11110000) = 2r11100000 ifTrue: [^2].
@@ -1249,71 +1301,26 @@ utf8Trailing: byte
 	^nil
 ! !
 
-!WriteStream methodsFor: '*BeeCompatibility' stamp: 'KenD 3/2/2024 07:32:57'!
+!WriteStream methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Mar/2024 07:32:57'!
 << aString
 
 	self nextPutAll: aString! !
 
-!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 14:24:21'!
-_instancesAreArrayed
+!WriteStream methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026 13:14:42'!
+timeStamp
+	"Append the current time to the receiver as a String."
+	self nextChunkPut:	"double string quotes and !!s"
+		    (String streamContents: [:s | Smalltalk writeSystemTimeStamp: s]) printString;
+		newLine! !
 
-	^ self isVariable ! !
-
-!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 14:23:46'!
-_instancesHavePointers
-
-	^ self isPointers ! !
-
-!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 5/18/2022 14:58:51'!
-instanceBehavior
-	self flag: #PossiblyBogus. "Probably bogus"
-	^ self methodDict ! !
-
-!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 1/31/2023 09:48:16'!
-methodNamed: selector 
-	"Answer the compiled method associated with the argument, selector (a 
-	Symbol), a message selector in the receiver's method dictionary. If the 
-	selector is not in the dictionary, create an error notification."
-
-	^self compiledMethodAt: selector 
-! !
-
-!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 1/31/2023 09:50:45'!
-removeLocalMethod: selector 
-	"Assuming that the argument, selector (a Symbol), is a message selector 
-	in my method dictionary, remove it and its method."
-
-	self basicRemoveSelector: selector ! !
-
-!ClassDescription methodsFor: '*BeeCompatibility' stamp: 'KenD 4/15/2022 11:56:44'!
-instanceSide
-
-	^ self theNonMetaClass ! !
-
-!Class methodsFor: '*BeeCompatibility' stamp: 'KenD 11/16/2023 10:45:50'!
-classSide
-
-	^ self class! !
-
-!Metaclass methodsFor: '*BeeCompatibility' stamp: 'KenD 11/16/2023 10:46:37'!
-classSide
-
-	^ self
-! !
-
-!Metaclass methodsFor: '*BeeCompatibility' stamp: 'KenD 4/22/2022 16:14:43'!
-isMetaclass
-
-	^ self isMeta ! !
-
-!BlockClosure methodsFor: '*BeeCompatibility' stamp: 'bp 11/29/2014 17:29'!
+!BlockClosure methodsFor: '*BeeCompatibility' stamp: 'bp 29/Nov/2014 17:29:00'!
 cull: firstArg
 	"Activate the receiver, with one or zero arguments."
 	
 	numArgs >= 1 ifTrue: [ ^self value: firstArg ].
 	^self value! !
 
-!BlockClosure methodsFor: '*BeeCompatibility' stamp: 'bp 11/29/2014 17:29'!
+!BlockClosure methodsFor: '*BeeCompatibility' stamp: 'bp 29/Nov/2014 17:29:00'!
 cull: firstArg cull: secondArg
 	"Activate the receiver, with two or less arguments."
 	
@@ -1321,7 +1328,7 @@ cull: firstArg cull: secondArg
 	numArgs = 1 ifTrue: [ ^self value: firstArg ].
 	^self value! !
 
-!BlockClosure methodsFor: '*BeeCompatibility' stamp: 'bp 11/29/2014 17:29'!
+!BlockClosure methodsFor: '*BeeCompatibility' stamp: 'bp 29/Nov/2014 17:29:00'!
 cull: firstArg cull: secondArg cull: thirdArg
 	"Activate the receiver, with three or less arguments."
 	
@@ -1331,7 +1338,7 @@ cull: firstArg cull: secondArg cull: thirdArg
 	numArgs = 1 ifTrue: [ ^self value: firstArg ].
 	^self value! !
 
-!BlockClosure methodsFor: '*BeeCompatibility' stamp: 'bp 11/29/2014 17:29'!
+!BlockClosure methodsFor: '*BeeCompatibility' stamp: 'bp 29/Nov/2014 17:29:00'!
 cull: firstArg cull: secondArg cull: thirdArg cull: fourthArg
 	"Activate the receiver, with four or less arguments."
 	
@@ -1343,73 +1350,73 @@ cull: firstArg cull: secondArg cull: thirdArg cull: fourthArg
 	numArgs = 1 ifTrue: [ ^self value: firstArg ].
 	^self value! !
 
-!Boolean methodsFor: '*BeeCompatibility' stamp: 'KenD 6/8/2021 07:04:59'!
+!Boolean methodsFor: '*BeeCompatibility' stamp: 'KenD 8/Jun/2021 07:04:59'!
 andNot: aBlock
 
 	self subclassResponsibility ! !
 
-!Boolean methodsFor: '*BeeCompatibility' stamp: 'KenD 10/2/2022 08:15:58'!
+!Boolean methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Oct/2022 08:15:58'!
 asBit
 
 	self subclassResponsibility ! !
 
-!Boolean methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:40:34'!
+!Boolean methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Jun/2021 12:40:34'!
 isBoolean 
 
 	^ true! !
 
-!False methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:39:02'!
+!False methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Jun/2021 12:39:02'!
 and: block1 andNot: block2 
 
 	^self! !
 
-!False methodsFor: '*BeeCompatibility' stamp: 'KenD 6/8/2021 07:05:27'!
+!False methodsFor: '*BeeCompatibility' stamp: 'KenD 8/Jun/2021 07:05:27'!
 andNot: aBlock
 
 	^ self! !
 
-!False methodsFor: '*BeeCompatibility' stamp: 'KenD 10/2/2022 08:16:20'!
+!False methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Oct/2022 08:16:20'!
 asBit
 
 	^ 0! !
 
-!False methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 11:00:52'!
+!False methodsFor: '*BeeCompatibility' stamp: 'KenD 19/Apr/2022 11:00:52'!
 asParameter 
 	"Answer machine value for falsity"
 	^ 0! !
 
-!True methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:37:43'!
+!True methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Jun/2021 12:37:43'!
 and: block1 andNot: block2 
 
 	^block1 value andNot: [block2 value]! !
 
-!True methodsFor: '*BeeCompatibility' stamp: 'KenD 6/2/2021 12:37:54'!
+!True methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Jun/2021 12:37:54'!
 andNot: aBlock 
 
 	^aBlock value not
 ! !
 
-!True methodsFor: '*BeeCompatibility' stamp: 'KenD 10/2/2022 08:16:37'!
+!True methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Oct/2022 08:16:37'!
 asBit
 
 	^ 1! !
 
-!True methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 10:59:03'!
+!True methodsFor: '*BeeCompatibility' stamp: 'KenD 19/Apr/2022 10:59:03'!
 asParameter 
 	"Answer machine value for truth"
 	^ 1! !
 
-!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 3/2/2024 11:50:30'!
+!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Mar/2024 11:50:30'!
 asCharacter
 
 	^ Character codePoint: self! !
 
-!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 14:06:27'!
+!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 14:06:27'!
 bitShiftRight: anInteger
 
 	^self bitShift: 0 - anInteger! !
 
-!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 14:05:17'!
+!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 14:05:17'!
 bitsAt: aStretch
 	"
 	(2r001101010 bitField: (3 thru: 6)) bin = '1010'
@@ -1420,7 +1427,7 @@ bitsAt: aStretch
 	mask := 1 bitShift: aStretch length.
 	^shifted bitAnd: mask - 1! !
 
-!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 13:54:59'!
+!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 13:54:59'!
 bitsAt: aStretch put: anInteger
 	"
 	((2r001101100 bitsAt: (3 thru: 6) put: 2r1101) bitField: (3 thru: 6)) bin = '1101'
@@ -1433,7 +1440,7 @@ bitsAt: aStretch put: anInteger
 	anInteger < max ifFalse: [self error: 'invalid argument'].
 	^(self bitsClear: aStretch) bitOr: shifted! !
 
-!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 13:56:10'!
+!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 13:56:10'!
 bitsClear: aStretch
 	"
 	(2r111100110 bitsClear: (3 thru: 6)) = 2r111000010
@@ -1442,17 +1449,17 @@ bitsClear: aStretch
 	mask := (1 bitShift: aStretch end) - (1 bitShift: aStretch start - 1).
 	^self bitAnd: mask bitInvert! !
 
-!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 14:08:24'!
+!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 14:08:24'!
 isOnBit: n
 
 	^(self bitAnd: n) = n! !
 
-!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 1/31/2025 15:46:36'!
+!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 31/Jan/2025 15:46:36'!
 isSmallInteger
 
 	^ false! !
 
-!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 14:08:54'!
+!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 14:08:54'!
 linearFeedbackShiftRandom: key
 	"
 	LFSR implementation (avoids 0 by definition).
@@ -1465,11 +1472,7 @@ linearFeedbackShiftRandom: key
 		ifTrue: [ shifted ]
 		ifFalse: [ shifted bitXor: key ]! !
 
-!Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 1/31/2025 14:20:46'!
-thru: anInteger
-	^Stretch from: self thru: anInteger! !
-
-!SmallInteger methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 15:33:32'!
+!SmallInteger methodsFor: '*BeeCompatibility' stamp: 'KenD 30/Sep/2022 15:33:32'!
 byteAt: n
 	"Treat me as a byte array"
 	(n = 1) ifTrue: [
@@ -1482,37 +1485,32 @@ byteAt: n
 		ifTrue: [  (-256 - self bitShift: -8) + 1 byteAt: n - 1 ] 
 		ifFalse: [ (self bitShift: 8 -  (n bitShift: 3)) bitAnd: 255 ]! !
 
-!SmallInteger methodsFor: '*BeeCompatibility' stamp: 'KenD 1/31/2025 15:46:49'!
-isSmallInteger
-
-	^ true! !
-
-!SmallInteger methodsFor: '*BeeCompatibility' stamp: 'KenD 9/28/2022 13:49:02'!
+!SmallInteger methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Sep/2022 13:49:02'!
 thru: largerNumber
 
 	^ Stretch from: self thru: largerNumber ! !
 
-!UndefinedObject methodsFor: '*BeeCompatibility' stamp: 'KenD 4/19/2022 11:02:35'!
+!UndefinedObject methodsFor: '*BeeCompatibility' stamp: 'KenD 19/Apr/2022 11:02:35'!
 asParameter 
 	"Answer machine value for 'no value'"
 	^ 0! !
 
-!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 9/30/2022 13:00:20'!
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 30/Sep/2022 13:00:20'!
 !!= aCodePointOrCharacter
 
 	^(self = aCodePointOrCharacter) not! !
 
-!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 12:00:20'!
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 12:00:20'!
 asInteger
 
 	^ self codePoint! !
 
-!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 2/16/2021 12:39:58'!
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 16/Feb/2021 12:39:58'!
 isASCIILetter
 
 	^'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' includes: self! !
 
-!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 3/1/2024 11:59:33'!
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 11:59:33'!
 isBlank
 	| value |
 	value := self codePoint.
@@ -1526,12 +1524,12 @@ isBlank
 	^false
 ! !
 
-!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 2/14/2021 18:46:33'!
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 14/Feb/2021 18:46:33'!
 isHexDigit
 
 	^'0123456789abcdefABCDEF' includes: self! !
 
-!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 5/31/2021 08:03:14'!
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 31/May/2021 08:03:14'!
 split: aString
 	"Answer a collection of Strings split at self -- include empty strings"
 	| delimiter parts keyStart keyStop |
@@ -1547,18 +1545,18 @@ split: aString
 		keyStart := keyStop + 1].
 	^parts! !
 
-!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 3/2/2024 07:25:21'!
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Mar/2024 07:25:21'!
 value: anInteger
 	"Answer the Character whose value is anInteger."
 
 	^ self codePoint: anInteger! !
 
-!DirectoryEntry methodsFor: '*BeeCompatibility' stamp: 'KenD 5/6/2022 07:59:19'!
+!DirectoryEntry methodsFor: '*BeeCompatibility' stamp: 'KenD 6/May/2022 07:59:19'!
 \ pathString
 	
 	^ self // pathString! !
 
-!DirectoryEntry methodsFor: '*BeeCompatibility' stamp: 'KenD 2/12/2023 10:38:02'!
+!DirectoryEntry methodsFor: '*BeeCompatibility' stamp: 'KenD 12/Feb/2023 10:38:02'!
 findEntryForFile: fileNameString
 	"In me or one of my subdirectories, match fileNameString
 	 and return its fileEntry or return `nil`."
@@ -1572,12 +1570,12 @@ findEntryForFile: fileNameString
 	].
 	^probe! !
 
-!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 10/1/2022 15:27:25'!
+!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Oct/2022 15:27:25'!
 asArray 
 
 	^self classPool asArray! !
 
-!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 10/1/2022 15:27:35'!
+!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Oct/2022 15:27:35'!
 at: aString 
 	| var |
 	var :=  self classPool
@@ -1585,25 +1583,25 @@ at: aString
 		ifAbsent: [ self error: 'no such pool var' ].
 	^var value! !
 
-!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 10/1/2022 15:27:42'!
+!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Oct/2022 15:27:42'!
 at: aString ifAbsent: aBlock 
 	| var |
 	var := self classPool associationAt: aString asSymbol ifAbsent: [^aBlock value].
 	^ var value! !
 
-!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 10/1/2022 15:27:49'!
+!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Oct/2022 15:27:49'!
 at: aString put: anObject 
 
 	^self classPool
 		at: aString 
 		put: anObject! !
 
-!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 10/1/2022 15:27:56'!
+!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Oct/2022 15:27:56'!
 detect: aBlock ifNone: anotherBlock 
 
 	^self classPool detect: aBlock  ifNone: [ ^ anotherBlock value ]! !
 
-!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 10/1/2022 15:28:01'!
+!SharedPool class methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Oct/2022 15:28:01'!
 do: aBlock 
 
 	^self classPool do: aBlock! !

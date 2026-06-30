@@ -1,29 +1,9 @@
-'From Cuis7.9 [latest update: #7998] on 28 June 2026 at 1:19:03 pm'!
+'From Cuis7.9 [latest update: #7998] on 30 June 2026 at 8:34:29 am'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 64!
+!provides: 'BeeCompatibility' 1 65!
 !requires: 'Cuis-Base' 63 6245 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
-
-!classDefinition: #NumberParser category: #BeeCompatibility!
-Object subclass: #NumberParser
-	instanceVariableNames: 'stream error return'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'BeeCompatibility'!
-!classDefinition: 'NumberParser class' category: #BeeCompatibility!
-NumberParser class
-	instanceVariableNames: ''!
-
-!classDefinition: #Stretch category: #BeeCompatibility!
-Object subclass: #Stretch
-	instanceVariableNames: 'start end'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'BeeCompatibility'!
-!classDefinition: 'Stretch class' category: #BeeCompatibility!
-Stretch class
-	instanceVariableNames: ''!
 
 !classDefinition: #TargetOSPlatform category: #BeeCompatibility!
 Object subclass: #TargetOSPlatform
@@ -33,16 +13,6 @@ Object subclass: #TargetOSPlatform
 	category: 'BeeCompatibility'!
 !classDefinition: 'TargetOSPlatform class' category: #BeeCompatibility!
 TargetOSPlatform class
-	instanceVariableNames: ''!
-
-!classDefinition: #Namespace category: #BeeCompatibility!
-Dictionary subclass: #Namespace
-	instanceVariableNames: 'parent'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'BeeCompatibility'!
-!classDefinition: 'Namespace class' category: #BeeCompatibility!
-Namespace class
 	instanceVariableNames: ''!
 
 !classDefinition: #PoolDictionary category: #BeeCompatibility!
@@ -66,16 +36,6 @@ NotFound class
 	instanceVariableNames: ''!
 
 
-!NumberParser commentStamp: '<historical>' prior: 0!
-Copyright (c) 2020 Aucerna. 
-    See (MIT) license in root directory.
-!
-
-!Stretch commentStamp: '<historical>' prior: 0!
-Copyright (c) 2020 Aucerna. 
-    See (MIT) license in root directory.
-!
-
 !TargetOSPlatform commentStamp: '<historical>' prior: 0!
 I am working around current target system assumptions.
 
@@ -87,347 +47,6 @@ For current system, note:
 	Smalltalk platformSubtype. " 'aarch64' "
 	Smalltalk osVersion ." 'linux-gnu' "
 	!
-
-!Namespace commentStamp: '<historical>' prior: 0!
-Copyright (c) 2022 Javier Pimás. 
-    See (MIT) license in root directory.
-!
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-checkNumberEnd: position
-	| char |
-	stream atEnd ifTrue: [^self].
-	char := stream peek.
-	char = $. ifFalse: [^self].
-	stream skip: 1.
-	stream atEnd
-		ifFalse: [stream peek isDigit
-			ifTrue: [self error: 'invalid number' at: position]].
-	stream skip: -1
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-completeFloat: anInteger
-	| tenth |
-	tenth := 10 raisedToInteger: self nextExponent.
-	^(anInteger * tenth) asFloat
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-completeNumber: anInteger after: aCharacter
-	aCharacter = $. ifTrue: [
-		^(stream peekFor: $s)
-			ifTrue: [self nextScaledFrom: anInteger fractionDigits: 0]
-			ifFalse: [self nextFloat: anInteger]].
-	(aCharacter = $e or: [aCharacter = $E])
-		ifTrue: [^self completeFloat: anInteger].
-	aCharacter = $r ifTrue: [^self nextIntegerRadix: anInteger].
-	aCharacter = $s ifTrue: [^self nextScaledFrom: anInteger fractionDigits: 0].
-	(anInteger = 0 and: [aCharacter = $x or: [aCharacter = $X]])
-		ifTrue: [^self nextIntegerRadix: 16].
-	stream skip: -1.
-	^anInteger
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-completeNumber: anInteger at: start
-	| number |
-	stream atEnd ifTrue: [^anInteger].
-	number := anInteger.
-	number := self completeNumber: anInteger after: stream next.
-	self checkNumberEnd: start.
-	^number
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-digitFromChar: char base: radix
-	| c |
-	char isDigit ifTrue: [^char digitValue].
-	char = $r ifTrue: [^nil].
-	char = $x ifTrue: [^nil].
-	char = $X ifTrue: [^nil].
-	c := char asUppercase.
-	(c asInteger between: $A asInteger and: $Z asInteger) ifFalse: [^nil].
-	(c !!= $E and: [radix <= c digitValue]) ifTrue: [^nil].
-	(c = $E and: [radix = 10]) ifTrue: [^nil].
-	^c digitValue
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-endToken
-	self error: 'end of stream' at: stream position
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-error: aString at: position
-	error := aString -> position.
-	return value: nil
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-negativeNumber
-	| position |
-	stream atEnd ifTrue: [^nil].
-	stream peek isDigit ifFalse: [^nil].
-	position := stream position.
-	^self next key negated -> position
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-next
-	| char |
-	return isNil ifTrue: [return := [:value | ^value]].
-	char := self nextChar.
-	char isNil ifTrue: [^self endToken].
-	char = $- ifTrue: [^self negativeNumber].
-	char = $+ ifTrue: [^self positiveNumber].
-	char isDigit ifTrue: [^self nextNumber: char].
-	^nil
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-nextChar
-	^stream skipWhitespace atEnd ifFalse: [stream next]
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-nextDigit: radix
-	| char digit |
-	stream atEnd ifTrue: [^nil].
-	char := stream next.
-	digit := self digitFromChar: char base: radix.
-	digit isNil ifTrue: [
-		stream skip: -1.
-		^nil].
-	radix <= digit
-		ifTrue: [self error: 'digit greater than radix' at: stream position].
-	^digit
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-nextExponent
-	| negated exp |
-	negated := false.
-	(stream peekFor: $+) ifFalse: [negated := stream peekFor: $-].
-	exp := self nextIntegerRadix: 10.
-	negated ifTrue: [exp := exp negated].
-	^exp
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-nextFloat: aNumber
-	| base digit e exp |
-	digit := self nextDigit: 10.
-	digit isNil ifTrue: [
-		stream skip: -1.
-		^aNumber].
-	e := 1.
-	base := aNumber * 10 + digit.
-	[
-		digit := self nextDigit: 10.
-		digit isNil]
-		whileFalse: [
-			base := base * 10 + digit.
-			e := e + 1].
-	((stream peekFor: $E) or: [stream peekFor: $e]) ifTrue: [
-		exp := self nextExponent.
-		^(base * (10 raisedToInteger: exp - e)) asFloat].
-	(stream peekFor: $s) ifTrue: [^self nextScaledFrom: base fractionDigits: e].
-	^(base * (10 raisedToInteger: e negated)) asFloat
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-nextIntegerRadix: radix
-	| value valid digit |
-	value := 0.
-	valid := false.
-	[
-		digit := self nextDigit: radix.
-		digit isNil]
-		whileFalse: [
-			valid := true.
-			value := value * radix + digit].
-	valid ifFalse: [self error: 'digit missing' at: stream position + 1].
-	^value
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-nextNumber: aCharacter
-	| start number digit |
-	start := stream position.
-	number := aCharacter digitValue.
-	[
-		digit := self nextDigit: 10.
-		digit isNil]
-		whileFalse: [number := number * 10 + digit].
-	number := self completeNumber: number at: start.
-	^number -> (start thru: stream position)
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-nextScaledFrom: aNumber fractionDigits: digits
-	| scale denominator sd |
-	scale := (stream atEnd not and: [stream peek isDigit])
-		ifTrue: [self nextIntegerRadix: 10].
-	denominator := 10 raisedToInteger: digits.
-	sd := ScaledDecimal
-		numerator: aNumber
-		denominator: denominator
-		scale: scale.
-	^sd reduced
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-positiveNumber
-	| position |
-	stream peek isDigit ifFalse: [^nil].
-	position := stream position.
-	^self next key -> position
-! !
-
-!NumberParser methodsFor: 'private' stamp: 'KenD 1/Mar/2024 11:54:08'!
-reset
-	stream reset.
-	return := nil
-! !
-
-!NumberParser methodsFor: 'accessing' stamp: 'KenD 1/Mar/2024 11:54:08'!
-error
-	^error
-! !
-
-!NumberParser methodsFor: 'accessing' stamp: 'KenD 1/Mar/2024 11:54:08'!
-on: aString
-	stream := aString readStream.
-	return := nil
-! !
-
-!NumberParser methodsFor: 'services' stamp: 'KenD 1/Mar/2024 11:54:08'!
-nextValue
-	^self next ifNil: [0] ifNotNil: [:assoc | assoc key]
-! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:36:10'!
-+ delta 
-
-	delta isInteger ifTrue: [^start + delta thru: end + delta].
-	delta isPoint ifTrue: [^start + delta x thru: end + delta y].
-	^start + delta start thru: end + delta end! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:36:25'!
-- delta 
-
-	^self + delta negated! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:36:38'!
-// anInteger 
-	^start // anInteger thru: end // anInteger! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:37:14'!
-center 
-
-	^start + end // 2! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:37:28'!
-down: anInteger 
-
-	^start thru: end + anInteger! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:39:53'!
-length 
-
-	^end - start + 1! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 30/Jan/2023 10:10:45'!
-mask
-	^(2 raisedTo: end) - (2 raisedTo: start - 1)
-! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:40:04'!
-max 
-
-	^start max: end! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:40:13'!
-min 
-
-	^start min: end! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 21/Feb/2021 13:40:25'!
-negated 
-
-	^start negated thru: end negated! !
-
-!Stretch methodsFor: 'arithmetic' stamp: 'KenD 30/Jan/2023 10:10:45'!
-shift
-	^(start - 1) negated
-! !
-
-!Stretch methodsFor: 'comparing' stamp: 'KenD 21/Feb/2021 13:37:03'!
-= aStretch 
-
-	self class == aStretch class ifFalse: [^false].
-	^start = aStretch start and: [end = aStretch end]! !
-
-!Stretch methodsFor: 'comparing' stamp: 'KenD 21/Feb/2021 13:38:19'!
-hash 
-
-	^start hashWith: end! !
-
-!Stretch methodsFor: 'accessing' stamp: 'KenD 21/Feb/2021 13:37:58'!
-end 
-
-	^end! !
-
-!Stretch methodsFor: 'accessing' stamp: 'KenD 21/Feb/2021 13:38:07'!
-end: anInteger 
-
-	end := anInteger! !
-
-!Stretch methodsFor: 'accessing' stamp: 'KenD 21/Feb/2021 13:41:30'!
-start 
-
-	^start! !
-
-!Stretch methodsFor: 'accessing' stamp: 'KenD 21/Feb/2021 13:41:38'!
-start: anInteger 
-
-	start := anInteger! !
-
-!Stretch methodsFor: 'testing' stamp: 'KenD 21/Feb/2021 13:39:03'!
-includes: anInteger 
-
-	^anInteger between: start and: end! !
-
-!Stretch methodsFor: 'testing' stamp: 'KenD 21/Feb/2021 13:39:26'!
-intersects: aStretch 
-
-	self isEmpty ifTrue: [^false].
-	(aStretch includes: start) ifTrue: [^true].
-	^aStretch includes: end! !
-
-!Stretch methodsFor: 'testing' stamp: 'KenD 21/Feb/2021 13:39:38'!
-isEmpty 
-
-	^end < start! !
-
-!Stretch methodsFor: 'testing' stamp: 'KenD 21/Feb/2021 13:40:40'!
-notEmpty 
-
-	^start <= end! !
-
-!Stretch methodsFor: 'printing' stamp: 'KenD 21/Feb/2021 13:41:14'!
-printOn: aStream 
-
-	aStream
-		nextPutAll: start asString;
-		nextPutAll: ' thru: ';
-		nextPutAll: end asString! !
-
-!Stretch class methodsFor: 'instance creation' stamp: 'KenD 21/Feb/2021 13:35:42'!
-from: start thru: end 
-
-	^self new start: start; end: end! !
 
 !TargetOSPlatform methodsFor: 'testing' stamp: 'KenD 24/Feb/2021 14:36:38'!
 isUnix64
@@ -465,25 +84,6 @@ targetWordSizeInBits
 current
 
 	^self new initialize.! !
-
-!Namespace methodsFor: 'lookup' stamp: 'KenD 29/Feb/2024 09:38:51'!
-_namespaceLookup: aSymbol
-	| table |
-	table := namespace _basicAt: 2.
-	2
-		to: table _size
-		do: [:j | | assoc |
-			assoc := (table _basicAt: j).
-			assoc == nil ifFalse: [
-				assoc key == aSymbol
-					ifTrue: [^table _basicAt: j + 1]]].
-	^nil
-! !
-
-!Namespace class methodsFor: 'instance creation' stamp: 'KenD 29/Feb/2024 09:38:51'!
-new
-	^super new
-! !
 
 !PoolDictionary methodsFor: 'testing' stamp: 'KenD 30/Jan/2023 10:10:46'!
 isConstant
@@ -570,6 +170,10 @@ signalFor: anObject
 !!= other
 	
 	^(self = other) not! !
+
+!ProtoObject methodsFor: '*BeeCompatibility' stamp: 'KenD 30/Jun/2026 08:33:12'!
+!!== anObject
+	^self == anObject ifTrue: [false] ifFalse: [true]! !
 
 !Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 19/Apr/2022 14:24:21'!
 _instancesAreArrayed
@@ -982,6 +586,18 @@ withIndexDo: aBlock
 		aBlock value: each value: i.
 		i := i + 1]! !
 
+!WriteStream methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Mar/2024 07:32:57'!
+<< aString
+
+	self nextPutAll: aString! !
+
+!WriteStream methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026 13:14:42'!
+timeStamp
+	"Append the current time to the receiver as a String."
+	self nextChunkPut:	"double string quotes and !!s"
+		    (String streamContents: [:s | Smalltalk writeSystemTimeStamp: s]) printString;
+		newLine! !
+
 !PositionableStream methodsFor: '*BeeCompatibility' stamp: 'KenD 29/Apr/2022 17:12:08'!
 copyFrom: start to: stop
 	"Answer a string"
@@ -1017,6 +633,18 @@ nextWordOrNumber
 sizeToEnd
 
 	^  readLimit - position! !
+
+!WriteStream methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Mar/2024 07:32:57'!
+<< aString
+
+	self nextPutAll: aString! !
+
+!WriteStream methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026 13:14:42'!
+timeStamp
+	"Append the current time to the receiver as a String."
+	self nextChunkPut:	"double string quotes and !!s"
+		    (String streamContents: [:s | Smalltalk writeSystemTimeStamp: s]) printString;
+		newLine! !
 
 !ReadStream methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024 15:14:52'!
 alignTo: boundary
@@ -1300,18 +928,6 @@ utf8Trailing: byte
 	(byte bitAnd: 2r11111000) = 2r11110000 ifTrue: [^3].
 	^nil
 ! !
-
-!WriteStream methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Mar/2024 07:32:57'!
-<< aString
-
-	self nextPutAll: aString! !
-
-!WriteStream methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026 13:14:42'!
-timeStamp
-	"Append the current time to the receiver as a String."
-	self nextChunkPut:	"double string quotes and !!s"
-		    (String streamContents: [:s | Smalltalk writeSystemTimeStamp: s]) printString;
-		newLine! !
 
 !BlockClosure methodsFor: '*BeeCompatibility' stamp: 'bp 29/Nov/2014 17:29:00'!
 cull: firstArg

@@ -1,9 +1,29 @@
-'From Cuis7.9 [latest update: #8034] on 30 June 2026 at 8:45:52 am'!
+'From Cuis7.9 [latest update: #8037] on 1 July 2026 at 2:48:41 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 66!
+!provides: 'BeeCompatibility' 1 70!
 !requires: 'Cuis-Base' 63 6245 nil!
 SystemOrganization addCategory: #BeeCompatibility!
 
+
+!classDefinition: #Stretch category: #BeeCompatibility!
+Object subclass: #Stretch
+	instanceVariableNames: 'start end'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'BeeCompatibility'!
+!classDefinition: 'Stretch class' category: #BeeCompatibility!
+Stretch class
+	instanceVariableNames: ''!
+
+!classDefinition: #SymbolicReference category: #BeeCompatibility!
+Object subclass: #SymbolicReference
+	instanceVariableNames: 'linker token object'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'BeeCompatibility'!
+!classDefinition: 'SymbolicReference class' category: #BeeCompatibility!
+SymbolicReference class
+	instanceVariableNames: ''!
 
 !classDefinition: #TargetOSPlatform category: #BeeCompatibility!
 Object subclass: #TargetOSPlatform
@@ -36,6 +56,16 @@ NotFound class
 	instanceVariableNames: ''!
 
 
+!Stretch commentStamp: '<historical>' prior: 0!
+Copyright (c) 2020 Aucerna. 
+    See (MIT) license in root directory.
+!
+
+!SymbolicReference commentStamp: '<historical>' prior: 0!
+Copyright (c) 2020 Aucerna.
+    See (MIT) license in root directory.
+!
+
 !TargetOSPlatform commentStamp: '<historical>' prior: 0!
 I am working around current target system assumptions.
 
@@ -47,6 +77,294 @@ For current system, note:
 	Smalltalk platformSubtype. " 'aarch64' "
 	Smalltalk osVersion ." 'linux-gnu' "
 	!
+
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
++ delta
+	delta isInteger ifTrue: [^start + delta thru: end + delta].
+	delta isPoint ifTrue: [^start + delta x thru: end + delta y].
+	^start + delta start thru: end + delta end
+! !
+
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+- delta
+	^self + delta negated
+! !
+
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+// anInteger
+	^start // anInteger thru: end // anInteger
+! !
+
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+center
+	^start + end // 2
+! !
+
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+down: anInteger
+	^start thru: end + anInteger
+! !
+
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+length
+	^end - start + 1
+! !
+
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 30/Jan/2023, 5:10:45 pm (UTC)'!
+mask
+	^(2 raisedTo: end) - (2 raisedTo: start - 1)
+! !
+
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+max
+	^start max: end
+! !
+
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+min
+	^start min: end
+! !
+
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+negated
+	^start negated thru: end negated
+! !
+
+!Stretch methodsFor: 'arithmetic' stamp: 'KenD 30/Jan/2023, 5:10:45 pm (UTC)'!
+shift
+	^(start - 1) negated
+! !
+
+!Stretch methodsFor: 'comparing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+= aStretch
+	self class == aStretch class ifFalse: [^false].
+	^start = aStretch start and: [end = aStretch end]
+! !
+
+!Stretch methodsFor: 'comparing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+hash
+	^start hashWith: end
+! !
+
+!Stretch methodsFor: 'accessing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+end
+	^end
+! !
+
+!Stretch methodsFor: 'accessing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+end: anInteger
+	end := anInteger
+! !
+
+!Stretch methodsFor: 'accessing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+start
+	^start
+! !
+
+!Stretch methodsFor: 'accessing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+start: anInteger
+	start := anInteger
+! !
+
+!Stretch methodsFor: 'testing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+includes: anInteger
+	^anInteger between: start and: end
+! !
+
+!Stretch methodsFor: 'testing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+intersects: aStretch
+	self isEmpty ifTrue: [^false].
+	(aStretch includes: start) ifTrue: [^true].
+	^aStretch includes: end
+! !
+
+!Stretch methodsFor: 'testing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+isEmpty
+	^end < start
+! !
+
+!Stretch methodsFor: 'testing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+notEmpty
+	^start <= end
+! !
+
+!Stretch methodsFor: 'printing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+printOn: aStream
+	aStream
+		nextPutAll: start asString;
+		nextPutAll: ' thru: ';
+		nextPutAll: end asString
+! !
+
+!Stretch class methodsFor: 'instance creation' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+from: start thru: end
+	^self new start: start; end: end
+! !
+
+!SymbolicReference methodsFor: 'comparing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+= aSymbolicReference
+	aSymbolicReference class == self class ifFalse: [^false].
+	^linker = aSymbolicReference linker and: [token = aSymbolicReference token]
+! !
+
+!SymbolicReference methodsFor: 'linking' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+asBehavior
+	^self asClass instanceBehavior
+! !
+
+!SymbolicReference methodsFor: 'linking' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+asCharacter
+	^(Integer fromString: token) asCharacter
+! !
+
+!SymbolicReference methodsFor: 'linking' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+asClass
+	| module |
+	module := Kernel load: token first.
+	^module namespace at: token second
+! !
+
+!SymbolicReference methodsFor: 'linking' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+asMetaclass
+	^self asClass class
+! !
+
+!SymbolicReference methodsFor: 'linking' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+asMetaclassBehavior
+	^self asClass behavior
+! !
+
+!SymbolicReference methodsFor: 'linking' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+asModule
+	^Kernel load: token
+! !
+
+!SymbolicReference methodsFor: 'linking' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+asSymbol
+	^token asSymbol
+! !
+
+!SymbolicReference methodsFor: 'linking' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+false
+	^false
+! !
+
+!SymbolicReference methodsFor: 'linking' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+nil
+	^nil
+! !
+
+!SymbolicReference methodsFor: 'linking' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+nilToken
+	^HashTable nilToken
+! !
+
+!SymbolicReference methodsFor: 'linking' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+symbolTable
+	^Symbol symbolTable
+! !
+
+!SymbolicReference methodsFor: 'linking' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+true
+	^true
+! !
+
+!SymbolicReference methodsFor: 'services' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+hasBeenLinked
+	^object notNil or: [token == #nil]
+! !
+
+!SymbolicReference methodsFor: 'services' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+link
+	^self hasBeenLinked ifTrue: [object] ifFalse: [object := self referredValue].
+! !
+
+!SymbolicReference methodsFor: 'services' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+referredValue
+	^self perform: linker
+! !
+
+!SymbolicReference methodsFor: 'accessing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+linker
+	^linker
+! !
+
+!SymbolicReference methodsFor: 'accessing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+linker: aSymbol
+	linker := aSymbol
+! !
+
+!SymbolicReference methodsFor: 'accessing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+object
+	^object
+! !
+
+!SymbolicReference methodsFor: 'accessing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+token
+	^token
+! !
+
+!SymbolicReference methodsFor: 'accessing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+token: string
+	token := string
+! !
+
+!SymbolicReference methodsFor: 'printing' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+printOn: aStream
+	aStream
+		nextPutAll: self type;
+		nextPutAll: ' (';
+		nextPutAll: token printString;
+		nextPut: $)
+! !
+
+!SymbolicReference class methodsFor: 'knownObjects' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+forBehavior: aBehavior
+	| species linker |
+	species :=  aBehavior classBinding.
+	linker := species isMetaclass ifTrue: [#asMetaclassBehavior] ifFalse: [#asBehavior].
+	^(self forClass: species instanceClass) linker: linker
+! !
+
+!SymbolicReference class methodsFor: 'knownObjects' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+forCharacter: aCharacter
+	^self new linker: #asCharacter; token: aCharacter codePoint asString
+! !
+
+!SymbolicReference class methodsFor: 'knownObjects' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+forClass: aClass
+	^self new linker: #asClass; token: {aClass module name. aClass name}
+! !
+
+!SymbolicReference class methodsFor: 'knownObjects' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+forMetaclass: aMetaclass
+	^(self forClass: aMetaclass instanceClass) linker: #asMetaclass
+! !
+
+!SymbolicReference class methodsFor: 'knownObjects' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+forModule: aModule
+	^self new linker: #asModule; token: aModule name
+! !
+
+!SymbolicReference class methodsFor: 'knownObjects' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+forSymbol: aSymbol
+	^self new linker: #asSymbol; token: aSymbol
+! !
+
+!SymbolicReference class methodsFor: 'knownObjects' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+nilToken
+	^self new linker: #nilToken
+! !
+
+!SymbolicReference class methodsFor: 'knownObjects' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+symbolTable
+	^self new linker: #symbolTable
+! !
+
+!SymbolicReference class methodsFor: 'unassigned' stamp: 'KenD 28/Jun/2026, 8:27:38 pm (UTC)'!
+linker: anObject token: anotherObject
+	^self new linker: anObject; token: anotherObject
+! !
 
 !TargetOSPlatform methodsFor: 'testing' stamp: 'KenD 24/Feb/2021, 9:36:38 pm (UTC)'!
 isUnix64
@@ -185,6 +503,12 @@ _instancesHavePointers
 
 	^ self isPointers ! !
 
+!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026, 8:27:39 pm (UTC)'!
+asSymbolicReference
+	self DENY: self isInstanceBehavior.
+	^SymbolicReference forBehavior: self
+! !
+
 !Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 18/May/2022, 9:58:51 pm (UTC)'!
 instanceBehavior
 	self flag: #PossiblyBogus. "Probably bogus"
@@ -206,15 +530,35 @@ removeLocalMethod: selector
 
 	self basicRemoveSelector: selector ! !
 
+!Behavior methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026, 8:27:39 pm (UTC)'!
+shouldBeStoredIn: anObjectClosure
+	^anObjectClosure scope includes: class
+! !
+
 !ClassDescription methodsFor: '*BeeCompatibility' stamp: 'KenD 15/Apr/2022, 6:56:44 pm (UTC)'!
 instanceSide
 
 	^ self theNonMetaClass ! !
 
+!Class methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026, 8:27:39 pm (UTC)'!
+asSymbolicReference
+	^SymbolicReference forClass: self
+! !
+
 !Class methodsFor: '*BeeCompatibility' stamp: 'KenD 16/Nov/2023, 5:45:50 pm (UTC)'!
 classSide
 
 	^ self class! !
+
+!Class methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026, 8:27:39 pm (UTC)'!
+shouldBeStoredIn: anObjectClosure
+	^anObjectClosure scope includes: self
+! !
+
+!Metaclass methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026, 8:27:39 pm (UTC)'!
+asSymbolicReference
+	^SymbolicReference forMetaclass: self
+! !
 
 !Metaclass methodsFor: '*BeeCompatibility' stamp: 'KenD 16/Nov/2023, 5:46:37 pm (UTC)'!
 classSide
@@ -226,6 +570,11 @@ classSide
 isMetaclass
 
 	^ self isMeta ! !
+
+!Metaclass methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026, 8:27:39 pm (UTC)'!
+shouldBeStoredIn: anObjectClosure
+	^anObjectClosure scope includes: class
+! !
 
 !Collection methodsFor: '*BeeCompatibility' stamp: 'KenD 1/Mar/2024, 8:35:07 pm (UTC)'!
 conform: evaluable
@@ -339,6 +688,15 @@ collect: aBlock in: aCollection
 classBinding
 
 	^ self methodClass! !
+
+!CompiledMethod methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026, 8:27:39 pm (UTC)'!
+sexpressions
+	| decoder |
+	decoder := TreecodeDecoder new
+		           stream: treecodes readStream;
+		           method: self.
+	^decoder decodeMethod
+! !
 
 !CompiledMethod methodsFor: '*BeeCompatibility' stamp: 'KenD 22/Apr/2022, 9:44:37 pm (UTC)'!
 source
@@ -975,6 +1333,11 @@ isBoolean
 
 	^ true! !
 
+!Boolean methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026, 8:27:39 pm (UTC)'!
+shouldBeStoredIn: anObjectClosure
+	^anObjectClosure module == Kernel
+! !
+
 !False methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Jun/2021, 7:39:02 pm (UTC)'!
 and: block1 andNot: block2 
 
@@ -994,6 +1357,11 @@ asBit
 asParameter 
 	"Answer machine value for falsity"
 	^ 0! !
+
+!False methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026, 8:27:39 pm (UTC)'!
+asSymbolicReference
+	^SymbolicReference new linker: #false
+! !
 
 !True methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Jun/2021, 7:37:43 pm (UTC)'!
 and: block1 andNot: block2 
@@ -1015,6 +1383,11 @@ asBit
 asParameter 
 	"Answer machine value for truth"
 	^ 1! !
+
+!True methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026, 8:27:39 pm (UTC)'!
+asSymbolicReference
+	^SymbolicReference new linker: #true
+! !
 
 !Integer methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Mar/2024, 6:50:30 pm (UTC)'!
 asCharacter
@@ -1105,6 +1478,16 @@ asParameter
 	"Answer machine value for 'no value'"
 	^ 0! !
 
+!UndefinedObject methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026, 8:27:39 pm (UTC)'!
+asSymbolicReference
+	^SymbolicReference new linker: #nil
+! !
+
+!UndefinedObject methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026, 8:27:39 pm (UTC)'!
+shouldBeStoredIn: anObjectClosure
+	^anObjectClosure module == Kernel
+! !
+
 !Character methodsFor: '*BeeCompatibility' stamp: 'KenD 30/Sep/2022, 8:00:20 pm (UTC)'!
 !!= aCodePointOrCharacter
 
@@ -1114,6 +1497,11 @@ asParameter
 asInteger
 
 	^ self codePoint! !
+
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026, 8:27:39 pm (UTC)'!
+asSymbolicReference
+	^SymbolicReference forCharacter: self
+! !
 
 !Character methodsFor: '*BeeCompatibility' stamp: 'KenD 16/Feb/2021, 7:39:58 pm (UTC)'!
 isASCIILetter
@@ -1138,6 +1526,11 @@ isBlank
 isHexDigit
 
 	^'0123456789abcdefABCDEF' includes: self! !
+
+!Character methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026, 8:27:39 pm (UTC)'!
+shouldBeStoredIn: anObjectClosure
+	^anObjectClosure module == Kernel
+! !
 
 !Character methodsFor: '*BeeCompatibility' stamp: 'KenD 31/May/2021, 3:03:14 pm (UTC)'!
 split: aString

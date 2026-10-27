@@ -7,10 +7,10 @@ Ported from:
 Copyright (C) 2012 Sven Van Caekenberghe.
 	See (MIT) license in LICENSES directory.
 '!
-!provides: 'ExchangeFormat-STON' 1 58!
-!requires: 'Cuis-Base' 63 6245 nil!
-!requires: 'Identities-UUID' 1 10 nil!
-!requires: 'CSS3-NamedColors' 1 1 nil!
+!provides: 'ExchangeFormat-STON' '1.58.0'!
+!requires: 'Cuis-Base' '6.3.6245' '63.*.*'!
+!requires: 'Identities-UUID' '1.10.0' '1.*.*'!
+!requires: 'CSS3-NamedColors' '1.1.0' '1.*.*'!
 SystemOrganization addCategory: #'ExchangeFormat-STON'!
 
 

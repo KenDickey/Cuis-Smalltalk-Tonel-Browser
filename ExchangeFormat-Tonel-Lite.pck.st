@@ -4,10 +4,10 @@
 Ported from  https://github.com/aucerna/bee-dmr/tree/master/Tonel
 Copyright (c) 2021 Quorum Software.
 	See (MIT) license in LICENSES directory.'!
-!provides: 'ExchangeFormat-Tonel-Lite' 1 73!
-!requires: 'Cuis-Base' 63 6188 nil!
-!requires: 'BeeCompatibility' 1 49 nil!
-!requires: 'ExchangeFormat-STON' 1 48 nil!
+!provides: 'ExchangeFormat-Tonel-Lite' '1.73.0'!
+!requires: 'Cuis-Base' '6.3.6188' '63.*.*'!
+!requires: 'BeeCompatibility' '1.49.0' '1.*.*' !
+!requires: 'ExchangeFormat-STON' '1.48.0' '1.*.*'!
 SystemOrganization addCategory: #'ExchangeFormat-Tonel-Lite'!
 
 

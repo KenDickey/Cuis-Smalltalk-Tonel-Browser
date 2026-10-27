@@ -1,7 +1,7 @@
-'From Cuis7.9 [latest update: #8037] on 1 July 2026 at 2:48:41 pm'!
+'From Cuis7.9 [latest update: #8031] on 1 July 2026 at 6:32:01 pm'!
 'Description Bee compatibile!!'!
-!provides: 'BeeCompatibility' 1 70!
-!requires: 'Cuis-Base' 63 6245 nil!
+!provides: 'BeeCompatibility' '1.71.0'!
+!requires: 'Cuis-Base' '6.3.6245' '63.*.*'!
 SystemOrganization addCategory: #BeeCompatibility!
 
 
@@ -550,6 +550,10 @@ classSide
 
 	^ self class! !
 
+!Class methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Jul/2026, 1:23:54 am (UTC)'!
+instanceClass
+	^self! !
+
 !Class methodsFor: '*BeeCompatibility' stamp: 'KenD 28/Jun/2026, 8:27:39 pm (UTC)'!
 shouldBeStoredIn: anObjectClosure
 	^anObjectClosure scope includes: self
@@ -565,6 +569,10 @@ classSide
 
 	^ self
 ! !
+
+!Metaclass methodsFor: '*BeeCompatibility' stamp: 'KenD 2/Jul/2026, 1:25:04 am (UTC)'!
+instanceClass
+	^thisClass! !
 
 !Metaclass methodsFor: '*BeeCompatibility' stamp: 'KenD 22/Apr/2022, 11:14:43 pm (UTC)'!
 isMetaclass
